@@ -12,11 +12,11 @@ interface InputComponentProps {
 const InputComponent: React.FunctionComponent<InputComponentProps> = props => {
   return (
     <div className="Input-container">
-      <div className="Input-utils">
-        <button onClick={() => props.removeDigit()}>Clear</button>
-      </div>
       <div className="Input-numbers">
         {[...Array(10).keys()].slice(1).map(x => <button key={x} onClick={() => props.setDigit(x)}>{x}</button>)}
+      </div>
+      <div className="Input-utils">
+        <button onClick={() => props.removeDigit()}>Clear</button>
       </div>
     </div>
   );
