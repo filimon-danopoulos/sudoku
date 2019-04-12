@@ -1,0 +1,15 @@
+@import './shared.scss';
+
+@import './colors';
+
+.Options-container {
+  background-color: $background-color-medium;
+  color: $color-medium;
+  
+  text-align: center;
+  padding: 5px 10px;
+
+  .Options-new,.Options-validate,.Options-difficulty {
+    @include Options-item();
+  }
+}

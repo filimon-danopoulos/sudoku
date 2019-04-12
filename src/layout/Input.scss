@@ -1,0 +1,29 @@
+@import './colors';
+
+.Input-container {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+
+  .Input-utils,.Input-numbers {
+    button {
+      outline: none;
+      border: solid 1px $color-light;
+      background: none;
+      background-color: $background-color-medium;
+      color: $color-highlight;
+      padding: 8px;
+      margin: 4px;
+      min-width: 32px;
+      min-height: 32px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+    
+      &:hover, &:active {
+        background-color: $color-medium;
+        color: $color-highlight;
+      }
+    }
+  }
+}

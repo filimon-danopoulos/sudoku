@@ -1,0 +1,18 @@
+@import './colors.scss';
+
+@mixin Options-item() {
+  position: relative;
+  background: none;
+  outline: none;
+  border: none;
+  padding: 8px 8px;
+  color: $color-medium;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+
+  &:hover, &:active {
+    background-color: $color-medium;
+    color: $color-highlight;
+  }
+}
