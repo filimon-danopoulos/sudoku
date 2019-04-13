@@ -48,11 +48,6 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
 
   public componentDidMount(): void {
     this.setCellSize();
-    window.addEventListener("resize", this.setCellSize);
-  }
-
-  public componentWillUnmount(): void {
-    window.removeEventListener("resize", this.setCellSize);
   }
 
   private setCellSize = () => {
