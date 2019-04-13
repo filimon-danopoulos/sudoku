@@ -7,14 +7,16 @@ import {
   TOGGLE_CELL,
   SET_DIGIT,
   NAVIGATE_CELLS,
-  REMOVE_DIGIT
+  REMOVE_DIGIT,
+  TOGGLE_NOTE_MODE
 } from "./types";
 import Sudoku from "../models/Sudoku";
 import { DIFFICULTY } from "../models/Difficulty";
 
 const initialState: IGameState = {
   difficulty: DIFFICULTY.Easy,
-  sudoku: Sudoku.create(DIFFICULTY.Easy)
+  sudoku: Sudoku.create(DIFFICULTY.Easy),
+  noteMode: false
 };
 
 export function gameReducer(
@@ -24,6 +26,7 @@ export function gameReducer(
   switch (action.type) {
     case CHANGE_DIFFICULTY:
       return {
+        ...state,
         difficulty: action.payload,
         sudoku: Sudoku.create(action.payload)
       };
@@ -45,7 +48,7 @@ export function gameReducer(
     case SET_DIGIT:
       return {
         ...state,
-        sudoku: state.sudoku.setDigit(action.payload.digit)
+        sudoku: state.sudoku.setDigit(action.payload.digit, state.noteMode)
       };
     case REMOVE_DIGIT:
       return {
@@ -57,6 +60,11 @@ export function gameReducer(
         ...state,
         sudoku: state.sudoku.navigate(action.payload.direction)
       };
+    case TOGGLE_NOTE_MODE:
+      return {
+        ...state,
+        noteMode: action.payload ? action.payload.value : !state.noteMode
+      }
     default:
       return state;
   }

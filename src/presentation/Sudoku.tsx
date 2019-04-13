@@ -4,9 +4,13 @@ import Sudoku from "../models/Sudoku";
 import SudokuRow from "./SudokuRow";
 import { ISudokuCellComponentActions } from "./SudokuCell";
 import { INPUT_HEIGHT } from "./Input";
+import { createNewGame } from "../store/actions";
+import { DIFFICULTY } from "../models/Difficulty";
 
 export interface ISudokuProps extends ISudokuCellComponentActions {
   sudoku: Sudoku;
+  difficulty: DIFFICULTY;
+  createNewGame: typeof createNewGame;
 }
 
 export interface ISudokuState {
@@ -15,7 +19,6 @@ export interface ISudokuState {
 
 export default class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
   private containerRef: React.RefObject<HTMLDivElement>;
-  private startTime: number;
 
   constructor(props: ISudokuProps) {
     super(props);
@@ -23,7 +26,6 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
     this.state = {
       rowSize: 0
     };
-    this.startTime = Date.now();
   }
 
   public render(): JSX.Element {
@@ -84,8 +86,10 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
     if (!this.props.sudoku.isSolved()) {
       return null;
     }
+
+    const difficulty = this.getDifficultyText();
     const endTime = Date.now()
-    const ellapsedTime = endTime - this.startTime
+    const ellapsedTime = endTime - this.props.sudoku.getCreationTimestamp();
     return (
       <div className="Sudoku-solved" style={{
         width: `${this.state.rowSize}px`,
@@ -93,8 +97,9 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
         marginLeft: `-${this.state.rowSize / 2}px`
       }}>
         <div className="Sudoku-solved-message">
-          <h1>You solved the puzzle!</h1>
+          <h1>You solved {difficulty} puzzle!</h1>
           <p>Ellapsed time: <span className="Sudoku-ellapsed">{this.formatMillisecons(ellapsedTime)}</span></p>
+          <button onClick={() => this.props.createNewGame()}>Start a new game</button>
         </div>
       </div>
     );
@@ -108,5 +113,24 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
     const hours = pad((milliSeconds / (1000 * 60 * 60)) % 24);
 
     return `${hours}:${minutes}:${seconds}`;
+  }
+
+  private getDifficultyText(): string {
+    switch (this.props.difficulty) {
+      case DIFFICULTY.VeryEasy:
+        return 'a very easy';
+      case DIFFICULTY.Easy:
+        return 'an easy';
+      case DIFFICULTY.Normal:
+        return 'a normal';
+      case DIFFICULTY.Hard:
+        return 'a hard';
+      case DIFFICULTY.VeryHard:
+        return 'a very hard';
+      case DIFFICULTY.Insane:
+        return 'an insane';
+      default:
+        return 'an unknown';
+    }
   }
 }

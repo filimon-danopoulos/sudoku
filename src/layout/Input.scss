@@ -20,7 +20,7 @@
       cursor: pointer;
       border-radius: 6px;
     
-      &:hover, &:active {
+      &:hover, &:active, &.active {
         background-color: $color-medium;
         color: $color-highlight;
       }

@@ -59,11 +59,11 @@ export default class Row {
     return this.active;
   }
 
-  public setDigit(digit: number): Row {
+  public setDigit(digit: number, isNote: boolean): Row {
     if (!this.active) {
       return this;
     }
-    this.cells = this.cells.map(c => c.setDigit(digit));
+    this.cells = this.cells.map(c => c.setDigit(digit, isNote));
     return new Row(this);
   }
 

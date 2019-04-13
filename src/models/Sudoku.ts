@@ -19,17 +19,20 @@ export default class Sudoku {
   private data: ([number, boolean][])[];
   private rows: Row[];
   private activeCell: { row: number, column: number };
+  private createdAt: number;
 
   private constructor(previous?: Sudoku) {
     this.difficulty = previous ? previous.difficulty : DIFFICULTY.Easy;
     this.data = previous ? previous.data : [];
     this.rows = previous ? previous.rows : [];
     this.activeCell = previous ? previous.activeCell : { row: -1, column: -1 }
+    this.createdAt = previous ? previous.createdAt : 0;
   }
 
   static create(difficulty: DIFFICULTY): Sudoku {
     const sudoku = new Sudoku();
     sudoku.difficulty = difficulty;
+    sudoku.createdAt = Date.now();
     sudoku.data = BASE.map(r => r.map(c => [c, true] as [number, boolean]));
     sudoku.generateSudoku();
     return sudoku
@@ -105,9 +108,9 @@ export default class Sudoku {
     return new Sudoku(this);
   }
 
-  public setDigit(digit: number): Sudoku {
+  public setDigit(digit: number, isNote: boolean): Sudoku {
     const sudoku = new Sudoku(this);
-    sudoku.rows = this.rows.map(r => r.setDigit(digit));
+    sudoku.rows = this.rows.map(r => r.setDigit(digit, isNote));
     return sudoku;
   }
 
@@ -155,5 +158,9 @@ export default class Sudoku {
 
   public isSolved(): boolean {
     return this.rows.every(r => r.getCells().every(c => c.isSolved()))
+  }
+
+  public getCreationTimestamp(): number {
+    return this.createdAt;
   }
 }

@@ -18,6 +18,73 @@ $border-thick: solid 2px $color-medium;
     left: 0;
     color: $color-dark;
   }
+  
+  .SudokuCell-note {
+     position: absolute;
+    cursor: pointer;
+    user-select: none;
+    color: $color-dark;
+    overflow: hidden;
+    font-size: initial;
+
+    &:nth-child(1) {
+      top: 0;
+      left: 0;
+      bottom: 66.666667%;
+      right: 66.666667%;
+    }
+    
+    &:nth-child(2) {
+      top: 0;
+      left: 33.333333%;
+      bottom: 66.666667%;
+      right: 33.333333%;
+    }
+    &:nth-child(3) {
+      top: 0;
+      left: 66.666667%;
+      bottom: 66.666667%;
+      right: 0;
+    }
+    &:nth-child(4) {
+      top: 33.333333%;
+      left: 0;
+      bottom: 33.333333%;
+      right: 66.666667%;
+    }
+    
+    &:nth-child(5) {
+      top: 33.333333%;
+      left: 33.333333%;
+      bottom: 33.333333%;
+      right: 33.333333%;
+    }
+    &:nth-child(6) {
+      top: 33.333333%;
+      left: 66.666667%;
+      bottom: 33.333333%;
+      right: 0;
+    }
+    &:nth-child(7) {
+      top: 66.666667%;
+      left: 0;
+      bottom: 0;
+      right: 66.666667%;
+    }
+    
+    &:nth-child(8) {
+      top: 66.666667%;
+      left: 33.333333%;
+      bottom: 0;
+      right: 33.333333%;
+    }
+    &:nth-child(9) {
+      top: 66.666667%;
+      left: 66.666667%;
+      bottom: 0;
+      right: 0;
+    }
+  }
 
   border-right: $border-thin;
   

@@ -1,3 +1,5 @@
+const NO_NOTES = [false, false, false, false, false, false, false, false, false];
+
 export default class Cell {
   private value: number | null;
   private valid: boolean;
@@ -6,6 +8,7 @@ export default class Cell {
   private column: number;
   private given: boolean;
   private active: boolean;
+  private notes: boolean[];
 
   private constructor(previous?: Cell) {
     this.value = previous ? previous.value : null;
@@ -15,6 +18,7 @@ export default class Cell {
     this.given = previous ? previous.given : false;
     this.active = previous ? previous.active : false;
     this.valid = previous ? previous.valid : true;
+    this.notes = previous ? previous.notes : [...NO_NOTES]
   }
 
   static create(solution: number, row: number, column: number, given: boolean): Cell {
@@ -88,11 +92,15 @@ export default class Cell {
     return cell;
   }
 
-  public setDigit(digit: number): Cell {
+  public setDigit(digit: number, isNote: boolean): Cell {
     if (!this.active || this.given) {
       return this;
     }
-    this.value = digit;
+    if (isNote) {
+      this.notes = this.notes.map((x, i) => i === (digit - 1) ? !x : x)
+    } else {
+      this.value = this.value === digit ? null : digit;
+    }
     this.valid = true;
     return new Cell(this);
   }
@@ -101,6 +109,7 @@ export default class Cell {
     if (!this.active) {
       return this;
     }
+    this.notes = [...NO_NOTES];
     this.value = null;
     this.valid = true;
     return new Cell(this);
@@ -108,5 +117,9 @@ export default class Cell {
 
   public isSolved(): boolean {
     return this.value === this.solution;
+  }
+
+  public getNotes(): boolean[] {
+    return this.notes;
   }
 }

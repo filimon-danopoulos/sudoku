@@ -1,4 +1,15 @@
-import { OptionActions, CHANGE_DIFFICULTY, NEW_GAME, VALIDATE_SOLUTION, TOGGLE_CELL, SET_DIGIT, REMOVE_DIGIT, NAVIGATE_CELLS, DIRECTION } from "./types";
+import {
+  OptionActions,
+  CHANGE_DIFFICULTY,
+  NEW_GAME,
+  VALIDATE_SOLUTION,
+  TOGGLE_CELL,
+  SET_DIGIT,
+  REMOVE_DIGIT,
+  NAVIGATE_CELLS,
+  DIRECTION,
+  TOGGLE_NOTE_MODE
+} from "./types";
 import { DIFFICULTY } from "../models/Difficulty";
 
 export function changeDifficulty(difficulty: DIFFICULTY): OptionActions {
@@ -51,5 +62,19 @@ export function navigateCells(direction: DIRECTION): OptionActions {
     payload: {
       direction
     }
+  };
+}
+
+export function toggleNoteMode(value?: boolean): OptionActions {
+  if (value !== undefined) {
+    return {
+      type: TOGGLE_NOTE_MODE,
+      payload: {
+        value
+      }
+    }
+  }
+  return {
+    type: TOGGLE_NOTE_MODE
   };
 }

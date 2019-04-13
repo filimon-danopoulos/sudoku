@@ -25,7 +25,26 @@ export default class SudokuCellComponent extends Component<
         ref="cell"
         onClick={() => this.handleClick()}
       >
-        <span className="SudokuCell-value">{this.props.cell.getValue()}</span>
+        {this.renderContent()}
+      </div>
+    );
+  }
+
+  private renderContent(): JSX.Element {
+    const value = this.props.cell.getValue();
+    if (!!value) {
+      return (
+        <span className="SudokuCell-value">{value}</span>
+      );
+    }
+    const notes = this.props.cell.getNotes();
+    return (
+      <div className="SudokuCell-notes">
+        {notes.map((x, i) => (
+          <span className="SudokuCell-note" key={i}>
+            {x ? i + 1 : ''}
+          </span>
+        ))}
       </div>
     );
   }
@@ -35,8 +54,8 @@ export default class SudokuCellComponent extends Component<
   }
 
   private calculateStyles(): CSSProperties {
-    const size: string = `${this.props.size}px`;
-    const fontSize: string = `${Math.floor(this.props.size * 0.68)}px`;
+    const size = `${this.props.size}px`;
+    const fontSize = `${Math.floor(this.props.size * 0.68)}px`;
     return {
       height: size,
       width: size,

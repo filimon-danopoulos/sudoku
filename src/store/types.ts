@@ -4,6 +4,7 @@ import { DIFFICULTY } from "../models/Difficulty";
 export interface ISudokuState {
   difficulty: DIFFICULTY;
   sudoku: Sudoku;
+  noteMode: boolean;
 }
 
 export enum DIRECTION {
@@ -20,6 +21,7 @@ export const TOGGLE_CELL = "TOGGLE_CELLs";
 export const SET_DIGIT = "SET_DIGIT";
 export const REMOVE_DIGIT = "REMOVE_DIGIT";
 export const NAVIGATE_CELLS = "NAVIGATE_CELLS";
+export const TOGGLE_NOTE_MODE = "TOGGLE_NOTE_MODE";
 
 interface IChangeDifficultyAction {
   type: typeof CHANGE_DIFFICULTY;
@@ -60,10 +62,18 @@ interface INavigateCellsAction {
   }
 }
 
+interface IToggleNoteModeAction {
+  type: typeof TOGGLE_NOTE_MODE;
+  payload?: {
+    value: boolean
+  }
+}
+
 export type OptionActions = IChangeDifficultyAction
   | INewGameAction
   | IValidateSolutionAction
   | IToggleCellAction
   | ISetDigitAction
   | IRemoveDigitAction
-  | INavigateCellsAction;
+  | INavigateCellsAction
+  | IToggleNoteModeAction;
