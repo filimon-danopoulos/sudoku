@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/sudoku/static/js/2.cd4f4d30.chunk.js"
   },
   {
-    "revision": "949b1d4f50aea14a320cb401579c74ed",
+    "revision": "18bc50ad6ca8ab8f27fc53104ebe6733",
     "url": "/sudoku/index.html"
   }
 ];
