@@ -9,7 +9,7 @@
     position: absolute;
     top: 0;
     left: 50%;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.3);
     color: white;
     display: flex;
     flex-direction: column;
@@ -20,7 +20,9 @@
       text-shadow: 0px 0px 8px black;
 
       button {
-        @include Options-item($color-highlight, $color-medium, $color-highlight, $color-shadow);
+        @include Options-item($color-highlight, $color-blue, $color-highlight, $color-medium);
+        box-shadow: 2px 2px 8px black;
+
       }
     }
   }

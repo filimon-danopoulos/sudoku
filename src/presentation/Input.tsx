@@ -36,6 +36,10 @@ const InputComponent: React.FunctionComponent<InputComponentProps> = props => {
     return '';
   }
 
+  if (props.sudoku.isSolved()) {
+    return null;
+  }
+
   return (
     <div className="Input-container" style={{ height: `${INPUT_HEIGHT}px` }}>
       <div className="Input-numbers">

@@ -43,7 +43,7 @@ export default class Sudoku {
   }
 
   private generateSudoku() {
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 42e4; i++) {
       this.moveRowOrColumn();
     }
     this.removeValues();
@@ -151,7 +151,6 @@ export default class Sudoku {
         break;
       case DIRECTION.Left:
         this.activeCell.column = decrement(this.activeCell.column);
-
         break;
     }
     return this.activateCell(this.activeCell.row, this.activeCell.column);

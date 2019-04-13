@@ -21,13 +21,11 @@ const initialState: IGameState = {
   difficulty: initialDifficulty,
   sudoku: {
     past: [],
-    current: Sudoku.create(initialDifficulty),
+    current: Sudoku.create(initialDifficulty).activateCell(1, 1),
     future: []
   },
   mode: MODE.Input
 };
-const pastStates: Sudoku[] = []
-const futureStates: Sudoku[] = []
 
 export function gameReducer(state = initialState, action: OptionActions): IGameState {
   switch (action.type) {
@@ -38,7 +36,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         difficulty: action.payload,
         sudoku: {
           past: [],
-          current: Sudoku.create(action.payload),
+          current: Sudoku.create(action.payload).activateCell(1, 1),
           future: []
         }
       };
@@ -68,7 +66,6 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         }
       };
     case SET_DIGIT:
-      console.log(pastStates, futureStates);
       return {
         ...state,
         sudoku: {
@@ -78,7 +75,6 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         }
       };
     case REMOVE_DIGIT:
-      console.log(pastStates, futureStates);
       return {
         ...state,
         sudoku: {
@@ -136,7 +132,7 @@ function readDifficulty(fallBack: DIFFICULTY): DIFFICULTY {
   if (!data) {
     return fallBack;
   }
-  return data as unknown as DIFFICULTY;
+  return +data as DIFFICULTY;
 }
 function writeDifficulty(difficulty: DIFFICULTY) {
   window.localStorage.setItem('DIFFICULTY', difficulty.toString());

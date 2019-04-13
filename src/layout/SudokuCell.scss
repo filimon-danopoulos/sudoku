@@ -25,12 +25,14 @@ $border-thick: solid 2px $color-medium;
   }
   
   .SudokuCell-note {
-     position: absolute;
+    position: absolute;
     cursor: pointer;
     user-select: none;
     color: $color-dark;
     overflow: hidden;
     font-size: initial;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
 
     &:nth-child(1) {
       top: 0;
