@@ -25,6 +25,8 @@ interface IAppProps {
   redo: typeof redo,
   noteMode: boolean;
   sudoku: Sudoku;
+  past: Sudoku[];
+  future: Sudoku[];
   difficulty: DIFFICULTY;
 }
 
@@ -77,6 +79,8 @@ class App extends Component<IAppProps> {
 
 const mapStateToProps = (state: AppState) => ({
   sudoku: state.game.sudoku.current,
+  past: state.game.sudoku.past,
+  future: state.game.sudoku.future,
   difficulty: state.game.difficulty,
   noteMode: state.game.noteMode
 });

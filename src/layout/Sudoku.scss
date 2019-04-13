@@ -9,7 +9,7 @@
     position: absolute;
     top: 0;
     left: 50%;
-    background-color: rgba(0, 128, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.4);
     color: white;
     display: flex;
     flex-direction: column;
@@ -20,13 +20,7 @@
       text-shadow: 0px 0px 8px black;
 
       button {
-        @include Options-item();
-        color: $color-highlight;
-        background-color: $color-medium;
-
-        &:hover {
-          background-color: $color-shadow;
-        }
+        @include Options-item($color-highlight, $color-medium, $color-highlight, $color-shadow);
       }
     }
   }

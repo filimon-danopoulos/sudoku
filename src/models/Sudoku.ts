@@ -164,4 +164,8 @@ export default class Sudoku {
   public getCreationTimestamp(): number {
     return this.createdAt;
   }
+
+  public isDigitSolved(digit: number): boolean {
+    return this.rows.every(r => r.getCells().some(c => c.getValue() === digit && c.isSolved()));
+  }
 }

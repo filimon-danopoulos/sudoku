@@ -1,5 +1,3 @@
-@import './colors.scss';
-
 @mixin Clear-button() {
   position: relative;
   background: none;
@@ -11,13 +9,20 @@
   border-radius: 6px;
 }
 
-@mixin Options-item() {
+@mixin Options-item($text-color, $background-color, $text-color-active, $background-color-active) {
   @include Clear-button();
-  color: $color-medium;
-  background-color: $background-color-medium;
+  color: $text-color;
+  background-color: $background-color;
+  
+  &:not([disabled]) {
+    &:hover,&:active {
+      background-color: $background-color-active;
+      color: $text-color-active;
+    }
+  }
 
-  &:hover, &:active {
-    background-color: $color-medium;
-    color: $color-highlight;
+  &[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 }
