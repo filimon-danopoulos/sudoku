@@ -63,16 +63,18 @@ export default class Row {
     if (!this.active) {
       return this;
     }
-    this.cells = this.cells.map(c => c.setDigit(digit, isNote));
-    return new Row(this);
+    const row = new Row(this);
+    row.cells = this.cells.map(c => c.setDigit(digit, isNote));
+    return row;
   }
 
   public removeDigit(): Row {
     if (!this.active) {
       return this;
     }
-    this.cells = this.cells.map(c => c.removeDigit());
-    return new Row(this);
+    const row = new Row(this);
+    row.cells = this.cells.map(c => c.removeDigit());
+    return row;
   }
 
 }

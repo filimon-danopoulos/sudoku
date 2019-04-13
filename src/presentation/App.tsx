@@ -6,7 +6,7 @@ import SudokuComponent from "./Sudoku";
 import OptionsComponent from "./Options";
 import Input from "./Input";
 import { AppState } from "../store";
-import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, toggleNoteMode } from "../store/actions";
+import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, toggleNoteMode, redo, undo } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
 import Sudoku from "../models/Sudoku";
 import { DIRECTION } from "../store/types";
@@ -21,6 +21,8 @@ interface IAppProps {
   removeDigit: typeof removeDigit;
   navigateCells: typeof navigateCells;
   toggleNoteMode: typeof toggleNoteMode;
+  undo: typeof undo,
+  redo: typeof redo,
   noteMode: boolean;
   sudoku: Sudoku;
   difficulty: DIFFICULTY;
@@ -74,7 +76,7 @@ class App extends Component<IAppProps> {
 }
 
 const mapStateToProps = (state: AppState) => ({
-  sudoku: state.game.sudoku,
+  sudoku: state.game.sudoku.current,
   difficulty: state.game.difficulty,
   noteMode: state.game.noteMode
 });
@@ -89,6 +91,8 @@ export default connect(
     setDigit,
     removeDigit,
     navigateCells,
-    toggleNoteMode
+    toggleNoteMode,
+    undo,
+    redo
   }
 )(App);

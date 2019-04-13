@@ -103,9 +103,10 @@ export default class Sudoku {
   }
 
   public activateCell(row: number, column: number): Sudoku {
-    this.activeCell = { row, column };
-    this.rows = this.rows.map(r => r.toggleCell(row, column));
-    return new Sudoku(this);
+    const sudoku = new Sudoku(this)
+    sudoku.activeCell = { row, column };
+    sudoku.rows = this.rows.map(r => r.toggleCell(row, column));
+    return sudoku;
   }
 
   public setDigit(digit: number, isNote: boolean): Sudoku {

@@ -1,9 +1,13 @@
 import Sudoku from "../models/Sudoku";
 import { DIFFICULTY } from "../models/Difficulty";
 
-export interface ISudokuState {
+export interface IGameState {
   difficulty: DIFFICULTY;
-  sudoku: Sudoku;
+  sudoku: {
+    past: Sudoku[];
+    current: Sudoku;
+    future: Sudoku[];
+  };
   noteMode: boolean;
 }
 
@@ -22,6 +26,8 @@ export const SET_DIGIT = "SET_DIGIT";
 export const REMOVE_DIGIT = "REMOVE_DIGIT";
 export const NAVIGATE_CELLS = "NAVIGATE_CELLS";
 export const TOGGLE_NOTE_MODE = "TOGGLE_NOTE_MODE";
+export const UNDO = "UNDO";
+export const REDO = "REDO";
 
 interface IChangeDifficultyAction {
   type: typeof CHANGE_DIFFICULTY;
@@ -68,6 +74,12 @@ interface IToggleNoteModeAction {
     value: boolean
   }
 }
+interface IUndoAction {
+  type: typeof UNDO;
+}
+interface IRedoAction {
+  type: typeof REDO;
+}
 
 export type OptionActions = IChangeDifficultyAction
   | INewGameAction
@@ -76,4 +88,6 @@ export type OptionActions = IChangeDifficultyAction
   | ISetDigitAction
   | IRemoveDigitAction
   | INavigateCellsAction
-  | IToggleNoteModeAction;
+  | IToggleNoteModeAction
+  | IUndoAction
+  | IRedoAction;

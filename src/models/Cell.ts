@@ -96,23 +96,25 @@ export default class Cell {
     if (!this.active || this.given) {
       return this;
     }
+    const cell = new Cell(this);
     if (isNote) {
-      this.notes = this.notes.map((x, i) => i === (digit - 1) ? !x : x)
+      cell.notes = this.notes.map((x, i) => i === (digit - 1) ? !x : x)
     } else {
-      this.value = this.value === digit ? null : digit;
+      cell.value = this.value === digit ? null : digit;
     }
-    this.valid = true;
-    return new Cell(this);
+    cell.valid = true;
+    return cell;
   }
 
   public removeDigit(): Cell {
     if (!this.active) {
       return this;
     }
-    this.notes = [...NO_NOTES];
-    this.value = null;
-    this.valid = true;
-    return new Cell(this);
+    const cell = new Cell(this);
+    cell.notes = [...NO_NOTES];
+    cell.value = null;
+    cell.valid = true;
+    return cell;
   }
 
   public isSolved(): boolean {

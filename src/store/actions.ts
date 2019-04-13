@@ -8,7 +8,9 @@ import {
   REMOVE_DIGIT,
   NAVIGATE_CELLS,
   DIRECTION,
-  TOGGLE_NOTE_MODE
+  TOGGLE_NOTE_MODE,
+  REDO,
+  UNDO
 } from "./types";
 import { DIFFICULTY } from "../models/Difficulty";
 
@@ -76,5 +78,17 @@ export function toggleNoteMode(value?: boolean): OptionActions {
   }
   return {
     type: TOGGLE_NOTE_MODE
+  };
+}
+
+export function undo(): OptionActions {
+  return {
+    type: UNDO,
+  };
+}
+
+export function redo(): OptionActions {
+  return {
+    type: REDO
   };
 }
