@@ -15,11 +15,12 @@ import {
 import Sudoku from "../models/Sudoku";
 import { DIFFICULTY } from "../models/Difficulty";
 
+const initialDifficulty = readDifficulty(DIFFICULTY.Easy)
 const initialState: IGameState = {
-  difficulty: DIFFICULTY.Easy,
+  difficulty: initialDifficulty,
   sudoku: {
     past: [],
-    current: Sudoku.create(DIFFICULTY.Easy),
+    current: Sudoku.create(initialDifficulty),
     future: []
   },
   noteMode: false
@@ -30,6 +31,7 @@ const futureStates: Sudoku[] = []
 export function gameReducer(state = initialState, action: OptionActions): IGameState {
   switch (action.type) {
     case CHANGE_DIFFICULTY:
+      writeDifficulty(action.payload);
       return {
         ...state,
         difficulty: action.payload,
@@ -126,4 +128,15 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
     default:
       return state;
   }
+}
+
+function readDifficulty(fallBack: DIFFICULTY): DIFFICULTY {
+  const data = window.localStorage.getItem('DIFFICULTY');
+  if (!data) {
+    return fallBack;
+  }
+  return data as unknown as DIFFICULTY;
+}
+function writeDifficulty(difficulty: DIFFICULTY) {
+  window.localStorage.setItem('DIFFICULTY', difficulty.toString());
 }
