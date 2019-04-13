@@ -12,8 +12,6 @@ export interface ISudokuCellComponentProps extends ISudokuCellComponentActions {
   size: number;
 }
 
-const FONT_MULTIPLIER = 0.68;
-
 export default class SudokuCellComponent extends Component<
   ISudokuCellComponentProps
   > {
@@ -39,7 +37,7 @@ export default class SudokuCellComponent extends Component<
       );
     }
     const notes = this.props.cell.getNotes();
-    const fontSize = `${Math.ceil((this.props.size / 3)) * FONT_MULTIPLIER}px`;
+    const fontSize = `${Math.ceil((this.props.size / 3)) * 0.76}px`;
     return (
       <div className="SudokuCell-notes">
         {notes.map((x, i) => (
@@ -57,7 +55,7 @@ export default class SudokuCellComponent extends Component<
 
   private calculateStyles(): CSSProperties {
     const size = `${this.props.size}px`;
-    const fontSize = `${Math.floor(this.props.size * FONT_MULTIPLIER)}px`;
+    const fontSize = `${Math.floor(this.props.size * 0.68)}px`;
     return {
       height: size,
       width: size,
