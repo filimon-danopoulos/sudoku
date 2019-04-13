@@ -9,9 +9,11 @@ interface InputComponentProps {
   removeDigit: typeof removeDigit;
 }
 
+export const INPUT_HEIGHT = 100;
+
 const InputComponent: React.FunctionComponent<InputComponentProps> = props => {
   return (
-    <div className="Input-container">
+    <div className="Input-container" style={{ height: `${INPUT_HEIGHT}px` }}>
       <div className="Input-numbers">
         {[...Array(10).keys()].slice(1).map(x => <button key={x} onClick={() => props.setDigit(x)}>{x}</button>)}
       </div>

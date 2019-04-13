@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, CSSProperties } from "react";
 import "../layout/Sudoku.scss";
 import Sudoku from "../models/Sudoku";
 import SudokuRow from "./SudokuRow";
 import { ISudokuCellComponentActions } from "./SudokuCell";
+import { INPUT_HEIGHT } from "./Input";
 
 export interface ISudokuProps extends ISudokuCellComponentActions {
   sudoku: Sudoku;
@@ -27,11 +28,20 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
 
   public render(): JSX.Element {
     return (
-      <div className="Sudoku-container" ref={this.containerRef}>
+      <div className="Sudoku-container" ref={this.containerRef} style={this.calculateStyles()}>
         {this.renderRows()}
         {this.renderSolvedOverlay()}
       </div>
     );
+  }
+
+  private calculateStyles(): CSSProperties {
+    if (!this.state.rowSize) {
+      return {};
+    }
+    return {
+      height: `${this.state.rowSize}px`
+    };
   }
 
   public componentDidMount(): void {
@@ -47,10 +57,12 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
     const rowDOM = this.containerRef.current;
     if (rowDOM) {
       const boundingRectangle = rowDOM.getBoundingClientRect();
-      const rawDimmension = boundingRectangle.height < boundingRectangle.width ? boundingRectangle.height : boundingRectangle.width;
-      const dimmension = 9 * Math.floor(rawDimmension / 9)
+      const height = boundingRectangle.height - INPUT_HEIGHT;
+      const width = boundingRectangle.width
+      const smallestDimmesion = height < width ? height : width;
+      const fittedDimmension = 9 * Math.floor(smallestDimmesion / 9)
       this.setState({
-        rowSize: dimmension
+        rowSize: fittedDimmension
       });
     } else {
       requestAnimationFrame(() => {

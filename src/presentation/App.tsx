@@ -34,8 +34,6 @@ class App extends Component<IAppProps> {
         <OptionsComponent {...this.props} />
         <div className="App-content">
           <SudokuComponent {...this.props} />
-        </div>
-        <div className="App-footer">
           <Input {...this.props} />
         </div>
       </div>
