@@ -8,9 +8,10 @@ import {
   SET_DIGIT,
   NAVIGATE_CELLS,
   REMOVE_DIGIT,
-  TOGGLE_NOTE_MODE,
+  TOGGLE_NOTE_MODE as SET_MODE,
   UNDO,
-  REDO
+  REDO,
+  MODE
 } from "./types";
 import Sudoku from "../models/Sudoku";
 import { DIFFICULTY } from "../models/Difficulty";
@@ -23,7 +24,7 @@ const initialState: IGameState = {
     current: Sudoku.create(initialDifficulty),
     future: []
   },
-  noteMode: false
+  mode: MODE.Input
 };
 const pastStates: Sudoku[] = []
 const futureStates: Sudoku[] = []
@@ -72,7 +73,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         ...state,
         sudoku: {
           past: [...state.sudoku.past, state.sudoku.current],
-          current: state.sudoku.current.setDigit(action.payload.digit, state.noteMode),
+          current: state.sudoku.current.setDigit(action.payload.digit, state.mode),
           future: []
         }
       };
@@ -94,10 +95,10 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           current: state.sudoku.current.navigate(action.payload.direction)
         }
       };
-    case TOGGLE_NOTE_MODE:
+    case SET_MODE:
       return {
         ...state,
-        noteMode: action.payload ? action.payload.value : !state.noteMode
+        mode: action.payload.mode
       };
     case UNDO:
       if (!state.sudoku.past.length) {

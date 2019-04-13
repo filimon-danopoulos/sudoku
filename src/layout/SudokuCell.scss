@@ -17,6 +17,11 @@ $border-thick: solid 2px $color-medium;
     bottom: 0;
     left: 0;
     color: $color-dark;
+
+    &.guess {
+      color: $color-red;
+      font-style: italic;
+    }
   }
   
   .SudokuCell-note {
@@ -122,5 +127,9 @@ $border-thick: solid 2px $color-medium;
 
   &.active-cell {
     background-color: $color-blue;
+
+    .guess {
+      color: $color-highlight;
+    }
   }
 }

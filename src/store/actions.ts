@@ -10,7 +10,8 @@ import {
   DIRECTION,
   TOGGLE_NOTE_MODE,
   REDO,
-  UNDO
+  UNDO,
+  MODE
 } from "./types";
 import { DIFFICULTY } from "../models/Difficulty";
 
@@ -67,18 +68,13 @@ export function navigateCells(direction: DIRECTION): OptionActions {
   };
 }
 
-export function toggleNoteMode(value?: boolean): OptionActions {
-  if (value !== undefined) {
-    return {
-      type: TOGGLE_NOTE_MODE,
-      payload: {
-        value
-      }
+export function setMode(mode: MODE): OptionActions {
+  return {
+    type: TOGGLE_NOTE_MODE,
+    payload: {
+      mode
     }
   }
-  return {
-    type: TOGGLE_NOTE_MODE
-  };
 }
 
 export function undo(): OptionActions {

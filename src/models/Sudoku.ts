@@ -1,6 +1,6 @@
 import Row from "./Row";
 import { DIFFICULTY } from "./Difficulty";
-import { DIRECTION } from "../store/types";
+import { DIRECTION, MODE } from "../store/types";
 
 const BASE = [
   [3, 6, 1, 7, 2, 5, 9, 4, 8],
@@ -109,9 +109,9 @@ export default class Sudoku {
     return sudoku;
   }
 
-  public setDigit(digit: number, isNote: boolean): Sudoku {
+  public setDigit(digit: number, mode: MODE): Sudoku {
     const sudoku = new Sudoku(this);
-    sudoku.rows = this.rows.map(r => r.setDigit(digit, isNote));
+    sudoku.rows = this.rows.map(r => r.setDigit(digit, mode));
     return sudoku;
   }
 

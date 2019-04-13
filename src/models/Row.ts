@@ -1,5 +1,5 @@
 import Cell from "./Cell";
-import { DIRECTION } from "../store/types";
+import { DIRECTION, MODE } from "../store/types";
 
 export default class Row {
   private cells: Cell[];
@@ -59,12 +59,12 @@ export default class Row {
     return this.active;
   }
 
-  public setDigit(digit: number, isNote: boolean): Row {
+  public setDigit(digit: number, mode: MODE): Row {
     if (!this.active) {
       return this;
     }
     const row = new Row(this);
-    row.cells = this.cells.map(c => c.setDigit(digit, isNote));
+    row.cells = this.cells.map(c => c.setDigit(digit, mode));
     return row;
   }
 

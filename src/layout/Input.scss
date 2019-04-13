@@ -8,14 +8,12 @@
 
   .Input-utils,.Input-numbers {
     button {
-      
+      @include Options-item($color-highlight, $background-color-medium, $color-highlight, $color-medium );
       padding: 6px;
       margin: 2px;
       min-width: 32px;
       min-height: 32px;
       font-size: 16px;
-
-      @include Options-item($color-highlight, $background-color-medium, $color-highlight, $color-medium );
       box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 
       &.active {

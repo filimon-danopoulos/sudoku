@@ -33,7 +33,7 @@ export default class SudokuCellComponent extends Component<
     const value = this.props.cell.getValue();
     if (!!value) {
       return (
-        <span className="SudokuCell-value">{value}</span>
+        <span className={`SudokuCell-value ${this.props.cell.isGuess() ? 'guess' : ''}`}>{value}</span>
       );
     }
     const notes = this.props.cell.getNotes();

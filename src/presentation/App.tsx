@@ -6,10 +6,10 @@ import SudokuComponent from "./Sudoku";
 import OptionsComponent from "./Options";
 import Input from "./Input";
 import { AppState } from "../store";
-import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, toggleNoteMode, redo, undo } from "../store/actions";
+import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, setMode, redo, undo } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
 import Sudoku from "../models/Sudoku";
-import { DIRECTION } from "../store/types";
+import { DIRECTION, MODE } from "../store/types";
 
 
 interface IAppProps {
@@ -20,10 +20,10 @@ interface IAppProps {
   setDigit: typeof setDigit;
   removeDigit: typeof removeDigit;
   navigateCells: typeof navigateCells;
-  toggleNoteMode: typeof toggleNoteMode;
+  setMode: typeof setMode;
   undo: typeof undo,
   redo: typeof redo,
-  noteMode: boolean;
+  mode: MODE;
   sudoku: Sudoku;
   past: Sudoku[];
   future: Sudoku[];
@@ -70,9 +70,9 @@ class App extends Component<IAppProps> {
     } else if (key === 40) { // down
       this.props.navigateCells(DIRECTION.Down);
     } else if (key === 32) { // space
-      this.props.toggleNoteMode()
+      this.props.setMode(this.props.mode !== MODE.Note ? MODE.Note : MODE.Input)
     } else if (key === 27) { // esc
-      this.props.toggleNoteMode(false)
+      this.props.setMode(MODE.Input)
     }
   }
 }
@@ -82,7 +82,7 @@ const mapStateToProps = (state: AppState) => ({
   past: state.game.sudoku.past,
   future: state.game.sudoku.future,
   difficulty: state.game.difficulty,
-  noteMode: state.game.noteMode
+  mode: state.game.mode
 });
 
 export default connect(
@@ -95,7 +95,7 @@ export default connect(
     setDigit,
     removeDigit,
     navigateCells,
-    toggleNoteMode,
+    setMode,
     undo,
     redo
   }

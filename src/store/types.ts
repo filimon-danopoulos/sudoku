@@ -8,7 +8,7 @@ export interface IGameState {
     current: Sudoku;
     future: Sudoku[];
   };
-  noteMode: boolean;
+  mode: MODE;
 }
 
 export enum DIRECTION {
@@ -16,6 +16,12 @@ export enum DIRECTION {
   Down,
   Left,
   Right
+}
+
+export enum MODE {
+  Input,
+  Note,
+  Guess
 }
 
 export const CHANGE_DIFFICULTY = "CHANGE_DIFFICULTY";
@@ -68,10 +74,10 @@ interface INavigateCellsAction {
   }
 }
 
-interface IToggleNoteModeAction {
+interface ISetModeAction {
   type: typeof TOGGLE_NOTE_MODE;
-  payload?: {
-    value: boolean
+  payload: {
+    mode: MODE
   }
 }
 interface IUndoAction {
@@ -88,6 +94,6 @@ export type OptionActions = IChangeDifficultyAction
   | ISetDigitAction
   | IRemoveDigitAction
   | INavigateCellsAction
-  | IToggleNoteModeAction
+  | ISetModeAction
   | IUndoAction
   | IRedoAction;

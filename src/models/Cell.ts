@@ -1,3 +1,5 @@
+import { MODE } from "../store/types";
+
 const NO_NOTES = [false, false, false, false, false, false, false, false, false];
 
 export default class Cell {
@@ -9,6 +11,7 @@ export default class Cell {
   private given: boolean;
   private active: boolean;
   private notes: boolean[];
+  private guess: boolean;
 
   private constructor(previous?: Cell) {
     this.value = previous ? previous.value : null;
@@ -18,7 +21,8 @@ export default class Cell {
     this.given = previous ? previous.given : false;
     this.active = previous ? previous.active : false;
     this.valid = previous ? previous.valid : true;
-    this.notes = previous ? previous.notes : [...NO_NOTES]
+    this.notes = previous ? previous.notes : [...NO_NOTES];
+    this.guess = previous ? previous.guess : false;
   }
 
   static create(solution: number, row: number, column: number, given: boolean): Cell {
@@ -28,7 +32,6 @@ export default class Cell {
     cell.column = column;
     cell.given = given;
     cell.value = given ? solution : null;
-    cell.valid = true;
     return cell;
   }
 
@@ -92,16 +95,21 @@ export default class Cell {
     return cell;
   }
 
-  public setDigit(digit: number, isNote: boolean): Cell {
+  public setDigit(digit: number, mode: MODE): Cell {
     if (!this.active || this.given) {
       return this;
     }
     const cell = new Cell(this);
-    if (isNote) {
+    if (mode === MODE.Note) {
       cell.notes = this.notes.map((x, i) => i === (digit - 1) ? !x : x)
     } else {
-      cell.value = this.value === digit ? null : digit;
+      if (cell.guess) {
+        cell.value = digit;
+      } else {
+        cell.value = this.value === digit ? null : digit;
+      }
     }
+    cell.guess = mode === MODE.Guess;
     cell.valid = true;
     return cell;
   }
@@ -123,5 +131,9 @@ export default class Cell {
 
   public getNotes(): boolean[] {
     return this.notes;
+  }
+
+  public isGuess(): boolean {
+    return this.guess;
   }
 }
