@@ -13,7 +13,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { DIFFICULTY } from '../models/Difficulty';
 import { changeDifficulty, validateSolution, createNewGame, setMode } from '../store/actions';
-import MenuItem from '@material-ui/core/MenuItem';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { MODE } from '../store/types';
@@ -42,7 +41,7 @@ const styles = (theme: Theme) => createStyles({
   }
 });
 
-export interface ISudokuAppBarProps extends WithStyles<typeof styles> {
+export interface ITopBarProps extends WithStyles<typeof styles> {
   difficulty: DIFFICULTY;
   mode: MODE;
 
@@ -51,16 +50,16 @@ export interface ISudokuAppBarProps extends WithStyles<typeof styles> {
   createNewGame: typeof createNewGame;
   setMode: typeof setMode;
 }
-export interface ISudokuAppBarState {
+export interface ITopBarState {
   drawerOpen: boolean;
 }
 
 const DIFFICUTIES = [{
-  difficulty: DIFFICULTY.Easy,
-  label: "Easy"
-}, {
   difficulty: DIFFICULTY.VeryEasy,
   label: "Very Easy"
+}, {
+  difficulty: DIFFICULTY.Easy,
+  label: "Easy"
 }, {
   difficulty: DIFFICULTY.Normal,
   label: "Normal"
@@ -75,8 +74,8 @@ const DIFFICUTIES = [{
   label: "Insane"
 }]
 
-class SudokuAppBar extends Component<ISudokuAppBarProps, ISudokuAppBarState> {
-  constructor(props: ISudokuAppBarProps) {
+class TopBar extends Component<ITopBarProps, ITopBarState> {
+  constructor(props: ITopBarProps) {
     super(props);
     this.state = {
       drawerOpen: false
@@ -101,7 +100,7 @@ class SudokuAppBar extends Component<ISudokuAppBarProps, ISudokuAppBarState> {
               labelPlacement="start"
               onClick={() => this.toggleMode()}
               control={
-                <Switch checked={this.props.mode === MODE.Note} />
+                <Switch color="default" checked={this.props.mode === MODE.Note} />
               }
             />
           </Toolbar>
@@ -110,7 +109,7 @@ class SudokuAppBar extends Component<ISudokuAppBarProps, ISudokuAppBarState> {
           <List>
             <ListSubheader inset>Puzzle</ListSubheader>
             <Divider />
-            <ListItem button onClick={() => this.props.createNewGame()}>
+            <ListItem button onClick={() => this.createNewGame()}>
               <ListItemText primary="New game" />
             </ListItem>
             <ListItem button>
@@ -166,7 +165,7 @@ class SudokuAppBar extends Component<ISudokuAppBarProps, ISudokuAppBarState> {
   private getBarText(): string {
     const difficulty = DIFFICUTIES.find(option => option.difficulty === this.props.difficulty);
     if (difficulty) {
-      return `${difficulty.label} Puzzle`;
+      return `${difficulty.label}`;
     }
     return "";
   }
@@ -178,6 +177,11 @@ class SudokuAppBar extends Component<ISudokuAppBarProps, ISudokuAppBarState> {
       this.props.setMode(MODE.Note);
     }
   }
+
+  private createNewGame(): void {
+    this.closeDrawer();
+    this.props.createNewGame();
+  }
 }
 
-export default withStyles(styles)(SudokuAppBar);
+export default withStyles(styles)(TopBar);

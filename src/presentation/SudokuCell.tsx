@@ -1,51 +1,171 @@
 import React, { Component, CSSProperties } from "react";
-import "../layout/SudokuCell.scss";
 import Cell from "../models/Cell";
 import { toggleCell } from "../store/actions";
+import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core";
 
-export interface ISudokuCellComponentActions {
+const styles = (theme: Theme) => {
+  const borderThin = `solid 1px ${theme.palette.common.black}`;
+  const borderThick = `solid 2px ${theme.palette.common.black}`;
+
+  return createStyles({
+    container: {
+      display: 'flex',
+      position: 'relative',
+      width: '11.111111%',
+      paddingBottom: '11.111111%',
+      textAlign: 'center'
+    },
+    content: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      borderRight: borderThin,
+      borderBottom: borderThin
+    },
+    thickBorderTop: {
+      borderTop: borderThick
+    },
+    thickBorderBottom: {
+      borderBottom: borderThick
+    },
+    thickBorderLeft: {
+      borderLeft: borderThick
+    },
+    thickBorderRight: {
+      borderRight: borderThick
+    },
+    dark: {
+      backgroundColor: theme.palette.grey[200],
+    },
+    given: {
+      fontWeight: 'bold'
+    },
+    active: {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.primary.contrastText,
+    },
+    invalid: {
+      backgroundColor: theme.palette.error.light,
+      color: theme.palette.error.contrastText
+    },
+    note1: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      bottom: '66.666667%',
+      right: '66.666667%'
+    },
+    note2: {
+      position: 'absolute',
+      top: "0",
+      left: "33.333333%",
+      bottom: "66.666667%",
+      right: "33.333333%",
+    },
+    note3: {
+      position: 'absolute',
+      top: "0",
+      left: "66.666667%",
+      bottom: "66.666667%",
+      right: "0",
+    },
+    note4: {
+      position: 'absolute',
+      top: "33.333333%",
+      left: "0",
+      bottom: "33.333333%",
+      right: "66.666667%",
+    },
+    note5: {
+      position: 'absolute',
+      top: "33.333333%",
+      left: "33.333333%",
+      bottom: "33.333333%",
+      right: "33.333333%",
+    },
+    note6: {
+      position: 'absolute',
+      top: "33.333333%",
+      left: "66.666667%",
+      bottom: "33.333333%",
+      right: "0",
+    },
+    note7: {
+      position: 'absolute',
+      top: "66.666667%",
+      left: "0",
+      bottom: "0",
+      right: "66.666667%",
+    },
+    note8: {
+      position: 'absolute',
+      top: "66.666667%",
+      left: "33.333333%",
+      bottom: "0",
+      right: "33.333333%",
+    },
+    note9: {
+      position: 'absolute',
+      top: "66.666667%",
+      left: "66.666667%",
+      bottom: "0",
+      right: "0",
+    }
+  });
+}
+
+export interface ISudokuCellComponentProps extends WithStyles<typeof styles> {
+  cell: Cell;
+  size: number;
   toggleCell: typeof toggleCell
 }
 
-export interface ISudokuCellComponentProps extends ISudokuCellComponentActions {
-  cell: Cell;
-  size: number;
-}
-
-export default class SudokuCellComponent extends Component<
-  ISudokuCellComponentProps
-  > {
+class SudokuCellComponent extends Component<ISudokuCellComponentProps> {
 
   public render(): JSX.Element {
+    const { classes } = this.props;
     return (
-      <div
-        className={`SudokuCell-container ${this.calculateClasses()}`}
-        style={this.calculateStyles()}
-        ref="cell"
-        onClick={() => this.handleClick()}
-      >
-        {this.renderContent()}
+      <div className={classes.container} onClick={() => this.handleClick()}>
+        <div className={this.calculateClasses()}>
+          {this.renderContent()}
+        </div>
       </div>
     );
   }
 
   private renderContent(): JSX.Element {
+    const { classes } = this.props;
     const value = this.props.cell.getValue();
     if (!!value) {
       return (
-        <span className={`SudokuCell-value ${this.props.cell.isGuess() ? 'guess' : ''}`}>{value}</span>
+        <span style={{ fontSize: `${this.props.size}px` }}>{value}</span>
       );
     }
     const notes = this.props.cell.getNotes();
-    const fontSize = `${Math.ceil((this.props.size / 3)) * 0.76}px`;
+    const fontSize = `${Math.ceil((this.props.size / 3))}px`;
+    const cellClasses = [
+      classes.note1,
+      classes.note2,
+      classes.note3,
+      classes.note4,
+      classes.note5,
+      classes.note6,
+      classes.note7,
+      classes.note8,
+      classes.note9
+    ];
     return (
-      <div className="SudokuCell-notes">
-        {notes.map((x, i) => (
-          <span className="SudokuCell-note" key={i} style={{ fontSize: fontSize }}>
-            {x ? i + 1 : ''}
-          </span>
-        ))}
-      </div>
+      <React.Fragment>
+        {
+          notes.map((x, i) => (
+            <span className={cellClasses[i]} key={i} style={{ fontSize: fontSize }}>
+              {x ? i + 1 : ''}
+            </span>
+          ))
+        }
+      </React.Fragment >
     );
   }
 
@@ -53,27 +173,26 @@ export default class SudokuCellComponent extends Component<
     this.props.toggleCell(this.props.cell.getRow(), this.props.cell.getColumn())
   }
 
-  private calculateStyles(): CSSProperties {
-    const size = `${this.props.size}px`;
-    const fontSize = `${Math.floor(this.props.size * 0.68)}px`;
-    return {
-      height: size,
-      width: size,
-      fontSize: fontSize
-    };
-  }
-
   private calculateClasses(): string {
+    const { classes } = this.props;
     const cell = this.props.cell;
     const row = cell.getRow();
-    const classes: { [key: string]: boolean } = {
-      "even-block-cell": cell.getBlock() % 2 === 0,
-      "given-cell": cell.isGiven(),
-      "invalid-cell": cell.isValid() !== true,
-      "active-cell": cell.isActive()
-    };
-    [...Array(10)].forEach((x, i) => classes[`row-${i}-cell`] = row === i);
+    const column = cell.getColumn();
+    const block = cell.getBlock();
 
-    return Object.keys(classes).filter(key => classes[key]).join(" ");
+    const result = {
+      [classes.content]: true,
+      [classes.thickBorderTop]: row === 1,
+      [classes.thickBorderBottom]: row % 3 === 0,
+      [classes.thickBorderLeft]: column === 1,
+      [classes.thickBorderRight]: column % 3 === 0,
+      [classes.dark]: block % 2 === 0,
+      [classes.given]: cell.isGiven(),
+      [classes.invalid]: !cell.isValid(),
+      [classes.active]: cell.isActive(),
+    }
+    return Object.keys(result).filter(key => result[key]).join(' ');
   }
 }
+
+export default withStyles(styles)(SudokuCellComponent);

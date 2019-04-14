@@ -9,8 +9,10 @@ import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit
 import { DIFFICULTY } from "../models/Difficulty";
 import Sudoku from "../models/Sudoku";
 import { DIRECTION, MODE } from "../store/types";
-import SudokuAppBar from "./SudokuAppBar";
+import TopBar from "./TopBar";
+import BottomBar from "./BottomBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import CompletedDialog from "./CompletedDialog";
 
 
 interface IAppProps {
@@ -36,11 +38,13 @@ class App extends Component<IAppProps> {
     return (
       <div className="App">
         <CssBaseline />
-        <SudokuAppBar {...this.props} />
+        <TopBar {...this.props} />
         <div className="App-content">
           <SudokuComponent {...this.props} />
           <Input {...this.props} />
         </div>
+        <CompletedDialog {...this.props}></CompletedDialog>
+        <BottomBar {...this.props} />
       </div>
     );
   }
