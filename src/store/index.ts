@@ -1,3 +1,4 @@
+import "typeface-roboto";
 import { createStore, combineReducers } from "redux";
 
 import { gameReducer } from "./reducers";

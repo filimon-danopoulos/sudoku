@@ -1,23 +1,41 @@
 import React, { Component, CSSProperties } from "react";
-import "../layout/Sudoku.scss";
 import Sudoku from "../models/Sudoku";
 import SudokuRow from "./SudokuRow";
-import { ISudokuCellComponentActions } from "./SudokuCell";
 import { INPUT_HEIGHT } from "./Input";
-import { createNewGame } from "../store/actions";
+import { createNewGame, toggleCell } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
+import Paper from "@material-ui/core/Paper";
+import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core";
 
-export interface ISudokuProps extends ISudokuCellComponentActions {
+const styles = (theme: Theme) => createStyles({
+  container: {
+    position: 'relative',
+    width: '100%',
+    paddingBottom: '100%'
+  },
+  sudokuPaper: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: theme.spacing.unit
+  }
+});
+
+export interface ISudokuProps extends WithStyles<typeof styles> {
   sudoku: Sudoku;
   difficulty: DIFFICULTY;
   createNewGame: typeof createNewGame;
+  toggleCell: typeof toggleCell
+
 }
 
 export interface ISudokuState {
   rowSize: number;
 }
 
-export default class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
+class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
   private containerRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: ISudokuProps) {
@@ -29,21 +47,14 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
   }
 
   public render(): JSX.Element {
+    const { classes } = this.props;
     return (
-      <div className="Sudoku-container" ref={this.containerRef} style={this.calculateStyles()}>
-        {this.renderRows()}
-        {this.renderSolvedOverlay()}
+      <div className={classes.container} ref={this.containerRef}>
+        <Paper className={classes.sudokuPaper} >
+          {this.renderRows()}
+        </Paper>
       </div>
     );
-  }
-
-  private calculateStyles(): CSSProperties {
-    if (!this.state.rowSize) {
-      return {};
-    }
-    return {
-      height: `${this.state.rowSize}px`
-    };
   }
 
   public componentDidMount(): void {
@@ -57,7 +68,7 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
       const height = boundingRectangle.height - INPUT_HEIGHT;
       const width = boundingRectangle.width
       const smallestDimmesion = height < width ? height : width;
-      const fittedDimmension = 9 * Math.floor(smallestDimmesion / 9)
+      const fittedDimmension = 9 * Math.floor(smallestDimmesion / 9);
       this.setState({
         rowSize: fittedDimmension
       });
@@ -73,31 +84,8 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
       return null;
     }
     return this.props.sudoku.getRows().map((r, i) => (
-      <SudokuRow row={r} key={i} rowSize={this.state.rowSize} {...this.props} />
+      <SudokuRow row={r} key={i} rowSize={this.state.rowSize} toggleCell={this.props.toggleCell} />
     ));
-  }
-
-  private renderSolvedOverlay(): JSX.Element | null {
-    if (!this.props.sudoku.isSolved()) {
-      return null;
-    }
-
-    const difficulty = this.getDifficultyText();
-    const endTime = Date.now()
-    const ellapsedTime = endTime - this.props.sudoku.getCreationTimestamp();
-    return (
-      <div className="Sudoku-solved" style={{
-        width: `${this.state.rowSize}px`,
-        height: `${this.state.rowSize}px`,
-        marginLeft: `-${this.state.rowSize / 2}px`
-      }}>
-        <div className="Sudoku-solved-message">
-          <h1>You solved {difficulty} puzzle!</h1>
-          <p>Ellapsed time: <span className="Sudoku-ellapsed">{this.formatMillisecons(ellapsedTime)}</span></p>
-          <button onClick={() => this.props.createNewGame()}>Start a new game</button>
-        </div>
-      </div>
-    );
   }
 
   private formatMillisecons(milliSeconds: number): string {
@@ -109,23 +97,7 @@ export default class SudokuComponent extends Component<ISudokuProps, ISudokuStat
 
     return `${hours}:${minutes}:${seconds}`;
   }
-
-  private getDifficultyText(): string {
-    switch (this.props.difficulty) {
-      case DIFFICULTY.VeryEasy:
-        return 'a very easy';
-      case DIFFICULTY.Easy:
-        return 'an easy';
-      case DIFFICULTY.Normal:
-        return 'a normal';
-      case DIFFICULTY.Hard:
-        return 'a hard';
-      case DIFFICULTY.VeryHard:
-        return 'a very hard';
-      case DIFFICULTY.Insane:
-        return 'an insane';
-      default:
-        return 'an unknown';
-    }
-  }
 }
+
+
+export default withStyles(styles)(SudokuComponent);

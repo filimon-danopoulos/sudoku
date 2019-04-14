@@ -1,40 +1,42 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import Row from "../models/Row";
-import "../layout/SudokuRow.scss";
-import SudokuCell, { ISudokuCellComponentActions } from "./SudokuCell";
+import SudokuCell from "./SudokuCell";
+import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core";
+import { toggleCell } from "../store/actions";
 
-export interface ISudokuRowProps extends ISudokuCellComponentActions {
+const styles = (theme: Theme) => createStyles({
+  sudokuRow: {
+    display: 'flex',
+    width: '100%'
+  }
+});
+
+export interface ISudokuRowProps extends WithStyles<typeof styles> {
   row: Row;
   rowSize: number;
+  toggleCell: typeof toggleCell;
 }
 
-export default class SudokuRowComponent extends Component<
-  ISudokuRowProps
-  > {
+class SudokuRowComponent extends Component<ISudokuRowProps> {
 
   public render(): JSX.Element {
+    const { classes } = this.props
     return (
-      <div className="SudokuRow-container" style={this.getRowStyle()}>
+      <div className={classes.sudokuRow}>
         {this.renderRow()}
       </div>
     );
   }
 
-  private getRowStyle(): React.CSSProperties {
-    return {
-      width: `${this.props.rowSize}px`,
-      height: `${this.getCellSize()}px`
-    };
-  }
-
   private renderRow(): JSX.Element[] | null {
     return this.props.row
       .getCells()
-      .map((c, i) => <SudokuCell {...this.props} cell={c} size={this.getCellSize()} key={i} />);
+      .map((c, i) => <SudokuCell toggleCell={this.props.toggleCell} cell={c} size={this.getCellSize()} key={i} />);
   }
 
   private getCellSize(): number {
     return this.props.rowSize / 9;
   }
 }
+
+export default withStyles(styles)(SudokuRowComponent);
