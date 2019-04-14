@@ -21,21 +21,6 @@ interface InputComponentProps {
 export const INPUT_HEIGHT = 100;
 
 const InputComponent: React.FunctionComponent<InputComponentProps> = props => {
-  const toggleMode = (mode: MODE) => {
-    if (props.mode === mode) {
-      props.setMode(MODE.Input);
-    } else {
-      props.setMode(mode);
-    }
-  }
-
-  const getModeClass = (mode: MODE): string => {
-    if (props.mode === mode) {
-      return 'active';
-    }
-    return '';
-  }
-
   if (props.sudoku.isSolved()) {
     return null;
   }
@@ -51,9 +36,7 @@ const InputComponent: React.FunctionComponent<InputComponentProps> = props => {
       </div>
       <div className="Input-utils">
         <button disabled={!props.past.length} onClick={() => props.undo()}>Undo</button>
-        <button className={getModeClass(MODE.Note)} onClick={() => toggleMode(MODE.Note)}>Note</button>
         <button onClick={() => props.removeDigit()}>Clear</button>
-        <button className={getModeClass(MODE.Guess)} onClick={() => toggleMode(MODE.Guess)}>Guess</button>
         <button disabled={!props.future.length} onClick={() => props.redo()}>Redo</button>
       </div>
     </div >

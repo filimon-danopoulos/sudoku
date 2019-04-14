@@ -3,13 +3,14 @@ import { connect } from "react-redux";
 
 import "../layout/App.scss";
 import SudokuComponent from "./Sudoku";
-import OptionsComponent from "./Options";
 import Input from "./Input";
 import { AppState } from "../store";
 import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, setMode, redo, undo } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
 import Sudoku from "../models/Sudoku";
 import { DIRECTION, MODE } from "../store/types";
+import SudokuAppBar from "./SudokuAppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 
 interface IAppProps {
@@ -34,10 +35,8 @@ class App extends Component<IAppProps> {
   public render(): JSX.Element {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1>Sudoku</h1>
-        </header>
-        <OptionsComponent {...this.props} />
+        <CssBaseline />
+        <SudokuAppBar {...this.props} />
         <div className="App-content">
           <SudokuComponent {...this.props} />
           <Input {...this.props} />
