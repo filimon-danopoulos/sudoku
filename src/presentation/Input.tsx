@@ -3,9 +3,26 @@ import React from 'react';
 import { setDigit, removeDigit, setMode, redo, undo } from '../store/actions';
 import Sudoku from '../models/Sudoku';
 import { MODE } from '../store/types';
-import { Chip, Paper } from '@material-ui/core';
+import { Chip, Paper, createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 
-interface InputComponentProps {
+const styles = (theme: Theme) => createStyles({
+  container: {
+    paddingTop: 15,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    '@media (orientation: portrait)': {
+      width: '100%',
+    },
+    '@media (orientation: landscape)': {
+      width: 'calc(100vh - 2*64px - 100px)',
+    },
+  },
+  chip: {
+    margin: '4px 2px 4px 2px'
+  }
+});
+
+interface InputComponentProps extends WithStyles<typeof styles> {
   setDigit: typeof setDigit;
   removeDigit: typeof removeDigit;
   mode: MODE;
@@ -20,17 +37,19 @@ const InputComponent: React.FunctionComponent<InputComponentProps> = props => {
     return null;
   }
 
+  const { classes } = props
   return (
-    <div className="Input-container" style={{ width: '100%', paddingTop: '15px' }}>
+    <div className={classes.container}>
       <Paper>
-        <div className="Input-numbers">
-          {[...Array(10).keys()].slice(1).map(x => (
-            <Chip color="primary" label={x} key={x} onClick={() => props.setDigit(x)} style={{ margin: '4px 2px 4px 2px' }} />
-          ))}
-        </div>
+        {[...Array(10).keys()].slice(1).map(x => {
+          if (props.sudoku.isDigitSolved(x)) {
+            return (<Chip clickable={false} color="default" className={classes.chip} label={x} key={x} />);
+          }
+          return (<Chip onClick={() => props.setDigit(x)} color="primary" className={classes.chip} label={x} key={x} />);
+        })}
       </Paper>
     </div >
   );
 }
 
-export default InputComponent;
+export default withStyles(styles)(InputComponent);

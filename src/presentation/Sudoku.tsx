@@ -10,8 +10,16 @@ import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core";
 const styles = (theme: Theme) => createStyles({
   container: {
     position: 'relative',
-    width: '100%',
-    paddingBottom: '100%'
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    '@media (orientation: portrait)': {
+      width: '100%',
+      paddingBottom: '100%',
+    },
+    '@media (orientation: landscape)': {
+      height: 'calc(100vh - 2*64px - 100px)',
+      width: 'calc(100vh - 2*64px - 100px)',
+    },
   },
   sudokuPaper: {
     position: 'absolute',
