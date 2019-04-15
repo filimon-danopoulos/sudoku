@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import "../layout/App.scss";
 import SudokuComponent from "./Sudoku";
-import Input from "./Input";
+import Numbers from "./Numebrs";
 import { AppState } from "../store";
 import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, setMode, redo, undo } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
@@ -41,7 +41,7 @@ class App extends Component<IAppProps> {
         <TopBar {...this.props} />
         <div className="App-content">
           <SudokuComponent {...this.props} />
-          <Input {...this.props} />
+          <Numbers {...this.props} />
         </div>
         <CompletedDialog {...this.props}></CompletedDialog>
         <BottomBar {...this.props} />

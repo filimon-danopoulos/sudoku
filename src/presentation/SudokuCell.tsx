@@ -13,7 +13,8 @@ const styles = (theme: Theme) => {
       position: 'relative',
       width: '11.111111%',
       paddingBottom: '11.111111%',
-      textAlign: 'center'
+      textAlign: 'center',
+      userSelect: "none"
     },
     content: {
       position: 'absolute',
@@ -42,13 +43,13 @@ const styles = (theme: Theme) => {
     given: {
       fontWeight: 'bold'
     },
-    active: {
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.primary.contrastText,
-    },
     invalid: {
       backgroundColor: theme.palette.error.light,
       color: theme.palette.error.contrastText
+    },
+    active: {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.primary.contrastText,
     },
     note1: {
       position: 'absolute',

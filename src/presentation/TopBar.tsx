@@ -100,7 +100,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
               labelPlacement="start"
               onClick={() => this.toggleMode()}
               control={
-                <Switch color="default" checked={this.props.mode === MODE.Note} />
+                <Switch color="secondary" checked={this.props.mode === MODE.Note} />
               }
             />
           </Toolbar>

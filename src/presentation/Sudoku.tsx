@@ -1,7 +1,6 @@
 import React, { Component, CSSProperties } from "react";
 import Sudoku from "../models/Sudoku";
 import SudokuRow from "./SudokuRow";
-import { INPUT_HEIGHT } from "./Input";
 import { createNewGame, toggleCell } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
 import Paper from "@material-ui/core/Paper";
@@ -73,7 +72,7 @@ class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
     const rowDOM = this.containerRef.current;
     if (rowDOM) {
       const boundingRectangle = rowDOM.getBoundingClientRect();
-      const height = boundingRectangle.height - INPUT_HEIGHT;
+      const height = boundingRectangle.height - 100;
       const width = boundingRectangle.width
       const smallestDimmesion = height < width ? height : width;
       const fittedDimmension = 9 * Math.floor(smallestDimmesion / 9);
