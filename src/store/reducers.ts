@@ -11,12 +11,14 @@ import {
   TOGGLE_NOTE_MODE as SET_MODE,
   UNDO,
   REDO,
-  MODE
+  MODE,
+  TOGGLE_NIGHT_MODE
 } from "./types";
 import Sudoku from "../models/Sudoku";
 import { DIFFICULTY } from "../models/Difficulty";
 
 const initialDifficulty = readDifficulty(DIFFICULTY.Easy)
+const initialNightMode = false;
 const initialState: IGameState = {
   difficulty: initialDifficulty,
   sudoku: {
@@ -24,7 +26,8 @@ const initialState: IGameState = {
     current: Sudoku.create(initialDifficulty).activateCell(1, 1),
     future: []
   },
-  mode: MODE.Input
+  mode: MODE.Input,
+  nightMode: initialNightMode
 };
 
 export function gameReducer(state = initialState, action: OptionActions): IGameState {
@@ -121,6 +124,12 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           current: next,
           future: state.sudoku.future.slice(0, -1)
         }
+      }
+    case TOGGLE_NIGHT_MODE:
+
+      return {
+        ...state,
+        nightMode: !state.nightMode
       }
     default:
       return state;

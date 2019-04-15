@@ -12,7 +12,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { DIFFICULTY } from '../models/Difficulty';
-import { changeDifficulty, validateSolution, createNewGame, setMode } from '../store/actions';
+import { changeDifficulty, validateSolution, createNewGame, setMode, toggleNightMode } from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { MODE } from '../store/types';
@@ -49,6 +49,8 @@ export interface ITopBarProps extends WithStyles<typeof styles> {
   validateSolution: typeof validateSolution;
   createNewGame: typeof createNewGame;
   setMode: typeof setMode;
+  toggleNightMode: typeof toggleNightMode;
+  nightMode: boolean;
 }
 export interface ITopBarState {
   drawerOpen: boolean;
@@ -107,7 +109,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
         </AppBar>
         <Drawer variant="temporary" classes={{ paper: classes.drawerPaper }} open={this.state.drawerOpen} onClose={() => this.closeDrawer()}>
           <List>
-            <ListSubheader inset>Puzzle</ListSubheader>
+            <ListSubheader>Puzzle</ListSubheader>
             <Divider />
             <ListItem button onClick={() => this.createNewGame()}>
               <ListItemText primary="New game" />
@@ -119,9 +121,17 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
               <ListItemText primary="Validate" onClick={() => this.validate()} />
             </ListItem>
             <Divider />
-            <ListSubheader inset>Difficulty</ListSubheader>
+            <ListSubheader>Difficulty</ListSubheader>
             <Divider />
             {this.renderDifficulties()}
+            <Divider />
+            <ListSubheader>Settings</ListSubheader>
+            <Divider />
+            <ListItem button
+              selected={this.props.nightMode}
+              onClick={() => this.props.toggleNightMode()}>
+              <ListItemText primary="Nightmode" onClick={() => this.validate()} />
+            </ListItem>
           </List>
         </Drawer>
       </React.Fragment>

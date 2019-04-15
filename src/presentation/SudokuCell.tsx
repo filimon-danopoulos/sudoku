@@ -38,7 +38,7 @@ const styles = (theme: Theme) => {
       borderRight: borderThick
     },
     dark: {
-      backgroundColor: theme.palette.grey[200],
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.light : theme.palette.grey[200],
     },
     given: {
       fontWeight: 'bold'
@@ -48,7 +48,7 @@ const styles = (theme: Theme) => {
       color: theme.palette.error.contrastText
     },
     active: {
-      backgroundColor: theme.palette.primary.light,
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
       color: theme.palette.primary.contrastText,
     },
     note1: {

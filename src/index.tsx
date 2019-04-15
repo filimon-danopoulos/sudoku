@@ -8,7 +8,6 @@ import * as serviceWorker from "./serviceWorker";
 import configureStore from "./store";
 import App from "./presentation/App";
 
-
 const store = configureStore();
 
 const Root = () => (

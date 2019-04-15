@@ -9,6 +9,7 @@ export interface IGameState {
     future: Sudoku[];
   };
   mode: MODE;
+  nightMode: boolean;
 }
 
 export enum DIRECTION {
@@ -34,6 +35,7 @@ export const NAVIGATE_CELLS = "NAVIGATE_CELLS";
 export const TOGGLE_NOTE_MODE = "TOGGLE_NOTE_MODE";
 export const UNDO = "UNDO";
 export const REDO = "REDO";
+export const TOGGLE_NIGHT_MODE = "TOGGLE_NIGHT_MODE";
 
 interface IChangeDifficultyAction {
   type: typeof CHANGE_DIFFICULTY;
@@ -86,6 +88,9 @@ interface IUndoAction {
 interface IRedoAction {
   type: typeof REDO;
 }
+interface IToggleNightModeAction {
+  type: typeof TOGGLE_NIGHT_MODE;
+}
 
 export type OptionActions = IChangeDifficultyAction
   | INewGameAction
@@ -96,4 +101,5 @@ export type OptionActions = IChangeDifficultyAction
   | INavigateCellsAction
   | ISetModeAction
   | IUndoAction
-  | IRedoAction;
+  | IRedoAction
+  | IToggleNightModeAction;

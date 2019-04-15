@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 
 import "../layout/App.scss";
 import SudokuComponent from "./Sudoku";
-import Numbers from "./Numebrs";
+import Numbers from "./Numbers";
 import { AppState } from "../store";
-import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, setMode, redo, undo } from "../store/actions";
+import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, setMode, redo, undo, toggleNightMode } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
 import Sudoku from "../models/Sudoku";
 import { DIRECTION, MODE } from "../store/types";
@@ -13,6 +13,8 @@ import TopBar from "./TopBar";
 import BottomBar from "./BottomBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import CompletedDialog from "./CompletedDialog";
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import theme from "../theme";
 
 
 interface IAppProps {
@@ -31,20 +33,25 @@ interface IAppProps {
   past: Sudoku[];
   future: Sudoku[];
   difficulty: DIFFICULTY;
+  nightMode: boolean;
+  toggleNightMode: typeof toggleNightMode;
 }
 
 class App extends Component<IAppProps> {
   public render(): JSX.Element {
+    const t = theme(this.props.nightMode)
     return (
       <div className="App">
-        <CssBaseline />
-        <TopBar {...this.props} />
-        <div className="App-content">
-          <SudokuComponent {...this.props} />
-          <Numbers {...this.props} />
-        </div>
-        <CompletedDialog {...this.props}></CompletedDialog>
-        <BottomBar {...this.props} />
+        <MuiThemeProvider theme={t}>
+          <CssBaseline />
+          <TopBar {...this.props} />
+          <div className="App-content">
+            <SudokuComponent {...this.props} />
+            <Numbers {...this.props} />
+          </div>
+          <CompletedDialog {...this.props}></CompletedDialog>
+          <BottomBar {...this.props} />
+        </MuiThemeProvider>
       </div>
     );
   }
@@ -85,7 +92,8 @@ const mapStateToProps = (state: AppState) => ({
   past: state.game.sudoku.past,
   future: state.game.sudoku.future,
   difficulty: state.game.difficulty,
-  mode: state.game.mode
+  mode: state.game.mode,
+  nightMode: state.game.nightMode
 });
 
 export default connect(
@@ -100,6 +108,7 @@ export default connect(
     navigateCells,
     setMode,
     undo,
-    redo
+    redo,
+    toggleNightMode
   }
 )(App);

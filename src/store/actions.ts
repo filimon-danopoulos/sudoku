@@ -11,7 +11,8 @@ import {
   TOGGLE_NOTE_MODE,
   REDO,
   UNDO,
-  MODE
+  MODE,
+  TOGGLE_NIGHT_MODE
 } from "./types";
 import { DIFFICULTY } from "../models/Difficulty";
 
@@ -69,6 +70,7 @@ export function navigateCells(direction: DIRECTION): OptionActions {
 }
 
 export function setMode(mode: MODE): OptionActions {
+  debugger;
   return {
     type: TOGGLE_NOTE_MODE,
     payload: {
@@ -88,3 +90,10 @@ export function redo(): OptionActions {
     type: REDO
   };
 }
+
+export function toggleNightMode(): OptionActions {
+  return {
+    type: TOGGLE_NIGHT_MODE
+  };
+}
+
