@@ -12,7 +12,8 @@ import {
   REDO,
   UNDO,
   MODE,
-  TOGGLE_NIGHT_MODE
+  TOGGLE_NIGHT_MODE,
+  RESET_SUDOKU
 } from "./types";
 import { DIFFICULTY } from "../models/Difficulty";
 
@@ -70,7 +71,6 @@ export function navigateCells(direction: DIRECTION): OptionActions {
 }
 
 export function setMode(mode: MODE): OptionActions {
-  debugger;
   return {
     type: TOGGLE_NOTE_MODE,
     payload: {
@@ -97,3 +97,8 @@ export function toggleNightMode(): OptionActions {
   };
 }
 
+export function resetSudoku(): OptionActions {
+  return {
+    type: RESET_SUDOKU
+  };
+}

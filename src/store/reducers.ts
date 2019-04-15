@@ -12,13 +12,14 @@ import {
   UNDO,
   REDO,
   MODE,
-  TOGGLE_NIGHT_MODE
+  TOGGLE_NIGHT_MODE,
+  RESET_SUDOKU
 } from "./types";
 import Sudoku from "../models/Sudoku";
 import { DIFFICULTY } from "../models/Difficulty";
 
 const initialDifficulty = readDifficulty(DIFFICULTY.Easy)
-const initialNightMode = false;
+const initialNightMode = readNightMode(false);
 const initialState: IGameState = {
   difficulty: initialDifficulty,
   sudoku: {
@@ -126,10 +127,20 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         }
       }
     case TOGGLE_NIGHT_MODE:
-
+      const nightMode = !state.nightMode;
+      writeNightMode(nightMode);
       return {
         ...state,
-        nightMode: !state.nightMode
+        nightMode
+      }
+    case RESET_SUDOKU:
+      return {
+        ...state,
+        sudoku: {
+          past: [],
+          current: state.sudoku.past.shift() || state.sudoku.current,
+          future: []
+        }
       }
     default:
       return state;
@@ -145,4 +156,15 @@ function readDifficulty(fallBack: DIFFICULTY): DIFFICULTY {
 }
 function writeDifficulty(difficulty: DIFFICULTY) {
   window.localStorage.setItem('DIFFICULTY', difficulty.toString());
+}
+
+function readNightMode(fallBack: boolean): boolean {
+  const data = window.localStorage.getItem('NIGHT_MODE');
+  if (!data) {
+    return fallBack;
+  }
+  return data === 'true';
+}
+function writeNightMode(nightMode: boolean) {
+  window.localStorage.setItem('NIGHT_MODE', nightMode.toString());
 }

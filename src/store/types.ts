@@ -36,6 +36,7 @@ export const TOGGLE_NOTE_MODE = "TOGGLE_NOTE_MODE";
 export const UNDO = "UNDO";
 export const REDO = "REDO";
 export const TOGGLE_NIGHT_MODE = "TOGGLE_NIGHT_MODE";
+export const RESET_SUDOKU = "RESET_SUDOKU";
 
 interface IChangeDifficultyAction {
   type: typeof CHANGE_DIFFICULTY;
@@ -92,6 +93,10 @@ interface IToggleNightModeAction {
   type: typeof TOGGLE_NIGHT_MODE;
 }
 
+interface IResetSudokuAction {
+  type: typeof RESET_SUDOKU;
+}
+
 export type OptionActions = IChangeDifficultyAction
   | INewGameAction
   | IValidateSolutionAction
@@ -102,4 +107,5 @@ export type OptionActions = IChangeDifficultyAction
   | ISetModeAction
   | IUndoAction
   | IRedoAction
-  | IToggleNightModeAction;
+  | IToggleNightModeAction
+  | IResetSudokuAction;

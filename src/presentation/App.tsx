@@ -5,7 +5,7 @@ import "../layout/App.scss";
 import SudokuComponent from "./Sudoku";
 import Numbers from "./Numbers";
 import { AppState } from "../store";
-import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, setMode, redo, undo, toggleNightMode } from "../store/actions";
+import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, setMode, redo, undo, toggleNightMode, resetSudoku } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
 import Sudoku from "../models/Sudoku";
 import { DIRECTION, MODE } from "../store/types";
@@ -35,6 +35,7 @@ interface IAppProps {
   difficulty: DIFFICULTY;
   nightMode: boolean;
   toggleNightMode: typeof toggleNightMode;
+  resetSudoku: typeof resetSudoku;
 }
 
 class App extends Component<IAppProps> {
@@ -109,6 +110,7 @@ export default connect(
     setMode,
     undo,
     redo,
-    toggleNightMode
+    toggleNightMode,
+    resetSudoku
   }
 )(App);

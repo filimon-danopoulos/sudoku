@@ -12,10 +12,19 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { DIFFICULTY } from '../models/Difficulty';
-import { changeDifficulty, validateSolution, createNewGame, setMode, toggleNightMode } from '../store/actions';
+import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku } from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { MODE } from '../store/types';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import VeryEasyIcon from '@material-ui/icons/LooksOne';
+import EasyIcon from '@material-ui/icons/LooksTwo';
+import NormalIcon from '@material-ui/icons/Looks3';
+import HardIcon from '@material-ui/icons/Looks4';
+import VeryHardIcon from '@material-ui/icons/Looks5';
+import InsaneIcon from '@material-ui/icons/Looks6';
+import NewIcon from '@material-ui/icons/FiberNew';
+import ResetIcon from '@material-ui/icons/Restore';
+import ValidateIcon from '@material-ui/icons/Check';
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -43,14 +52,12 @@ const styles = (theme: Theme) => createStyles({
 
 export interface ITopBarProps extends WithStyles<typeof styles> {
   difficulty: DIFFICULTY;
-  mode: MODE;
-
   changeDifficulty: typeof changeDifficulty;
   validateSolution: typeof validateSolution;
   createNewGame: typeof createNewGame;
-  setMode: typeof setMode;
   toggleNightMode: typeof toggleNightMode;
   nightMode: boolean;
+  resetSudoku: typeof resetSudoku;
 }
 export interface ITopBarState {
   drawerOpen: boolean;
@@ -58,22 +65,28 @@ export interface ITopBarState {
 
 const DIFFICUTIES = [{
   difficulty: DIFFICULTY.VeryEasy,
-  label: "Very Easy"
+  label: "Very Easy",
+  icon: <VeryEasyIcon />
 }, {
   difficulty: DIFFICULTY.Easy,
-  label: "Easy"
+  label: "Easy",
+  icon: <EasyIcon />
 }, {
   difficulty: DIFFICULTY.Normal,
-  label: "Normal"
+  label: "Normal",
+  icon: <NormalIcon />
 }, {
   difficulty: DIFFICULTY.Hard,
-  label: "Hard"
+  label: "Hard",
+  icon: <HardIcon />
 }, {
   difficulty: DIFFICULTY.VeryHard,
-  label: "Very Hard"
+  label: "Very Hard",
+  icon: <VeryHardIcon />
 }, {
   difficulty: DIFFICULTY.Insane,
-  label: "Insane"
+  label: "Insane",
+  icon: <InsaneIcon />
 }]
 
 class TopBar extends Component<ITopBarProps, ITopBarState> {
@@ -98,12 +111,10 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             </Typography>
             <FormControlLabel
               classes={{ label: classes.notesToggle }}
-              label="Take Notes"
+              label="Night mode"
               labelPlacement="start"
-              onClick={() => this.toggleMode()}
-              control={
-                <Switch color="secondary" checked={this.props.mode === MODE.Note} />
-              }
+              onClick={() => this.props.toggleNightMode()}
+              control={<Switch checked={this.props.nightMode} />}
             />
           </Toolbar>
         </AppBar>
@@ -112,26 +123,27 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             <ListSubheader>Puzzle</ListSubheader>
             <Divider />
             <ListItem button onClick={() => this.createNewGame()}>
+              <ListItemIcon>
+                <NewIcon />
+              </ListItemIcon>
               <ListItemText primary="New game" />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={() => this.reset()} >
+              <ListItemIcon>
+                <ResetIcon />
+              </ListItemIcon>
               <ListItemText primary="Reset" />
             </ListItem>
-            <ListItem button>
-              <ListItemText primary="Validate" onClick={() => this.validate()} />
+            <ListItem button onClick={() => this.validate()} >
+              <ListItemIcon>
+                <ValidateIcon />
+              </ListItemIcon>
+              <ListItemText primary="Validate" />
             </ListItem>
             <Divider />
             <ListSubheader>Difficulty</ListSubheader>
             <Divider />
             {this.renderDifficulties()}
-            <Divider />
-            <ListSubheader>Settings</ListSubheader>
-            <Divider />
-            <ListItem button
-              selected={this.props.nightMode}
-              onClick={() => this.props.toggleNightMode()}>
-              <ListItemText primary="Nightmode" onClick={() => this.validate()} />
-            </ListItem>
           </List>
         </Drawer>
       </React.Fragment>
@@ -157,6 +169,9 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
         key={option.difficulty}
         selected={this.props.difficulty === option.difficulty}
         onClick={() => this.setDifficulty(option.difficulty)}>
+        <ListItemIcon>
+          {option.icon}
+        </ListItemIcon>
         <ListItemText primary={option.label} />
       </ListItem>
     ));
@@ -179,18 +194,14 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     }
     return "";
   }
-
-  private toggleMode(): void {
-    if (this.props.mode === MODE.Note) {
-      this.props.setMode(MODE.Input);
-    } else {
-      this.props.setMode(MODE.Note);
-    }
-  }
-
   private createNewGame(): void {
     this.closeDrawer();
     this.props.createNewGame();
+  }
+
+  private reset(): void {
+    this.closeDrawer();
+    this.props.resetSudoku();
   }
 }
 

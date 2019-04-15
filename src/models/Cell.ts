@@ -115,7 +115,7 @@ export default class Cell {
   }
 
   public removeDigit(): Cell {
-    if (!this.active) {
+    if (!this.active || this.given) {
       return this;
     }
     const cell = new Cell(this);
