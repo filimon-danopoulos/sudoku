@@ -21,15 +21,16 @@ export default class GeneratorNew {
 
   constructor(private difficulty: DIFFICULTY) {
     this.solution = this.shuffle(BASE)
-    do {
-      this.data = this.solution.map(r => [...r])
-      this.removeValues();
-    } while (this.hasUniqueSolution())
+    this.data = this.solution.map(r => [...r])
+    this.removeValues();
+    // if (!this.hasUniqueSolution()) {
+    //   console.log("Puzzle reject due to uniqueness")
+    // }
   }
 
   private shuffle(base: number[][]): number[][] {
     const data = BASE.map(r => [...r]);
-    for (let i = 0; i < 42e3; i++) {
+    for (let i = 0; i < 4200; i++) {
       this.moveRowOrColumn(data);
     }
     return data;
