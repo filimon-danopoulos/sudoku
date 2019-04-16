@@ -14,16 +14,20 @@ const styles = (theme: Theme) => {
       width: '11.111111%',
       paddingBottom: '11.111111%',
       textAlign: 'center',
-      userSelect: "none"
+      userSelect: "none",
     },
     content: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       position: 'absolute',
       top: 0,
       right: 0,
       bottom: 0,
       left: 0,
       borderRight: borderThin,
-      borderBottom: borderThin
+      borderBottom: borderThin,
+      color: theme.palette.type === "dark" ? theme.palette.grey[400] : theme.palette.common.black
     },
     thickBorderTop: {
       borderTop: borderThick
