@@ -1,99 +1,35 @@
 import Row from "./Row";
 import { DIFFICULTY } from "./Difficulty";
 import { DIRECTION, MODE } from "../store/types";
+import Generator from "./Generator";
 
-const BASE = [
-  [3, 6, 1, 7, 2, 5, 9, 4, 8],
-  [5, 8, 7, 9, 6, 4, 2, 1, 3],
-  [4, 9, 2, 8, 3, 1, 6, 5, 7],
-  [6, 3, 8, 2, 5, 9, 4, 7, 1],
-  [1, 7, 4, 6, 8, 3, 5, 9, 2],
-  [2, 5, 9, 1, 4, 7, 8, 3, 6],
-  [7, 4, 6, 3, 9, 2, 1, 8, 5],
-  [9, 2, 3, 5, 1, 8, 7, 6, 4],
-  [8, 1, 5, 4, 7, 6, 3, 2, 9]
-];
 
 export default class Sudoku {
   private difficulty: DIFFICULTY;
-  private data: ([number, boolean][])[];
   private rows: Row[];
   private activeCell: { row: number, column: number };
   private createdAt: number;
 
   private constructor(previous?: Sudoku) {
     this.difficulty = previous ? previous.difficulty : DIFFICULTY.Easy;
-    this.data = previous ? previous.data : [];
     this.rows = previous ? previous.rows : [];
     this.activeCell = previous ? previous.activeCell : { row: -1, column: -1 }
     this.createdAt = previous ? previous.createdAt : 0;
   }
 
   static create(difficulty: DIFFICULTY): Sudoku {
+    const generator = new Generator(difficulty);
     const sudoku = new Sudoku();
     sudoku.difficulty = difficulty;
     sudoku.createdAt = Date.now();
-    sudoku.data = BASE.map(r => r.map(c => [c, true] as [number, boolean]));
-    sudoku.generateSudoku();
+    sudoku.rows = generator.execute().map((d, i) => Row.create(d, i + 1));
+
+    console.log(generator.candidates())
     return sudoku
   }
 
   public getRows(): Row[] {
     return this.rows;
-  }
-
-  private generateSudoku() {
-    for (let i = 0; i < 42e4; i++) {
-      this.moveRowOrColumn();
-    }
-    this.removeValues();
-    this.rows = this.data.map((d, i) => Row.create(d, i + 1))
-  }
-
-  private removeValues() {
-    let cellsToRemove = this.difficulty as number
-    while (cellsToRemove) {
-      const x = Math.floor(Math.random() * 9);
-      const y = Math.floor(Math.random() * 9);
-      const [value, given] = this.data[x][y]
-      if (given) {
-        this.data[x][y] = [value, false] as [number, boolean];
-        --cellsToRemove;
-      }
-    }
-  }
-
-  private moveRowOrColumn() {
-    const [from, to] = this.getFromAndTo()
-    if (!!Math.round(Math.random())) {
-      this.moveColumn(from, to);
-    } else {
-      this.moveRow(from, to);
-    }
-  }
-
-  private getFromAndTo(from: number = -1): [number, number] {
-    from = from === -1 ? Math.floor(Math.random() * 3) : from;
-    let to = Math.floor(Math.random() * 3);
-    if (to === from) {
-      return this.getFromAndTo(from);
-    }
-    const block = Math.floor(Math.random() * 3);
-    return [block * 3 + from, block * 3 + to];
-  }
-
-  private moveRow(from: number, to: number) {
-    const temp = this.data[to];
-    this.data[to] = this.data[from];
-    this.data[from] = temp;
-  }
-
-  private moveColumn(from: number, to: number) {
-    this.data.forEach(row => {
-      const temp = row[to];
-      row[to] = row[from];
-      row[from] = temp;
-    });
   }
 
   public validate(): Sudoku {
