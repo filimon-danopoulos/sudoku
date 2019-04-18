@@ -140,6 +140,7 @@ export default class GeneratorNew {
     let startIndex = this.getStartIndex(candidates);
 
     const values = candidates[startIndex]
+
     const iMax = values.length
     let solutions = 0
     for (let i = 0; i < iMax; i++) {
@@ -203,10 +204,10 @@ export default class GeneratorNew {
     return startIndex;
   }
 
-  private segment(data: nullber[]): segments {
-    const rows: nullber[][] = [[], [], [], [], [], [], [], [], []]
-    const blocks: nullber[][] = [[], [], [], [], [], [], [], [], []]
-    const columns: nullber[][] = [[], [], [], [], [], [], [], [], []]
+  private segment<T>(data: T[]): segments<T> {
+    const rows: T[][] = [[], [], [], [], [], [], [], [], []]
+    const blocks: T[][] = [[], [], [], [], [], [], [], [], []]
+    const columns: T[][] = [[], [], [], [], [], [], [], [], []]
 
     for (let i = 0; i < 81; i++) {
       const v = data[i]
@@ -271,10 +272,10 @@ export default class GeneratorNew {
   }
 }
 
-type segments = {
-  rows: nullber[][]
-  blocks: nullber[][]
-  columns: nullber[][]
+type segments<T> = {
+  rows: T[][]
+  blocks: T[][]
+  columns: T[][]
 }
 
 type nullber = number | null
