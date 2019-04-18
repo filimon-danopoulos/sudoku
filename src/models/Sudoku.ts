@@ -23,8 +23,6 @@ export default class Sudoku {
     sudoku.difficulty = difficulty;
     sudoku.createdAt = Date.now();
     sudoku.rows = generator.execute().map((d, i) => Row.create(d, i + 1));
-
-    console.log(generator.candidates())
     return sudoku
   }
 
