@@ -1,43 +1,47 @@
 self.__precacheManifest = [
   {
-    "revision": "0f46a6267c678901f923",
+    "revision": "a22096a0c9ee6f5da92a",
     "url": "/sudoku/static/css/main.5eb982b1.chunk.css"
   },
   {
-    "revision": "0f46a6267c678901f923",
-    "url": "/sudoku/static/js/main.0bad91fe.chunk.js"
+    "revision": "a22096a0c9ee6f5da92a",
+    "url": "/sudoku/static/js/main.3bd6daea.chunk.js"
   },
   {
-    "revision": "2376657f656b447c3d4b",
-    "url": "/sudoku/static/js/runtime~main.e7756cf6.js"
+    "revision": "c6440607aefabbca9582",
+    "url": "/sudoku/static/js/runtime~main.dcef67e1.js"
   },
   {
-    "revision": "98e4b8215e080b77d360",
+    "revision": "094b985af3ffbefbc6a1",
     "url": "/sudoku/static/css/2.e0d97c26.chunk.css"
   },
   {
-    "revision": "98e4b8215e080b77d360",
-    "url": "/sudoku/static/js/2.693670a1.chunk.js"
+    "revision": "094b985af3ffbefbc6a1",
+    "url": "/sudoku/static/js/2.0a9e6fbf.chunk.js"
+  },
+  {
+    "revision": "3ade98a337044abd5f52afbe21631baf",
+    "url": "/sudoku/ce6051675018ac10eb74.worker.js"
   },
   {
     "revision": "987b84570ea69ee660455b8d5e91f5f1",
     "url": "/sudoku/static/media/roboto-latin-100.987b8457.woff2"
   },
   {
-    "revision": "55536c8e9e9a532651e3cf374f290ea3",
-    "url": "/sudoku/static/media/roboto-latin-300.55536c8e.woff2"
-  },
-  {
     "revision": "5d4aeb4e5f5ef754e307d7ffaef688bd",
     "url": "/sudoku/static/media/roboto-latin-400.5d4aeb4e.woff2"
   },
   {
-    "revision": "285467176f7fe6bb6a9c6873b3dad2cc",
-    "url": "/sudoku/static/media/roboto-latin-500.28546717.woff2"
+    "revision": "55536c8e9e9a532651e3cf374f290ea3",
+    "url": "/sudoku/static/media/roboto-latin-300.55536c8e.woff2"
   },
   {
     "revision": "037d830416495def72b7881024c14b7b",
     "url": "/sudoku/static/media/roboto-latin-700.037d8304.woff2"
+  },
+  {
+    "revision": "285467176f7fe6bb6a9c6873b3dad2cc",
+    "url": "/sudoku/static/media/roboto-latin-500.28546717.woff2"
   },
   {
     "revision": "19b7a0adfdd4f808b53af7e2ce2ad4e5",
@@ -84,14 +88,6 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-500.de8b7431.woff"
   },
   {
-    "revision": "510dec37fa69fba39593e01a469ee018",
-    "url": "/sudoku/static/media/roboto-latin-500italic.510dec37.woff2"
-  },
-  {
-    "revision": "cf6613d1adf490972c557a8e318e0868",
-    "url": "/sudoku/static/media/roboto-latin-700.cf6613d1.woff"
-  },
-  {
     "revision": "ffcc050b2d92d4b14a4fcb527ee0bcc8",
     "url": "/sudoku/static/media/roboto-latin-500italic.ffcc050b.woff"
   },
@@ -100,12 +96,12 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-700italic.010c1aee.woff2"
   },
   {
-    "revision": "846d1890aee87fde5d8ced8eba360c3a",
-    "url": "/sudoku/static/media/roboto-latin-700italic.846d1890.woff"
+    "revision": "cf6613d1adf490972c557a8e318e0868",
+    "url": "/sudoku/static/media/roboto-latin-700.cf6613d1.woff"
   },
   {
-    "revision": "7b770d6c53423deb1a8e49d3c9175184",
-    "url": "/sudoku/static/media/roboto-latin-900italic.7b770d6c.woff2"
+    "revision": "846d1890aee87fde5d8ced8eba360c3a",
+    "url": "/sudoku/static/media/roboto-latin-700italic.846d1890.woff"
   },
   {
     "revision": "8c2ade503b34e31430d6c98aa29a52a3",
@@ -116,7 +112,15 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-900italic.bc833e72.woff"
   },
   {
-    "revision": "9754fa92d25b929d1c13436c745a88a5",
+    "revision": "7b770d6c53423deb1a8e49d3c9175184",
+    "url": "/sudoku/static/media/roboto-latin-900italic.7b770d6c.woff2"
+  },
+  {
+    "revision": "510dec37fa69fba39593e01a469ee018",
+    "url": "/sudoku/static/media/roboto-latin-500italic.510dec37.woff2"
+  },
+  {
+    "revision": "547e2c381a9513cd58b737acd06dd344",
     "url": "/sudoku/index.html"
   }
 ];
