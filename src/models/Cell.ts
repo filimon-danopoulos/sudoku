@@ -82,6 +82,9 @@ export default class Cell {
   public validate(): Cell {
     const cell = new Cell(this)
     cell.valid = this.value === null || this.value === this.solution;
+    if (cell.valid) {
+      cell.active = false;
+    }
     return cell;
   }
 

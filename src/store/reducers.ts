@@ -17,6 +17,8 @@ import {
 } from "./types";
 import Sudoku from "../models/Sudoku";
 import { DIFFICULTY } from "../models/Difficulty";
+import PuzzleStorage from "../PuzzleStorage"
+
 
 const initialDifficulty = readDifficulty(DIFFICULTY.Easy)
 const initialNightMode = readNightMode(false);
@@ -24,7 +26,7 @@ const initialState: IGameState = {
   difficulty: initialDifficulty,
   sudoku: {
     past: [],
-    current: Sudoku.create(initialDifficulty).activateCell(1, 1),
+    current: PuzzleStorage.getPuzzle(initialDifficulty).activateCell(1, 1),
     future: []
   },
   mode: MODE.Input,
@@ -40,7 +42,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         difficulty: action.payload,
         sudoku: {
           past: [],
-          current: Sudoku.create(action.payload).activateCell(1, 1),
+          current: PuzzleStorage.getPuzzle(action.payload).activateCell(1, 1),
           future: []
         }
       };
@@ -49,7 +51,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         ...state,
         sudoku: {
           past: [],
-          current: Sudoku.create(state.difficulty),
+          current: PuzzleStorage.getPuzzle(state.difficulty).activateCell(1, 1),
           future: []
         }
       };

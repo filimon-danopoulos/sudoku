@@ -21,7 +21,6 @@ import EasyIcon from '@material-ui/icons/LooksTwo';
 import NormalIcon from '@material-ui/icons/Looks3';
 import HardIcon from '@material-ui/icons/Looks4';
 import VeryHardIcon from '@material-ui/icons/Looks5';
-import InsaneIcon from '@material-ui/icons/Looks6';
 import NewIcon from '@material-ui/icons/FiberNew';
 import ResetIcon from '@material-ui/icons/Restore';
 import ValidateIcon from '@material-ui/icons/Check';
@@ -83,10 +82,6 @@ const DIFFICUTIES = [{
   difficulty: DIFFICULTY.VeryHard,
   label: "Very Hard",
   icon: <VeryHardIcon />
-}, {
-  difficulty: DIFFICULTY.Insane,
-  label: "Insane",
-  icon: <InsaneIcon />
 }]
 
 class TopBar extends Component<ITopBarProps, ITopBarState> {

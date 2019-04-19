@@ -1,28 +1,21 @@
 import Row from "./Row";
-import { DIFFICULTY } from "./Difficulty";
 import { DIRECTION, MODE } from "../store/types";
-import Generator from "./Generator";
-
 
 export default class Sudoku {
-  private difficulty: DIFFICULTY;
   private rows: Row[];
   private activeCell: { row: number, column: number };
   private createdAt: number;
 
   private constructor(previous?: Sudoku) {
-    this.difficulty = previous ? previous.difficulty : DIFFICULTY.Easy;
     this.rows = previous ? previous.rows : [];
     this.activeCell = previous ? previous.activeCell : { row: -1, column: -1 }
     this.createdAt = previous ? previous.createdAt : 0;
   }
 
-  static create(difficulty: DIFFICULTY): Sudoku {
-    const generator = new Generator(difficulty);
+  static create(data: ([number, boolean])[][]): Sudoku {
     const sudoku = new Sudoku();
-    sudoku.difficulty = difficulty;
     sudoku.createdAt = Date.now();
-    sudoku.rows = generator.execute().map((d, i) => Row.create(d, i + 1));
+    sudoku.rows = data.map((d, i) => Row.create(d, i + 1));
     return sudoku
   }
 

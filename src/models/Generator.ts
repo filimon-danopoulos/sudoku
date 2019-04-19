@@ -51,13 +51,14 @@ const COLUMN_INDECES = [
 const repeat = (times: number) => [...Array(times).keys()]
 const range = (start: number, end: number) => repeat(end + 1).slice(start)
 
-export default class GeneratorNew {
+export default class Generator {
+  private success: boolean;
   private solution: number[][];
   private data: nullber[][];
 
   constructor(private difficulty: DIFFICULTY) {
     this.solution = this.shuffle(BASE)
-    let maxItterations = 50;
+    let maxItterations = 20;
     do {
       this.data = this.solution.map(r => [...r])
       this.removeValues();
@@ -65,7 +66,7 @@ export default class GeneratorNew {
         break;
       }
     } while (--maxItterations)
-    console.log(`${50 - maxItterations} failed attempts to generate a puzzle.`)
+    this.success = maxItterations !== 0
   }
 
   private shuffle(base: number[][]): number[][] {
@@ -76,8 +77,12 @@ export default class GeneratorNew {
     return data;
   }
 
+  public succeeded(): boolean {
+    return this.success;
+  }
 
-  public execute(): ([number, boolean])[][] {
+
+  public getPuzzleData(): ([number, boolean])[][] {
     return this.data.map((r, i) => r.map((y, l) => [this.solution[i][l], this.solution[i][l] === this.data[i][l]] as [number, boolean]));
   }
 

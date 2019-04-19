@@ -7,6 +7,7 @@ import * as serviceWorker from "./serviceWorker";
 
 import configureStore from "./store";
 import App from "./presentation/App";
+import pregenerate from "./utils/pregenerate";
 
 const store = configureStore();
 
@@ -18,3 +19,7 @@ const Root = () => (
 
 ReactDOM.render(<Root />, document.getElementById("root"));
 serviceWorker.register();
+
+if (process.env.NODE_ENV === "development") {
+  (window as any).pregenerate = pregenerate;
+}

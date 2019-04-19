@@ -16,7 +16,6 @@ import CompletedDialog from "./CompletedDialog";
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import theme from "../theme";
 
-
 interface IAppProps {
   changeDifficulty: typeof changeDifficulty;
   createNewGame: typeof createNewGame;
@@ -39,6 +38,10 @@ interface IAppProps {
 }
 
 class App extends Component<IAppProps> {
+  constructor(props: IAppProps) {
+    super(props);
+  }
+
   public render(): JSX.Element {
     const t = theme(this.props.nightMode)
     return (
