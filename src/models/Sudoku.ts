@@ -1,5 +1,6 @@
 import Row from "./Row";
 import { DIRECTION, MODE } from "../store/types";
+import Cell from "./Cell";
 
 export default class Sudoku {
   private rows: Row[];
@@ -93,5 +94,15 @@ export default class Sudoku {
 
   public isDigitSolved(digit: number): boolean {
     return this.rows.every(r => r.getCells().some(c => c.getValue() === digit && c.isSolved()));
+  }
+
+  public countSolvedCells(): number {
+    const cells = this.rows.reduce((acc, row) => acc.concat(row.getCells()), [] as Cell[])
+    return cells.reduce((sum, cell) => {
+      if (cell.isSolved() && !cell.isGiven()) {
+        return sum + 1;
+      }
+      return sum;
+    }, 0)
   }
 }
