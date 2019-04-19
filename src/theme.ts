@@ -12,7 +12,7 @@ export default (nightMode: boolean) => {
         main: '#424242'
       },
       secondary: {
-        main: nightMode ? '#616161' : '#ffc107'
+        main: '#616161'
       }
     },
   });
