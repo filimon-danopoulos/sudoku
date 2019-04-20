@@ -12,7 +12,6 @@ import { MODE } from '../store/types';
 import Fab from '@material-ui/core/Fab';
 import PenIcon from "@material-ui/icons/Edit";
 import PenIconOutline from "@material-ui/icons/EditOutlined";
-import { Typography } from '@material-ui/core';
 
 const styles = (theme: Theme) => createStyles({
   appBar: {
@@ -72,7 +71,6 @@ const BottomBar: React.FunctionComponent<IBottomBarProps> = (props: IBottomBarPr
         <IconButton color="inherit" disabled={!props.past.length} onClick={() => props.undo()}>
           <UndoIcon />
         </IconButton>
-        {isNoteMode ? <Typography variant="subheading">Taking notes</Typography> : null}
         <IconButton color="inherit" disabled={!props.future.length} onClick={() => props.redo()}>
           <RedoIcon />
         </IconButton>

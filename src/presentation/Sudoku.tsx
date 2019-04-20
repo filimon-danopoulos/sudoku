@@ -5,6 +5,7 @@ import { createNewGame, toggleCell } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
 import Paper from "@material-ui/core/Paper";
 import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core";
+import { MODE } from "../store/types";
 
 const styles = (theme: Theme) => createStyles({
   container: {
@@ -34,8 +35,8 @@ export interface ISudokuProps extends WithStyles<typeof styles> {
   sudoku: Sudoku;
   difficulty: DIFFICULTY;
   createNewGame: typeof createNewGame;
-  toggleCell: typeof toggleCell
-
+  toggleCell: typeof toggleCell;
+  mode: MODE;
 }
 
 export interface ISudokuState {
@@ -91,7 +92,7 @@ class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
       return null;
     }
     return this.props.sudoku.getRows().map((r, i) => (
-      <SudokuRow row={r} key={i} rowSize={this.state.rowSize} toggleCell={this.props.toggleCell} />
+      <SudokuRow mode={this.props.mode} row={r} key={i} rowSize={this.state.rowSize} toggleCell={this.props.toggleCell} />
     ));
   }
 

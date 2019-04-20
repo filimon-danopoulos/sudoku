@@ -2,6 +2,7 @@ import React, { Component, CSSProperties } from "react";
 import Cell from "../models/Cell";
 import { toggleCell } from "../store/actions";
 import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core";
+import { MODE } from "../store/types";
 
 const styles = (theme: Theme) => {
   const borderThin = `solid 1px ${theme.palette.common.black}`;
@@ -47,6 +48,70 @@ const styles = (theme: Theme) => {
     given: {
       fontWeight: 'bold'
     },
+    note: {
+      position: 'absolute'
+    },
+    inactiveNote: {
+      opacity: 0.15
+    },
+    activeNote: {
+      opacity: 1,
+      fontWeight: 'bold'
+    },
+    note1: {
+      top: 0,
+      left: 0,
+      bottom: '66.666667%',
+      right: '66.666667%'
+    },
+    note2: {
+      top: "0",
+      left: "33.333333%",
+      bottom: "66.666667%",
+      right: "33.333333%",
+    },
+    note3: {
+      top: "0",
+      left: "66.666667%",
+      bottom: "66.666667%",
+      right: "0",
+    },
+    note4: {
+      top: "33.333333%",
+      left: "0",
+      bottom: "33.333333%",
+      right: "66.666667%",
+    },
+    note5: {
+      top: "33.333333%",
+      left: "33.333333%",
+      bottom: "33.333333%",
+      right: "33.333333%",
+    },
+    note6: {
+      top: "33.333333%",
+      left: "66.666667%",
+      bottom: "33.333333%",
+      right: "0",
+    },
+    note7: {
+      top: "66.666667%",
+      left: "0",
+      bottom: "0",
+      right: "66.666667%",
+    },
+    note8: {
+      top: "66.666667%",
+      left: "33.333333%",
+      bottom: "0",
+      right: "33.333333%",
+    },
+    note9: {
+      top: "66.666667%",
+      left: "66.666667%",
+      bottom: "0",
+      right: "0",
+    },
     invalid: {
       backgroundColor: theme.palette.error.light,
       color: theme.palette.error.contrastText
@@ -54,69 +119,6 @@ const styles = (theme: Theme) => {
     active: {
       backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
       color: theme.palette.primary.contrastText,
-    },
-    note1: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      bottom: '66.666667%',
-      right: '66.666667%'
-    },
-    note2: {
-      position: 'absolute',
-      top: "0",
-      left: "33.333333%",
-      bottom: "66.666667%",
-      right: "33.333333%",
-    },
-    note3: {
-      position: 'absolute',
-      top: "0",
-      left: "66.666667%",
-      bottom: "66.666667%",
-      right: "0",
-    },
-    note4: {
-      position: 'absolute',
-      top: "33.333333%",
-      left: "0",
-      bottom: "33.333333%",
-      right: "66.666667%",
-    },
-    note5: {
-      position: 'absolute',
-      top: "33.333333%",
-      left: "33.333333%",
-      bottom: "33.333333%",
-      right: "33.333333%",
-    },
-    note6: {
-      position: 'absolute',
-      top: "33.333333%",
-      left: "66.666667%",
-      bottom: "33.333333%",
-      right: "0",
-    },
-    note7: {
-      position: 'absolute',
-      top: "66.666667%",
-      left: "0",
-      bottom: "0",
-      right: "66.666667%",
-    },
-    note8: {
-      position: 'absolute',
-      top: "66.666667%",
-      left: "33.333333%",
-      bottom: "0",
-      right: "33.333333%",
-    },
-    note9: {
-      position: 'absolute',
-      top: "66.666667%",
-      left: "66.666667%",
-      bottom: "0",
-      right: "0",
     }
   });
 }
@@ -124,7 +126,8 @@ const styles = (theme: Theme) => {
 export interface ISudokuCellComponentProps extends WithStyles<typeof styles> {
   cell: Cell;
   size: number;
-  toggleCell: typeof toggleCell
+  toggleCell: typeof toggleCell;
+  mode: MODE;
 }
 
 class SudokuCellComponent extends Component<ISudokuCellComponentProps> {
@@ -165,8 +168,10 @@ class SudokuCellComponent extends Component<ISudokuCellComponentProps> {
       <React.Fragment>
         {
           notes.map((x, i) => (
-            <span className={cellClasses[i]} key={i} style={{ fontSize: fontSize }}>
-              {x ? i + 1 : ''}
+            <span className={`${classes.note} ${cellClasses[i]} ${x ? classes.activeNote : classes.inactiveNote}`}
+              key={i}
+              style={{ fontSize: fontSize }}>
+              {this.props.mode === MODE.Note ? i + 1 : ''}
             </span>
           ))
         }
