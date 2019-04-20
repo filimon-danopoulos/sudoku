@@ -171,7 +171,7 @@ class SudokuCellComponent extends Component<ISudokuCellComponentProps> {
             <span className={`${classes.note} ${cellClasses[i]} ${x ? classes.activeNote : classes.inactiveNote}`}
               key={i}
               style={{ fontSize: fontSize }}>
-              {this.props.mode === MODE.Note ? i + 1 : ''}
+              {(x || this.props.mode === MODE.Note) ? i + 1 : ''}
             </span>
           ))
         }
