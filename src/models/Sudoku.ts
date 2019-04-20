@@ -132,8 +132,4 @@ export default class Sudoku {
     })
     return sudoku;
   }
-
-  public isValid(): boolean {
-    return this.rows.some(r => r.getCells().some(c => c.isValid()))
-  }
 }

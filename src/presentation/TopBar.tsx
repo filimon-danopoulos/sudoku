@@ -25,9 +25,6 @@ import NewIcon from '@material-ui/icons/FiberNew';
 import ResetIcon from '@material-ui/icons/Restore';
 import ValidateIcon from '@material-ui/icons/Check';
 import ChildFriendlyIcon from '@material-ui/icons/ChildFriendly';
-import { Snackbar, SnackbarContent } from '@material-ui/core';
-import Sudoku from '../models/Sudoku';
-import CloseIcon from '@material-ui/icons/Close';
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -58,7 +55,6 @@ const styles = (theme: Theme) => createStyles({
 
 export interface ITopBarProps extends WithStyles<typeof styles> {
   difficulty: DIFFICULTY;
-  sudoku: Sudoku;
   changeDifficulty: typeof changeDifficulty;
   validateSolution: typeof validateSolution;
   createNewGame: typeof createNewGame;
@@ -158,19 +154,6 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             {this.renderDifficulties()}
           </List>
         </Drawer>
-        <Snackbar anchorOrigin={{
-          horizontal: 'center',
-          vertical: 'bottom'
-        }}
-          message={<span className={classes.snackbar}>No invalid cells!</span>}
-          open={this.state.showSnackbar}
-          action={
-            <IconButton
-              color="inherit"
-              onClick={() => this.setState({ showSnackbar: false })}>
-              <CloseIcon />
-            </IconButton>}
-        />
       </React.Fragment>
     );
   }
@@ -210,16 +193,6 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   private validate(): void {
     this.closeDrawer();
     this.props.validateSolution();
-    if (this.props.sudoku.isValid()) {
-      this.setState({
-        showSnackbar: true
-      })
-      setTimeout(() => {
-        this.setState({
-          showSnackbar: false
-        })
-      }, 2 * 1000)
-    }
   }
 
   private getBarText(): string {

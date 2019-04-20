@@ -30,7 +30,7 @@ export default class Generator {
         break;
       }
     } while (--maxItterations)
-    this.success = maxItterations !== 0
+    this.success = maxItterations > 0
   }
 
   private shuffle(base: number[][]): number[][] {

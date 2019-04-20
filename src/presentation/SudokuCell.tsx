@@ -52,11 +52,10 @@ const styles = (theme: Theme) => {
       position: 'absolute'
     },
     inactiveNote: {
-      opacity: 0.15
+      opacity: 0.1
     },
     activeNote: {
       opacity: 1,
-      fontWeight: 'bold'
     },
     note1: {
       top: 0,
@@ -112,13 +111,13 @@ const styles = (theme: Theme) => {
       bottom: "0",
       right: "0",
     },
-    invalid: {
-      backgroundColor: theme.palette.error.light,
-      color: theme.palette.error.contrastText
-    },
     active: {
       backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
       color: theme.palette.primary.contrastText,
+    },
+    invalid: {
+      backgroundColor: theme.palette.error.light,
+      color: theme.palette.error.contrastText
     }
   });
 }
