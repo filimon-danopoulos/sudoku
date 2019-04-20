@@ -13,9 +13,9 @@ import {
   REDO,
   MODE,
   TOGGLE_NIGHT_MODE,
-  RESET_SUDOKU
+  RESET_SUDOKU,
+  FILL_CANDIDATES
 } from "./types";
-import Sudoku from "../models/Sudoku";
 import { DIFFICULTY } from "../models/Difficulty";
 import PuzzleStorage from "../PuzzleStorage"
 
@@ -47,6 +47,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         }
       };
     case NEW_GAME:
+
       return {
         ...state,
         sudoku: {
@@ -141,6 +142,15 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         sudoku: {
           past: [],
           current: state.sudoku.past.shift() || state.sudoku.current,
+          future: []
+        }
+      }
+    case FILL_CANDIDATES:
+      return {
+        ...state,
+        sudoku: {
+          past: [...state.sudoku.past, state.sudoku.current],
+          current: state.sudoku.current.fillCandidates(),
           future: []
         }
       }

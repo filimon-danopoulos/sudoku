@@ -12,7 +12,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { DIFFICULTY } from '../models/Difficulty';
-import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku } from '../store/actions';
+import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates } from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -24,6 +24,10 @@ import VeryHardIcon from '@material-ui/icons/Looks5';
 import NewIcon from '@material-ui/icons/FiberNew';
 import ResetIcon from '@material-ui/icons/Restore';
 import ValidateIcon from '@material-ui/icons/Check';
+import ChildFriendlyIcon from '@material-ui/icons/ChildFriendly';
+import { Snackbar, SnackbarContent } from '@material-ui/core';
+import Sudoku from '../models/Sudoku';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -46,20 +50,26 @@ const styles = (theme: Theme) => createStyles({
   },
   notesToggle: {
     color: theme.palette.common.white
+  },
+  snackbar: {
+    color: theme.palette.type === "dark" ? theme.palette.common.black : theme.palette.primary.contrastText
   }
 });
 
 export interface ITopBarProps extends WithStyles<typeof styles> {
   difficulty: DIFFICULTY;
+  sudoku: Sudoku;
   changeDifficulty: typeof changeDifficulty;
   validateSolution: typeof validateSolution;
   createNewGame: typeof createNewGame;
   toggleNightMode: typeof toggleNightMode;
   nightMode: boolean;
   resetSudoku: typeof resetSudoku;
+  fillCandidates: typeof fillCandidates;
 }
 export interface ITopBarState {
   drawerOpen: boolean;
+  showSnackbar: boolean;
 }
 
 const DIFFICUTIES = [{
@@ -88,7 +98,8 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   constructor(props: ITopBarProps) {
     super(props);
     this.state = {
-      drawerOpen: false
+      drawerOpen: false,
+      showSnackbar: false
     }
   }
 
@@ -133,7 +144,13 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
               <ListItemIcon>
                 <ValidateIcon />
               </ListItemIcon>
-              <ListItemText primary="Validate" />
+              <ListItemText primary="Show invalid cells" />
+            </ListItem>
+            <ListItem button onClick={() => this.fillCandidates()} >
+              <ListItemIcon>
+                <ChildFriendlyIcon />
+              </ListItemIcon>
+              <ListItemText primary="Fill candidates" />
             </ListItem>
             <Divider />
             <ListSubheader>Difficulty</ListSubheader>
@@ -141,6 +158,19 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             {this.renderDifficulties()}
           </List>
         </Drawer>
+        <Snackbar anchorOrigin={{
+          horizontal: 'center',
+          vertical: 'bottom'
+        }}
+          message={<span className={classes.snackbar}>No invalid cells!</span>}
+          open={this.state.showSnackbar}
+          action={
+            <IconButton
+              color="inherit"
+              onClick={() => this.setState({ showSnackbar: false })}>
+              <CloseIcon />
+            </IconButton>}
+        />
       </React.Fragment>
     );
   }
@@ -179,7 +209,17 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
 
   private validate(): void {
     this.closeDrawer();
-    this.props.validateSolution()
+    this.props.validateSolution();
+    if (this.props.sudoku.isValid()) {
+      this.setState({
+        showSnackbar: true
+      })
+      setTimeout(() => {
+        this.setState({
+          showSnackbar: false
+        })
+      }, 2 * 1000)
+    }
   }
 
   private getBarText(): string {
@@ -197,6 +237,11 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   private reset(): void {
     this.closeDrawer();
     this.props.resetSudoku();
+  }
+
+  private fillCandidates(): void {
+    this.closeDrawer();
+    this.props.fillCandidates();
   }
 }
 

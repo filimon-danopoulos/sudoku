@@ -105,6 +105,7 @@ export default class Cell {
     const cell = new Cell(this);
     if (mode === MODE.Note) {
       cell.notes = this.notes.map((x, i) => i === (digit - 1) ? !x : x)
+      cell.value = null
     } else {
       if (cell.guess) {
         cell.value = digit;

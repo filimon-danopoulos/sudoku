@@ -13,7 +13,8 @@ import {
   UNDO,
   MODE,
   TOGGLE_NIGHT_MODE,
-  RESET_SUDOKU
+  RESET_SUDOKU,
+  FILL_CANDIDATES
 } from "./types";
 import { DIFFICULTY } from "../models/Difficulty";
 
@@ -100,5 +101,11 @@ export function toggleNightMode(): OptionActions {
 export function resetSudoku(): OptionActions {
   return {
     type: RESET_SUDOKU
+  };
+}
+
+export function fillCandidates(): OptionActions {
+  return {
+    type: FILL_CANDIDATES
   };
 }

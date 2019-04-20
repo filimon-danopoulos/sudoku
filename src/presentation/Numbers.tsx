@@ -23,6 +23,12 @@ const styles = (theme: Theme) => createStyles({
     borderBottomRightRadius: theme.spacing.unit / 2,
     borderBottomLeftRadius: theme.spacing.unit / 2
   },
+  errorBar: {
+    backgroundColor: theme.palette.error.light
+  },
+  successBar: {
+    backgroundColor: '#66bb6a'
+  },
   chip: {
     margin: '4px 2px 4px 2px'
   }
@@ -38,11 +44,14 @@ interface INumbersProps extends WithStyles<typeof styles> {
 }
 
 const INumbers: React.FunctionComponent<INumbersProps> = props => {
-  if (props.sudoku.isSolved()) {
-    return null;
-  }
+  const { classes } = props;
+  const isNoteMode = props.mode === MODE.Note;
+  const sudoku = props.sudoku;
+  const isSolved = sudoku.isSolved();
+  const showRedProgressBar = sudoku.countEmptyCells() === 0 && !isSolved;
+  const progress = ((props.difficulty - props.sudoku.countEmptyCells()) / props.difficulty) * 100
 
-  const { classes } = props
+
   return (
     <div className={classes.container}>
       <Paper>
@@ -50,7 +59,7 @@ const INumbers: React.FunctionComponent<INumbersProps> = props => {
           let color: ChipProps['color'] = 'primary';
           if (props.sudoku.isDigitSolved(x)) {
             color = 'default';
-          } else if (props.mode === MODE.Note) {
+          } else if (isNoteMode) {
             color = 'secondary';
           }
           return (
@@ -58,9 +67,11 @@ const INumbers: React.FunctionComponent<INumbersProps> = props => {
           );
         })}
         <LinearProgress className={classes.progress}
+          classes={{
+            bar: showRedProgressBar ? classes.errorBar : ""
+          }}
           variant="determinate"
-          color={props.mode === MODE.Note ? "secondary" : "primary"}
-          value={(props.sudoku.countSolvedCells() / props.difficulty) * 100}
+          value={progress}
         />
       </Paper>
     </div >
