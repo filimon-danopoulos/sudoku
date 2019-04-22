@@ -84,10 +84,6 @@ class App extends Component<IAppProps> {
       this.props.navigateCells(DIRECTION.Right);
     } else if (key === 40) { // down
       this.props.navigateCells(DIRECTION.Down);
-    } else if (key === 32) { // space
-      this.props.setMode(this.props.mode !== MODE.Note ? MODE.Note : MODE.Input)
-    } else if (key === 27) { // esc
-      this.props.setMode(MODE.Input)
     }
   }
 }

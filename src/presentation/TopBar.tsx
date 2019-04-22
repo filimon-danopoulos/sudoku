@@ -15,16 +15,6 @@ import { DIFFICULTY } from '../models/Difficulty';
 import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates } from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import VeryEasyIcon from '@material-ui/icons/LooksOne';
-import EasyIcon from '@material-ui/icons/LooksTwo';
-import NormalIcon from '@material-ui/icons/Looks3';
-import HardIcon from '@material-ui/icons/Looks4';
-import VeryHardIcon from '@material-ui/icons/Looks5';
-import NewIcon from '@material-ui/icons/FiberNew';
-import ResetIcon from '@material-ui/icons/Restore';
-import ValidateIcon from '@material-ui/icons/Check';
-import ChildFriendlyIcon from '@material-ui/icons/ChildFriendly';
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -70,24 +60,19 @@ export interface ITopBarState {
 
 const DIFFICUTIES = [{
   difficulty: DIFFICULTY.VeryEasy,
-  label: "Very Easy",
-  icon: <VeryEasyIcon />
+  label: "Very Easy"
 }, {
   difficulty: DIFFICULTY.Easy,
-  label: "Easy",
-  icon: <EasyIcon />
+  label: "Easy"
 }, {
   difficulty: DIFFICULTY.Normal,
-  label: "Normal",
-  icon: <NormalIcon />
+  label: "Normal"
 }, {
   difficulty: DIFFICULTY.Hard,
-  label: "Hard",
-  icon: <HardIcon />
+  label: "Hard"
 }, {
   difficulty: DIFFICULTY.VeryHard,
-  label: "Very Hard",
-  icon: <VeryHardIcon />
+  label: "Very Hard"
 }]
 
 class TopBar extends Component<ITopBarProps, ITopBarState> {
@@ -125,28 +110,16 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             <ListSubheader>Puzzle</ListSubheader>
             <Divider />
             <ListItem button onClick={() => this.createNewGame()}>
-              <ListItemIcon>
-                <NewIcon />
-              </ListItemIcon>
               <ListItemText primary="New game" />
             </ListItem>
             <ListItem button onClick={() => this.reset()} >
-              <ListItemIcon>
-                <ResetIcon />
-              </ListItemIcon>
               <ListItemText primary="Reset" />
             </ListItem>
             <ListItem button onClick={() => this.validate()} >
-              <ListItemIcon>
-                <ValidateIcon />
-              </ListItemIcon>
               <ListItemText primary="Show invalid cells" />
             </ListItem>
             <ListItem button onClick={() => this.fillCandidates()} >
-              <ListItemIcon>
-                <ChildFriendlyIcon />
-              </ListItemIcon>
-              <ListItemText primary="Fill candidates" />
+              <ListItemText primary="Add notes" />
             </ListItem>
             <Divider />
             <ListSubheader>Difficulty</ListSubheader>
@@ -177,9 +150,6 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
         key={option.difficulty}
         selected={this.props.difficulty === option.difficulty}
         onClick={() => this.setDifficulty(option.difficulty)}>
-        <ListItemIcon>
-          {option.icon}
-        </ListItemIcon>
         <ListItemText primary={option.label} />
       </ListItem>
     ));

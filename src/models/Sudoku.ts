@@ -113,6 +113,7 @@ export default class Sudoku {
   }
 
   public fillCandidates(): Sudoku {
+    const notes = this.rows.map(r => r.getCells().map(c => c.getNotes()))
     const data = this.rows.map(r => r.getCells().map(c => c.getValue()))
     const solver = new Solver(data)
     const candidates = solver.getCandidates()
@@ -124,7 +125,7 @@ export default class Sudoku {
       rowCandidates.forEach((cellCandidates, cell) => {
         sudoku = sudoku.activateCell(row + 1, cell + 1)
         cellCandidates.forEach(candidate => {
-          if (data[row][cell] === null) {
+          if (data[row][cell] === null && !notes[row][cell][candidate - 1]) {
             sudoku = sudoku.setDigit(candidate, MODE.Note)
           }
         })
