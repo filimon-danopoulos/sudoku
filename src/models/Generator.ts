@@ -26,7 +26,7 @@ export default class Generator {
     const startAt = Date.now()
     this.data = this.solution.map(r => [...r])
     const removed = [] as string[]
-    let allowedAttempts = 200;
+    let allowedAttempts = 1273;
     while (removed.length < this.difficulty && allowedAttempts--) {
       let row;
       let column;
