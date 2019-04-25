@@ -111,13 +111,13 @@ const styles = (theme: Theme) => {
       bottom: "0",
       right: "0",
     },
-    active: {
-      backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
-      color: theme.palette.primary.contrastText,
-    },
     invalid: {
       backgroundColor: theme.palette.error.light,
       color: theme.palette.error.contrastText
+    },
+    active: {
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
+      color: theme.palette.primary.contrastText,
     }
   });
 }
