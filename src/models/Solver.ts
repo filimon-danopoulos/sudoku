@@ -1,39 +1,3 @@
-import { DIFFICULTY } from "./Difficulty";
-
-const ROw_INDECES = [
-  [0, 1, 2, 3, 4, 5, 6, 7, 8],
-  [9, 10, 11, 12, 13, 14, 15, 16, 17],
-  [18, 19, 20, 21, 22, 23, 24, 25, 26],
-  [27, 28, 29, 30, 31, 32, 33, 34, 35],
-  [36, 37, 38, 39, 40, 41, 42, 43, 44],
-  [45, 46, 47, 48, 49, 50, 51, 52, 53],
-  [54, 55, 56, 57, 58, 59, 60, 61, 62],
-  [63, 64, 65, 66, 67, 68, 69, 70, 71],
-  [72, 73, 74, 75, 76, 77, 78, 79, 80]
-]
-const BLOCK_INDECES = [
-  [0, 1, 2, 9, 10, 11, 18, 19, 20],
-  [3, 4, 5, 12, 13, 14, 21, 22, 23],
-  [6, 7, 8, 15, 16, 17, 24, 25, 26],
-  [27, 28, 29, 36, 37, 38, 45, 46, 47],
-  [30, 31, 32, 39, 40, 41, 48, 49, 50],
-  [33, 34, 35, 42, 43, 44, 51, 52, 53],
-  [54, 55, 56, 63, 64, 65, 72, 73, 74],
-  [57, 58, 59, 66, 67, 68, 75, 76, 77],
-  [60, 61, 62, 69, 70, 71, 78, 79, 80]
-]
-const COLUMN_INDECES = [
-  [0, 9, 18, 27, 36, 45, 54, 63, 72],
-  [1, 10, 19, 28, 37, 46, 55, 64, 73],
-  [2, 11, 20, 29, 38, 47, 56, 65, 74],
-  [3, 12, 21, 30, 39, 48, 57, 66, 75],
-  [4, 13, 22, 31, 40, 49, 58, 67, 76],
-  [5, 14, 23, 32, 41, 50, 59, 68, 77],
-  [6, 15, 24, 33, 42, 51, 60, 69, 78],
-  [7, 16, 25, 34, 43, 52, 61, 70, 79],
-  [8, 17, 26, 35, 44, 53, 62, 71, 80]
-]
-
 
 const repeat = (times: number) => [...Array(times).keys()]
 const range = (start: number, end: number) => repeat(end + 1).slice(start)
@@ -44,42 +8,39 @@ export default class Solver {
   }
 
   public hasUniqueSolution(): boolean {
-    const flatData = this.data.reduce((s, x) => s.concat(x), []);
-    const candidates = this.findCandidates(flatData);
-    const hasUniqueSolution = this.recurseOverCandidates(candidates)
-    return hasUniqueSolution
+    const data = this.data.reduce((s, x) => s.concat(x), []);
+    const solution1 = this.solve(data, true)
+    const solution2 = this.solve(data, false)
+    return solution1 === solution2
   }
 
-  private recurseOverCandidates(candidates: number[][]): boolean {
-    if (this.isSolved(candidates)) return true;
-    if (this.isUnsolvable(candidates)) return false;
+  private solve(data: nullber[], reverseCandidates: boolean): string {
+    const candidates = this.findCandidates(data)
+    if (reverseCandidates) {
+      candidates.forEach(c => c.reverse())
+    }
+
+    if (this.isSolved(candidates)) {
+      return candidates.map(c => c[0]).join('');
+    }
+    if (this.isUnsolvable(candidates)) {
+      return '';
+    }
     let startIndex = this.getStartIndex(candidates);
 
     const values = candidates[startIndex]
 
     const iMax = values.length
-    let solutions = 0
     for (let i = 0; i < iMax; i++) {
       const value = values[i]
-      const localCandidates = this.removeValueFromCandidates(candidates, startIndex, value)
-      const couldSolve = this.recurseOverCandidates(localCandidates)
-      if (couldSolve) {
-        solutions += 1
+      const localData = [...data]
+      localData[startIndex] = value
+      const solution = this.solve(localData, reverseCandidates)
+      if (solution) {
+        return solution
       }
     }
-    return solutions === 1
-  }
-
-  private removeValueFromCandidates(candidates: number[][], startIndex: number, value: number): number[][] {
-    let localCandidates = [...candidates.map(x => [...x])]
-    const { row, column, block } = this.findParents(startIndex)
-    const removeFrom = [...ROw_INDECES[row], ...COLUMN_INDECES[column], ...BLOCK_INDECES[block]]
-    for (let i = 0; i < 27; i++) {
-      const removeFromIndex = removeFrom[i];
-      localCandidates[removeFromIndex] = localCandidates[removeFromIndex].filter(c => c !== value)
-    }
-    localCandidates[startIndex] = [value]
-    return localCandidates
+    return ''
   }
 
   private isSolved(candidates: number[][]): boolean {

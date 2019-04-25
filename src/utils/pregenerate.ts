@@ -13,7 +13,7 @@ export default function pregenerate(count: number): string {
   [DIFFICULTY.VeryEasy, DIFFICULTY.Easy, DIFFICULTY.Normal, DIFFICULTY.Hard, DIFFICULTY.VeryHard].forEach(d => {
     while (puzzles[DIFFICULTY[d]].length < count) {
       const g = new Generator(d);
-      if (g.succeeded()) {
+      if (g.generate()) {
         puzzles[DIFFICULTY[d]].push(g.getPuzzleData())
       }
     };

@@ -6,7 +6,7 @@ const ctx: Worker = self as any;
 ctx.addEventListener("message", (message) => {
   const difficulty = message.data as DIFFICULTY;
   const generator = new Generator(difficulty);
-  if (generator.succeeded()) {
+  if (generator.generate()) {
     const puzzleData = generator.getPuzzleData();
     ctx.postMessage({
       puzzleData,

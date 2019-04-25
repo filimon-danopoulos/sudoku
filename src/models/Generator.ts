@@ -1,5 +1,4 @@
 import { DIFFICULTY } from "./Difficulty";
-import { start } from "repl";
 import Solver from "./Solver";
 
 const BASE = [
@@ -15,22 +14,44 @@ const BASE = [
 ];
 
 export default class Generator {
-  private success: boolean;
   private solution: number[][];
   private data: (null | number)[][];
 
   constructor(private difficulty: DIFFICULTY) {
     this.solution = this.shuffle(BASE)
-    let maxItterations = 20;
-    do {
-      this.data = this.solution.map(r => [...r])
-      this.removeValues();
-      const solver = new Solver(this.data);
+    this.data = [];
+  }
+
+  public generate() {
+    const startAt = Date.now()
+    this.data = this.solution.map(r => [...r])
+    const removed = [] as string[]
+    let allowedAttempts = 200;
+    while (removed.length < this.difficulty && allowedAttempts--) {
+      let row;
+      let column;
+      do {
+        row = ~~(Math.random() * 9);
+        column = ~~(Math.random() * 9);
+      } while (removed.includes(`${row}:${column}`))
+      let value = this.data[row][column]
+      this.data[row][column] = null
+      const solver = new Solver(this.data)
       if (solver.hasUniqueSolution()) {
-        break;
+        removed.push(`${row}:${column}`)
+      } else {
+        this.data[row][column] = value
       }
-    } while (--maxItterations)
-    this.success = maxItterations > 0
+    }
+    const ellapsedTime = Date.now() - startAt
+
+    if (allowedAttempts > 0) {
+      console.log(`It took ${ellapsedTime}ms to generate a ${DIFFICULTY[this.difficulty]} puzzle`)
+      return true
+    } else {
+      console.log(`Failed to generate a ${DIFFICULTY[this.difficulty]} puzzle after ${ellapsedTime}ms`)
+      return false
+    }
   }
 
   private shuffle(base: number[][]): number[][] {
@@ -41,25 +62,8 @@ export default class Generator {
     return data;
   }
 
-  public succeeded(): boolean {
-    return this.success;
-  }
-
   public getPuzzleData(): ([number, boolean])[][] {
     return this.data.map((r, i) => r.map((y, l) => [this.solution[i][l], this.solution[i][l] === this.data[i][l]] as [number, boolean]));
-  }
-
-  private removeValues() {
-    let cellsToRemove = this.difficulty as number
-    while (cellsToRemove) {
-      const x = ~~(Math.random() * 9);
-      const y = ~~(Math.random() * 9);
-      const value = this.data[x][y]
-      if (value !== null) {
-        this.data[x][y] = null;
-        --cellsToRemove;
-      }
-    }
   }
 
   private moveRowOrColumn(data: number[][]) {
