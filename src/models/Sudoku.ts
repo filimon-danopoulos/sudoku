@@ -1,7 +1,7 @@
 import Row from "./Row";
 import { DIRECTION, MODE } from "../store/types";
 import Cell from "./Cell";
-import Solver from "./Solver";
+import Analyzer from "./Analyzer";
 
 export default class Sudoku {
   private rows: Row[];
@@ -115,8 +115,8 @@ export default class Sudoku {
   public fillCandidates(): Sudoku {
     const notes = this.rows.map(r => r.getCells().map(c => c.getNotes()))
     const data = this.rows.map(r => r.getCells().map(c => c.getValue()))
-    const solver = new Solver(data)
-    const candidates = solver.getCandidates()
+    const analyzer = new Analyzer(data)
+    const candidates = analyzer.getCandidates()
     let sudoku = new Sudoku(this);
     if (sudoku.activeCell.row !== -1 && sudoku.activeCell.column !== -1) {
       sudoku = sudoku.activateCell(sudoku.activeCell.row, sudoku.activeCell.column)

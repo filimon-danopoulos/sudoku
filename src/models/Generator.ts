@@ -1,5 +1,5 @@
 import { DIFFICULTY } from "./Difficulty";
-import Solver from "./Solver";
+import SudokuSolver from "../solver/SudokuSolver";
 
 const BASE = [
   [3, 6, 1, 7, 2, 5, 9, 4, 8],
@@ -23,6 +23,7 @@ export default class Generator {
   }
 
   public generate() {
+    const solver = new SudokuSolver()
     const startAt = Date.now()
     this.data = this.solution.map(r => [...r])
     const removed = [] as string[]
@@ -36,8 +37,8 @@ export default class Generator {
       } while (removed.includes(`${row}:${column}`))
       let value = this.data[row][column]
       this.data[row][column] = null
-      const solver = new Solver(this.data)
-      if (solver.hasUniqueSolution()) {
+      const solutions = solver.solve(this.data)
+      if (solutions.length === 1) {
         removed.push(`${row}:${column}`)
       } else {
         this.data[row][column] = value

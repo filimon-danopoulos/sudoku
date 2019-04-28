@@ -27,10 +27,6 @@ const options = [
   {
     label: "Very Hard",
     value: DIFFICULTY.VeryHard
-  },
-  {
-    label: "Insane",
-    value: DIFFICULTY.Insane
   }
 ];
 

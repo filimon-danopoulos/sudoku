@@ -37,8 +37,6 @@ const CompletedDialog: React.FunctionComponent<ICompletedDialogProps> = (props: 
         return 'a hard';
       case DIFFICULTY.VeryHard:
         return 'a very hard';
-      case DIFFICULTY.Insane:
-        return 'an insane';
       default:
         return 'an unknown';
     }
