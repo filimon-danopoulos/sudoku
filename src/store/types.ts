@@ -38,6 +38,7 @@ export const REDO = "REDO";
 export const TOGGLE_NIGHT_MODE = "TOGGLE_NIGHT_MODE";
 export const RESET_SUDOKU = "RESET_SUDOKU";
 export const FILL_CANDIDATES = "FILL_CANDIDATES";
+export const CLEAR_CANDIDATES = "CLEAR_CANDIDATES";
 
 interface IChangeDifficultyAction {
   type: typeof CHANGE_DIFFICULTY;
@@ -102,6 +103,9 @@ interface IFillCandidatesAction {
   type: typeof FILL_CANDIDATES;
 }
 
+interface IClearCandidatesAction {
+  type: typeof CLEAR_CANDIDATES;
+}
 
 export type OptionActions = IChangeDifficultyAction
   | INewGameAction
@@ -115,4 +119,5 @@ export type OptionActions = IChangeDifficultyAction
   | IRedoAction
   | IToggleNightModeAction
   | IResetSudokuAction
-  | IFillCandidatesAction;
+  | IFillCandidatesAction
+  | IClearCandidatesAction;

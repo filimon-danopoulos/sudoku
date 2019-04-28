@@ -12,7 +12,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { DIFFICULTY } from '../models/Difficulty';
-import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates } from '../store/actions';
+import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates, clearCandidates } from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
@@ -52,6 +52,7 @@ export interface ITopBarProps extends WithStyles<typeof styles> {
   nightMode: boolean;
   resetSudoku: typeof resetSudoku;
   fillCandidates: typeof fillCandidates;
+  clearCandidates: typeof clearCandidates;
 }
 export interface ITopBarState {
   drawerOpen: boolean;
@@ -110,16 +111,19 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             <ListSubheader>Puzzle</ListSubheader>
             <Divider />
             <ListItem button onClick={() => this.createNewGame()}>
-              <ListItemText primary="New game" />
+              <ListItemText primary="New puzzle" />
             </ListItem>
             <ListItem button onClick={() => this.reset()} >
-              <ListItemText primary="Reset" />
+              <ListItemText primary="Reset puzzle" />
             </ListItem>
             <ListItem button onClick={() => this.validate()} >
               <ListItemText primary="Show invalid cells" />
             </ListItem>
             <ListItem button onClick={() => this.fillCandidates()} >
               <ListItemText primary="Add notes" />
+            </ListItem>
+            <ListItem button onClick={() => this.clearCandidates()} >
+              <ListItemText primary="Remove notes" />
             </ListItem>
             <Divider />
             <ListSubheader>Difficulty</ListSubheader>
@@ -185,6 +189,11 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   private fillCandidates(): void {
     this.closeDrawer();
     this.props.fillCandidates();
+  }
+
+  private clearCandidates(): void {
+    this.closeDrawer();
+    this.props.clearCandidates();
   }
 }
 

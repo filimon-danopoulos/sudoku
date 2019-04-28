@@ -14,7 +14,8 @@ import {
   MODE,
   TOGGLE_NIGHT_MODE,
   RESET_SUDOKU,
-  FILL_CANDIDATES
+  FILL_CANDIDATES,
+  CLEAR_CANDIDATES
 } from "./types";
 import { DIFFICULTY } from "../models/Difficulty";
 import PuzzleStorage from "../PuzzleStorage"
@@ -151,6 +152,15 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         sudoku: {
           past: [...state.sudoku.past, state.sudoku.current],
           current: state.sudoku.current.fillCandidates(),
+          future: []
+        }
+      }
+    case CLEAR_CANDIDATES:
+      return {
+        ...state,
+        sudoku: {
+          past: [...state.sudoku.past, state.sudoku.current],
+          current: state.sudoku.current.clearCandidates(),
           future: []
         }
       }

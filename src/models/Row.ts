@@ -77,4 +77,10 @@ export default class Row {
     return row;
   }
 
+  public clearCandidates(): Row {
+    const row = new Row(this);
+    row.cells = this.cells.map(c => c.clearNotes());
+    return row;
+  }
+
 }

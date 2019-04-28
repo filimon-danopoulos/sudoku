@@ -14,7 +14,8 @@ import {
   MODE,
   TOGGLE_NIGHT_MODE,
   RESET_SUDOKU,
-  FILL_CANDIDATES
+  FILL_CANDIDATES,
+  CLEAR_CANDIDATES
 } from "./types";
 import { DIFFICULTY } from "../models/Difficulty";
 
@@ -107,5 +108,12 @@ export function resetSudoku(): OptionActions {
 export function fillCandidates(): OptionActions {
   return {
     type: FILL_CANDIDATES
+  };
+}
+
+
+export function clearCandidates(): OptionActions {
+  return {
+    type: CLEAR_CANDIDATES
   };
 }

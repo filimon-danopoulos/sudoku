@@ -133,4 +133,10 @@ export default class Sudoku {
     })
     return sudoku;
   }
+
+  public clearCandidates(): Sudoku {
+    const sudoku = new Sudoku(this);
+    sudoku.rows = sudoku.rows.map(row => row.clearCandidates())
+    return sudoku;
+  }
 }

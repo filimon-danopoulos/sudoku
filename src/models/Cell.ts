@@ -140,4 +140,10 @@ export default class Cell {
   public isGuess(): boolean {
     return this.guess;
   }
+
+  public clearNotes(): Cell {
+    const cell = new Cell(this);
+    cell.notes = cell.notes.map(n => false);
+    return cell;
+  }
 }
