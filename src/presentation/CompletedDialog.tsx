@@ -32,7 +32,7 @@ const CompletedDialog: React.FunctionComponent<ICompletedDialogProps> = (props: 
       case DIFFICULTY.Easy:
         return 'an easy';
       case DIFFICULTY.Normal:
-        return 'a normal';
+        return 'a medium';
       case DIFFICULTY.Hard:
         return 'a hard';
       case DIFFICULTY.VeryHard:
@@ -55,14 +55,14 @@ const CompletedDialog: React.FunctionComponent<ICompletedDialogProps> = (props: 
       <DialogTitle id="confirmation-dialog-title">Done!</DialogTitle>
       <DialogContent>
         <Typography variant="body1" gutterBottom>
-          You completed a {difficultyText()} puzzle.
+          You completed {difficultyText()} puzzle.
         </Typography>
         <Typography variant="body1">
-          Ellapsed time: {ellapsedTime}
+          Elapsed time: {ellapsedTime}
         </Typography>
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={() => { props.createNewGame() }}>
+        <Button onClick={() => { props.createNewGame() }}>
           New Game
         </Button>
       </DialogActions>

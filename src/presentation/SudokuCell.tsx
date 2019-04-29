@@ -16,6 +16,7 @@ const styles = (theme: Theme) => {
       paddingBottom: '11.111111%',
       textAlign: 'center',
       userSelect: "none",
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
     },
     content: {
       display: 'flex',

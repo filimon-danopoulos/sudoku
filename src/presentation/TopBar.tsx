@@ -15,6 +15,7 @@ import { DIFFICULTY } from '../models/Difficulty';
 import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates, clearCandidates } from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -23,6 +24,18 @@ const styles = (theme: Theme) => createStyles({
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingTop: theme.spacing.unit / 2,
+    paddingBottom: theme.spacing.unit / 2,
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    color: theme.palette.type === "dark" ? theme.palette.primary.contrastText : theme.palette.secondary.main,
+  },
+  drawerList: {
+    paddingTop: 0
   },
   drawerPaper: {
     [theme.breakpoints.down('xs')]: {
@@ -67,7 +80,7 @@ const DIFFICUTIES = [{
   label: "Easy"
 }, {
   difficulty: DIFFICULTY.Normal,
-  label: "Normal"
+  label: "Medium"
 }, {
   difficulty: DIFFICULTY.Hard,
   label: "Hard"
@@ -107,7 +120,16 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
           </Toolbar>
         </AppBar>
         <Drawer variant="temporary" classes={{ paper: classes.drawerPaper }} open={this.state.drawerOpen} onClose={() => this.closeDrawer()}>
-          <List>
+          <div className={classes.drawerHeader}>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              Options
+              </Typography>
+            <IconButton onClick={() => this.closeDrawer()}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <List className={classes.drawerList}>
+            <Divider />
             <ListSubheader>Puzzle</ListSubheader>
             <Divider />
             <ListItem button onClick={() => this.createNewGame()}>
