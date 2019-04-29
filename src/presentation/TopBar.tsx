@@ -16,6 +16,9 @@ import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, res
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Collapse from '@material-ui/core/Collapse';
+import CollapseIcon from '@material-ui/icons/ExpandLess';
+import ExpandIcon from '@material-ui/icons/ExpandMore';
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -53,6 +56,9 @@ const styles = (theme: Theme) => createStyles({
   },
   snackbar: {
     color: theme.palette.type === "dark" ? theme.palette.common.black : theme.palette.primary.contrastText
+  },
+  nested: {
+    paddingLeft: theme.spacing.unit * 4,
   }
 });
 
@@ -69,7 +75,7 @@ export interface ITopBarProps extends WithStyles<typeof styles> {
 }
 export interface ITopBarState {
   drawerOpen: boolean;
-  showSnackbar: boolean;
+  difficultyOpen: boolean;
 }
 
 const DIFFICUTIES = [{
@@ -94,7 +100,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     super(props);
     this.state = {
       drawerOpen: false,
-      showSnackbar: false
+      difficultyOpen: false
     }
   }
 
@@ -147,10 +153,21 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             <ListItem button onClick={() => this.clearCandidates()} >
               <ListItemText primary="Remove notes" />
             </ListItem>
+            <ListItem button onClick={() => this.toggleDifficulty()}>
+              <ListItemText primary="Difficulty" />
+              {this.state.difficultyOpen ? <CollapseIcon /> : <ExpandIcon />}
+            </ListItem>
+            <Collapse in={this.state.difficultyOpen} timeout="auto" unmountOnExit>
+              <List disablePadding>
+                {this.renderDifficulties()}
+              </List>
+            </Collapse>
             <Divider />
-            <ListSubheader>Difficulty</ListSubheader>
+            <ListSubheader>Settings</ListSubheader>
             <Divider />
-            {this.renderDifficulties()}
+            <ListItem button onClick={() => this.forceRefresh()}>
+              <ListItemText primary="Update" />
+            </ListItem>
           </List>
         </Drawer>
       </React.Fragment>
@@ -165,7 +182,8 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
 
   private closeDrawer(): void {
     this.setState({
-      drawerOpen: false
+      drawerOpen: false,
+      difficultyOpen: false
     });
   }
 
@@ -173,6 +191,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     return DIFFICUTIES.map(option => (
       <ListItem
         button
+        className={this.props.classes.nested}
         key={option.difficulty}
         selected={this.props.difficulty === option.difficulty}
         onClick={() => this.setDifficulty(option.difficulty)}>
@@ -216,6 +235,20 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   private clearCandidates(): void {
     this.closeDrawer();
     this.props.clearCandidates();
+  }
+
+  private async forceRefresh() {
+    this.closeDrawer();
+    let serviceWorker = await navigator.serviceWorker.getRegistration()
+    if (serviceWorker) {
+      await serviceWorker.unregister();
+    }
+    localStorage.clear()
+    window.location.reload(true);
+  }
+
+  private toggleDifficulty(): void {
+    this.setState({ difficultyOpen: !this.state.difficultyOpen })
   }
 }
 
