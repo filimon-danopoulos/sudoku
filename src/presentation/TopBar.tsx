@@ -19,6 +19,12 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Collapse from '@material-ui/core/Collapse';
 import CollapseIcon from '@material-ui/icons/ExpandLess';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import NewIcon from '@material-ui/icons/Casino'
+import ResetIcon from '@material-ui/icons/Replay'
+import HelpIcon from '@material-ui/icons/Help'
+import DifficultyIcon from '@material-ui/icons/FitnessCenter'
+import UpdateIcon from '@material-ui/icons/SyncProblem'
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -51,6 +57,10 @@ const styles = (theme: Theme) => createStyles({
       minWidth: '30%'
     }
   },
+  listHeader: {
+    backgroundColor: theme.palette.background.default,
+    textTransform: "uppercase"
+  },
   notesToggle: {
     color: theme.palette.common.white
   },
@@ -58,7 +68,7 @@ const styles = (theme: Theme) => createStyles({
     color: theme.palette.type === "dark" ? theme.palette.common.black : theme.palette.primary.contrastText
   },
   nested: {
-    paddingLeft: theme.spacing.unit * 4,
+    paddingLeft: theme.spacing.unit * 5
   }
 });
 
@@ -76,6 +86,7 @@ export interface ITopBarProps extends WithStyles<typeof styles> {
 export interface ITopBarState {
   drawerOpen: boolean;
   difficultyOpen: boolean;
+  helpOpen: boolean;
 }
 
 const DIFFICUTIES = [{
@@ -100,7 +111,8 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     super(props);
     this.state = {
       drawerOpen: false,
-      difficultyOpen: false
+      difficultyOpen: false,
+      helpOpen: false
     }
   }
 
@@ -135,25 +147,44 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             </IconButton>
           </div>
           <List className={classes.drawerList}>
-            <Divider />
-            <ListSubheader>Puzzle</ListSubheader>
-            <Divider />
+            <ListSubheader className={classes.listHeader}>Puzzle</ListSubheader>
             <ListItem button onClick={() => this.createNewGame()}>
+              <ListItemIcon>
+                <NewIcon />
+              </ListItemIcon>
               <ListItemText primary="New puzzle" />
             </ListItem>
             <ListItem button onClick={() => this.reset()} >
+              <ListItemIcon>
+                <ResetIcon />
+              </ListItemIcon>
               <ListItemText primary="Reset puzzle" />
             </ListItem>
-            <ListItem button onClick={() => this.validate()} >
-              <ListItemText primary="Show invalid cells" />
+            <ListItem button onClick={() => this.toggleHelp()}>
+              <ListItemIcon>
+                <HelpIcon />
+              </ListItemIcon>
+              <ListItemText primary="Help" />
+              {this.state.helpOpen ? <CollapseIcon /> : <ExpandIcon />}
             </ListItem>
-            <ListItem button onClick={() => this.fillCandidates()} >
-              <ListItemText primary="Add notes" />
-            </ListItem>
-            <ListItem button onClick={() => this.clearCandidates()} >
-              <ListItemText primary="Remove notes" />
-            </ListItem>
+            <Collapse in={this.state.helpOpen} timeout="auto" unmountOnExit>
+              <List disablePadding>
+                <ListItem className={this.props.classes.nested} button onClick={() => this.validate()} >
+                  <ListItemText primary="Show invalid cells" />
+                </ListItem>
+                <ListItem className={this.props.classes.nested} button onClick={() => this.fillCandidates()} >
+                  <ListItemText primary="Add notes" />
+                </ListItem>
+                <ListItem className={this.props.classes.nested} button onClick={() => this.clearCandidates()} >
+                  <ListItemText primary="Remove notes" />
+                </ListItem>
+              </List>
+            </Collapse>
             <ListItem button onClick={() => this.toggleDifficulty()}>
+
+              <ListItemIcon>
+                <DifficultyIcon />
+              </ListItemIcon>
               <ListItemText primary="Difficulty" />
               {this.state.difficultyOpen ? <CollapseIcon /> : <ExpandIcon />}
             </ListItem>
@@ -162,11 +193,12 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
                 {this.renderDifficulties()}
               </List>
             </Collapse>
-            <Divider />
-            <ListSubheader>Settings</ListSubheader>
-            <Divider />
+            <ListSubheader className={classes.listHeader}>Settings</ListSubheader>
             <ListItem button onClick={() => this.forceRefresh()}>
-              <ListItemText primary="Update" />
+              <ListItemIcon>
+                <UpdateIcon />
+              </ListItemIcon>
+              <ListItemText primary="Update App" />
             </ListItem>
           </List>
         </Drawer>
@@ -183,7 +215,8 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   private closeDrawer(): void {
     this.setState({
       drawerOpen: false,
-      difficultyOpen: false
+      difficultyOpen: false,
+      helpOpen: false
     });
   }
 
@@ -249,6 +282,10 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
 
   private toggleDifficulty(): void {
     this.setState({ difficultyOpen: !this.state.difficultyOpen })
+  }
+
+  private toggleHelp(): void {
+    this.setState({ helpOpen: !this.state.helpOpen })
   }
 }
 
