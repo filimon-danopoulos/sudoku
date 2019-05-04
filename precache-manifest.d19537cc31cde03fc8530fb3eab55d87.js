@@ -1,23 +1,23 @@
 self.__precacheManifest = [
   {
-    "revision": "2b1a237772c05cd2b9db",
+    "revision": "ae3f2588d1d2752d0e9c",
     "url": "/sudoku/static/css/main.856ce89d.chunk.css"
   },
   {
-    "revision": "2b1a237772c05cd2b9db",
-    "url": "/sudoku/static/js/main.3cf36e33.chunk.js"
+    "revision": "ae3f2588d1d2752d0e9c",
+    "url": "/sudoku/static/js/main.3f055956.chunk.js"
   },
   {
     "revision": "c6440607aefabbca9582",
     "url": "/sudoku/static/js/runtime~main.dcef67e1.js"
   },
   {
-    "revision": "878981ff55a78b7ede20",
+    "revision": "118a28750f99aa2168fc",
     "url": "/sudoku/static/css/2.e0d97c26.chunk.css"
   },
   {
-    "revision": "878981ff55a78b7ede20",
-    "url": "/sudoku/static/js/2.bddaf847.chunk.js"
+    "revision": "118a28750f99aa2168fc",
+    "url": "/sudoku/static/js/2.57d08f7b.chunk.js"
   },
   {
     "revision": "56317aadb0451b8a3d090cc5dbda65bc",
@@ -32,12 +32,12 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-300.55536c8e.woff2"
   },
   {
-    "revision": "5d4aeb4e5f5ef754e307d7ffaef688bd",
-    "url": "/sudoku/static/media/roboto-latin-400.5d4aeb4e.woff2"
-  },
-  {
     "revision": "285467176f7fe6bb6a9c6873b3dad2cc",
     "url": "/sudoku/static/media/roboto-latin-500.28546717.woff2"
+  },
+  {
+    "revision": "5d4aeb4e5f5ef754e307d7ffaef688bd",
+    "url": "/sudoku/static/media/roboto-latin-400.5d4aeb4e.woff2"
   },
   {
     "revision": "037d830416495def72b7881024c14b7b",
@@ -48,40 +48,40 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-900.19b7a0ad.woff2"
   },
   {
+    "revision": "e9dbbe8a693dd275c16d32feb101f1c1",
+    "url": "/sudoku/static/media/roboto-latin-100.e9dbbe8a.woff"
+  },
+  {
     "revision": "6232f43d15b0e7a0bf0fe82e295bdd06",
     "url": "/sudoku/static/media/roboto-latin-100italic.6232f43d.woff2"
   },
   {
-    "revision": "d69924b98acd849cdeba9fbff3f88ea6",
-    "url": "/sudoku/static/media/roboto-latin-300italic.d69924b9.woff2"
-  },
-  {
-    "revision": "e9dbbe8a693dd275c16d32feb101f1c1",
-    "url": "/sudoku/static/media/roboto-latin-100.e9dbbe8a.woff"
+    "revision": "d704bb3d579b7d5e40880c75705c8a71",
+    "url": "/sudoku/static/media/roboto-latin-100italic.d704bb3d.woff"
   },
   {
     "revision": "a1471d1d6431c893582a5f6a250db3f9",
     "url": "/sudoku/static/media/roboto-latin-300.a1471d1d.woff"
   },
   {
-    "revision": "210a7c781f5a354a0e4985656ab456d9",
-    "url": "/sudoku/static/media/roboto-latin-300italic.210a7c78.woff"
-  },
-  {
-    "revision": "d8bcbe724fd6f4ba44d0ee6a2675890f",
-    "url": "/sudoku/static/media/roboto-latin-400italic.d8bcbe72.woff2"
+    "revision": "d69924b98acd849cdeba9fbff3f88ea6",
+    "url": "/sudoku/static/media/roboto-latin-300italic.d69924b9.woff2"
   },
   {
     "revision": "bafb105baeb22d965c70fe52ba6b49d9",
     "url": "/sudoku/static/media/roboto-latin-400.bafb105b.woff"
   },
   {
-    "revision": "9680d5a0c32d2fd084e07bbc4c8b2923",
-    "url": "/sudoku/static/media/roboto-latin-400italic.9680d5a0.woff"
+    "revision": "d8bcbe724fd6f4ba44d0ee6a2675890f",
+    "url": "/sudoku/static/media/roboto-latin-400italic.d8bcbe72.woff2"
   },
   {
-    "revision": "d704bb3d579b7d5e40880c75705c8a71",
-    "url": "/sudoku/static/media/roboto-latin-100italic.d704bb3d.woff"
+    "revision": "210a7c781f5a354a0e4985656ab456d9",
+    "url": "/sudoku/static/media/roboto-latin-300italic.210a7c78.woff"
+  },
+  {
+    "revision": "9680d5a0c32d2fd084e07bbc4c8b2923",
+    "url": "/sudoku/static/media/roboto-latin-400italic.9680d5a0.woff"
   },
   {
     "revision": "de8b7431b74642e830af4d4f4b513ec9",
@@ -92,12 +92,12 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-500italic.ffcc050b.woff"
   },
   {
-    "revision": "cf6613d1adf490972c557a8e318e0868",
-    "url": "/sudoku/static/media/roboto-latin-700.cf6613d1.woff"
-  },
-  {
     "revision": "510dec37fa69fba39593e01a469ee018",
     "url": "/sudoku/static/media/roboto-latin-500italic.510dec37.woff2"
+  },
+  {
+    "revision": "cf6613d1adf490972c557a8e318e0868",
+    "url": "/sudoku/static/media/roboto-latin-700.cf6613d1.woff"
   },
   {
     "revision": "846d1890aee87fde5d8ced8eba360c3a",
@@ -120,7 +120,7 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-900italic.bc833e72.woff"
   },
   {
-    "revision": "0774d275041c1840662788f296bdaea8",
+    "revision": "28d22017d8b97f5bb34d7f54a4f737f5",
     "url": "/sudoku/index.html"
   }
 ];
