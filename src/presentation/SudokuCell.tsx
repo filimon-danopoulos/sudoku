@@ -5,8 +5,8 @@ import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core";
 import { MODE } from "../store/types";
 
 const styles = (theme: Theme) => {
-  const borderThin = `solid 1px ${theme.palette.common.black}`;
-  const borderThick = `solid 2px ${theme.palette.common.black}`;
+  const borderThin = `solid 1px ${theme.palette.primary.dark}`;
+  const borderThick = `solid 2px ${theme.palette.primary.dark}`;
 
   return createStyles({
     container: {
@@ -29,7 +29,7 @@ const styles = (theme: Theme) => {
       left: 0,
       borderRight: borderThin,
       borderBottom: borderThin,
-      color: theme.palette.type === "dark" ? theme.palette.grey[400] : theme.palette.common.black
+      color: theme.palette.type === "dark" ? theme.palette.grey[400] : theme.palette.primary.dark
     },
     thickBorderTop: {
       borderTop: borderThick

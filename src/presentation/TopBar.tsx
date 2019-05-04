@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
@@ -25,6 +24,15 @@ import ResetIcon from '@material-ui/icons/Replay'
 import HelpIcon from '@material-ui/icons/Help'
 import DifficultyIcon from '@material-ui/icons/FitnessCenter'
 import UpdateIcon from '@material-ui/icons/SyncProblem'
+import VeryEasyIcon from '@material-ui/icons/LooksOne'
+import EasyIcon from '@material-ui/icons/LooksTwo'
+import MediumIcon from '@material-ui/icons/Looks3'
+import HardIcon from '@material-ui/icons/Looks4'
+import VeryHardIcon from '@material-ui/icons/Looks5'
+import ValidateIcon from '@material-ui/icons/CheckCircle'
+import ShowCandidatesIcon from '@material-ui/icons/AddCircle'
+import RemoveCandidatesIcon from '@material-ui/icons/RemoveCircle'
+
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -64,11 +72,11 @@ const styles = (theme: Theme) => createStyles({
   notesToggle: {
     color: theme.palette.common.white
   },
-  snackbar: {
-    color: theme.palette.type === "dark" ? theme.palette.common.black : theme.palette.primary.contrastText
-  },
   nested: {
-    paddingLeft: theme.spacing.unit * 5
+    paddingLeft: theme.spacing.unit * 9
+  },
+  subMenuButton: {
+    color: theme.palette.type === "dark" ? theme.palette.primary.contrastText : theme.palette.grey[600]
   }
 });
 
@@ -91,19 +99,24 @@ export interface ITopBarState {
 
 const DIFFICUTIES = [{
   difficulty: DIFFICULTY.VeryEasy,
-  label: "Very Easy"
+  label: "Very Easy",
+  icon: <VeryEasyIcon />
 }, {
   difficulty: DIFFICULTY.Easy,
-  label: "Easy"
+  label: "Easy",
+  icon: <EasyIcon />
 }, {
   difficulty: DIFFICULTY.Normal,
-  label: "Medium"
+  label: "Medium",
+  icon: <MediumIcon />
 }, {
   difficulty: DIFFICULTY.Hard,
-  label: "Hard"
+  label: "Hard",
+  icon: <HardIcon />
 }, {
   difficulty: DIFFICULTY.VeryHard,
-  label: "Very Hard"
+  label: "Very Hard",
+  icon: <VeryHardIcon />
 }]
 
 class TopBar extends Component<ITopBarProps, ITopBarState> {
@@ -165,28 +178,42 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
                 <HelpIcon />
               </ListItemIcon>
               <ListItemText primary="Help" />
-              {this.state.helpOpen ? <CollapseIcon /> : <ExpandIcon />}
+              {this.state.helpOpen ?
+                <CollapseIcon className={classes.subMenuButton} /> :
+                <ExpandIcon className={classes.subMenuButton} />
+              }
             </ListItem>
             <Collapse in={this.state.helpOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
                 <ListItem className={this.props.classes.nested} button onClick={() => this.validate()} >
-                  <ListItemText primary="Show invalid cells" />
+                  <ListItemIcon>
+                    <ValidateIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Validate" />
                 </ListItem>
                 <ListItem className={this.props.classes.nested} button onClick={() => this.fillCandidates()} >
-                  <ListItemText primary="Add notes" />
+                  <ListItemIcon>
+                    <ShowCandidatesIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Show candidates" />
                 </ListItem>
                 <ListItem className={this.props.classes.nested} button onClick={() => this.clearCandidates()} >
-                  <ListItemText primary="Remove notes" />
+                  <ListItemIcon>
+                    <RemoveCandidatesIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Remove candidates" />
                 </ListItem>
               </List>
             </Collapse>
             <ListItem button onClick={() => this.toggleDifficulty()}>
-
               <ListItemIcon>
                 <DifficultyIcon />
               </ListItemIcon>
               <ListItemText primary="Difficulty" />
-              {this.state.difficultyOpen ? <CollapseIcon /> : <ExpandIcon />}
+              {this.state.difficultyOpen ?
+                <CollapseIcon className={classes.subMenuButton} /> :
+                <ExpandIcon className={classes.subMenuButton} />
+              }
             </ListItem>
             <Collapse in={this.state.difficultyOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
@@ -215,8 +242,6 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   private closeDrawer(): void {
     this.setState({
       drawerOpen: false,
-      difficultyOpen: false,
-      helpOpen: false
     });
   }
 
@@ -228,6 +253,9 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
         key={option.difficulty}
         selected={this.props.difficulty === option.difficulty}
         onClick={() => this.setDifficulty(option.difficulty)}>
+        <ListItemIcon>
+          {option.icon}
+        </ListItemIcon>
         <ListItemText primary={option.label} />
       </ListItem>
     ));
@@ -271,7 +299,6 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   }
 
   private async forceRefresh() {
-    this.closeDrawer();
     let serviceWorker = await navigator.serviceWorker.getRegistration()
     if (serviceWorker) {
       await serviceWorker.unregister();
