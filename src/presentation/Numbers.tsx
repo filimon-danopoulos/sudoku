@@ -12,12 +12,6 @@ const styles = (theme: Theme) => createStyles({
     paddingTop: theme.spacing.unit,
     marginLeft: 'auto',
     marginRight: 'auto',
-    '@media (orientation: portrait)': {
-      width: '100%',
-    },
-    '@media (orientation: landscape)': {
-      width: 'calc(100vh - 2*64px - 100px)',
-    },
   },
   progress: {
     borderBottomRightRadius: theme.spacing.unit / 2,

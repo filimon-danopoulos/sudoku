@@ -1,33 +1,55 @@
 import React, { Component, CSSProperties } from "react";
 import Sudoku from "../models/Sudoku";
 import SudokuRow from "./SudokuRow";
-import { createNewGame, toggleCell } from "../store/actions";
+import { createNewGame, toggleCell, undo, redo, removeDigit, resetSudoku } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
-import Paper from "@material-ui/core/Paper";
-import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core";
+import { withStyles, WithStyles, createStyles, Theme, Card, CardActions, CardContent, IconButton, CardHeader, Menu, MenuItem } from "@material-ui/core";
+import UndoIcon from '@material-ui/icons/Undo';
+import RedoIcon from '@material-ui/icons/Redo';
+import ClearIcon from '@material-ui/icons/Clear';
 import { MODE } from "../store/types";
+import MenuIcon from '@material-ui/icons/MoreVert';
 
 const styles = (theme: Theme) => createStyles({
+  cardContent: {
+    padding: 0
+  },
   container: {
     position: 'relative',
     marginLeft: 'auto',
     marginRight: 'auto',
     '@media (orientation: portrait)': {
-      width: '100%',
-      paddingBottom: '100%',
+      height: `calc(100vw - ${2.5 * theme.spacing.unit}px)`,
+      width: `calc(100vw - ${2.5 * theme.spacing.unit}px)`,
     },
     '@media (orientation: landscape)': {
       height: 'calc(100vh - 2*64px - 100px)',
       width: 'calc(100vh - 2*64px - 100px)',
     },
   },
-  sudokuPaper: {
+  sudoku: {
     position: 'absolute',
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
     padding: theme.spacing.unit
+  },
+  toolbar: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: `0 ${theme.spacing.unit}px`
+  },
+  toolbarButton: {
+    padding: theme.spacing.unit
+  },
+  header: {
+    padding: theme.spacing.unit,
+    paddingBottom: 0
+  },
+  headerButton: {
+    padding: theme.spacing.unit
+
   }
 });
 
@@ -37,10 +59,17 @@ export interface ISudokuProps extends WithStyles<typeof styles> {
   createNewGame: typeof createNewGame;
   toggleCell: typeof toggleCell;
   mode: MODE;
+  undo: typeof undo;
+  redo: typeof redo;
+  removeDigit: typeof removeDigit;
+  past: Sudoku[];
+  resetSudoku: typeof resetSudoku;
+  future: Sudoku[];
 }
 
 export interface ISudokuState {
   rowSize: number;
+  menuAnchor: any
 }
 
 class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
@@ -50,19 +79,73 @@ class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
     super(props);
     this.containerRef = React.createRef();
     this.state = {
-      rowSize: 0
+      rowSize: 0,
+      menuAnchor: null
     };
   }
 
   public render(): JSX.Element {
     const { classes } = this.props;
     return (
-      <div className={classes.container} ref={this.containerRef}>
-        <Paper className={classes.sudokuPaper} >
-          {this.renderRows()}
-        </Paper>
-      </div>
+      <React.Fragment>
+        <Card>
+          <CardHeader
+            classes={{
+              root: classes.header
+            }}
+            action={
+              <IconButton className={classes.headerButton} onClick={(e) => this.openMenu(e)}>
+                <MenuIcon />
+              </IconButton>
+            }
+          />
+          <CardContent className={classes.cardContent}>
+            <div className={classes.container} ref={this.containerRef}>
+              <div className={classes.sudoku} >
+                {this.renderRows()}
+              </div>
+            </div>
+          </CardContent>
+          <CardActions className={classes.toolbar}>
+            <IconButton className={classes.toolbarButton} color="inherit" disabled={!this.props.past.length} onClick={() => this.props.undo()}>
+              <UndoIcon />
+            </IconButton>
+            <IconButton className={classes.toolbarButton} onClick={() => this.props.removeDigit()}>
+              <ClearIcon />
+            </IconButton>
+            <IconButton className={classes.toolbarButton} color="inherit" disabled={!this.props.future.length} onClick={() => this.props.redo()}>
+              <RedoIcon />
+            </IconButton>
+          </CardActions>
+        </Card>
+        <Menu
+          id="simple-menu"
+          anchorEl={this.state.menuAnchor}
+          open={!!this.state.menuAnchor}
+          onClose={() => this.closeMenu()}
+        >
+          <MenuItem disabled>Save Progress</MenuItem>
+          <MenuItem onClick={() => this.reset()}>Reset Sudoku</MenuItem>
+        </Menu>
+      </React.Fragment>
     );
+  }
+
+  private openMenu(event: React.MouseEvent) {
+    this.setState({
+      menuAnchor: event.currentTarget
+    })
+  }
+
+  private closeMenu() {
+    this.setState({
+      menuAnchor: null
+    })
+  }
+
+  private reset() {
+    this.props.resetSudoku()
+    this.closeMenu()
   }
 
   public componentDidMount(): void {

@@ -10,7 +10,6 @@ import { DIFFICULTY } from "../models/Difficulty";
 import Sudoku from "../models/Sudoku";
 import { DIRECTION, MODE } from "../store/types";
 import TopBar from "./TopBar";
-import BottomBar from "./BottomBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import CompletedDialog from "./CompletedDialog";
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -56,7 +55,6 @@ class App extends Component<IAppProps> {
             <Numbers {...this.props} />
           </div>
           <CompletedDialog {...this.props}></CompletedDialog>
-          <BottomBar {...this.props} />
         </MuiThemeProvider>
       </div>
     );

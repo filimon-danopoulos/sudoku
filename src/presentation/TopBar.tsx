@@ -11,7 +11,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { DIFFICULTY } from '../models/Difficulty';
-import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates, clearCandidates } from '../store/actions';
+import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates, clearCandidates, setMode } from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -32,11 +32,20 @@ import VeryHardIcon from '@material-ui/icons/Looks5'
 import ValidateIcon from '@material-ui/icons/CheckCircle'
 import ShowCandidatesIcon from '@material-ui/icons/AddCircle'
 import RemoveCandidatesIcon from '@material-ui/icons/RemoveCircle'
-
+import { Fab } from '@material-ui/core';
+import PenIcon from "@material-ui/icons/Edit";
+import PenIconOutline from "@material-ui/icons/EditOutlined";
+import { MODE } from '../store/types';
 
 const styles = (theme: Theme) => createStyles({
   grow: {
     flexGrow: 1,
+  },
+  modeFab: {
+    position: 'fixed',
+    zIndex: 1,
+    bottom: 4 * theme.spacing.unit,
+    right: 4 * theme.spacing.unit
   },
   menuButton: {
     marginLeft: -12,
@@ -90,6 +99,8 @@ export interface ITopBarProps extends WithStyles<typeof styles> {
   resetSudoku: typeof resetSudoku;
   fillCandidates: typeof fillCandidates;
   clearCandidates: typeof clearCandidates;
+  mode: MODE;
+  setMode: typeof setMode;
 }
 export interface ITopBarState {
   drawerOpen: boolean;
@@ -130,6 +141,15 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   }
 
   public render(): JSX.Element {
+    const isNoteMode = this.props.mode === MODE.Note
+    const toggleMode = () => {
+      if (isNoteMode) {
+        this.props.setMode(MODE.Input);
+      } else {
+        this.props.setMode(MODE.Note);
+      }
+    }
+
     const { classes } = this.props;
     return (
       <React.Fragment>
@@ -229,6 +249,10 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             </ListItem>
           </List>
         </Drawer>
+
+        <Fab color={isNoteMode ? 'secondary' : 'default'} className={classes.modeFab} onClick={() => toggleMode()}>
+          {isNoteMode ? <PenIconOutline /> : <PenIcon />}
+        </Fab>
       </React.Fragment>
     );
   }
