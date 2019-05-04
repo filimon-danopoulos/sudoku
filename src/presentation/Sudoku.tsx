@@ -63,7 +63,6 @@ export interface ISudokuProps extends WithStyles<typeof styles> {
   redo: typeof redo;
   removeDigit: typeof removeDigit;
   past: Sudoku[];
-  resetSudoku: typeof resetSudoku;
   future: Sudoku[];
 }
 
@@ -89,16 +88,6 @@ class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
     return (
       <React.Fragment>
         <Card>
-          <CardHeader
-            classes={{
-              root: classes.header
-            }}
-            action={
-              <IconButton className={classes.headerButton} onClick={(e) => this.openMenu(e)}>
-                <MenuIcon />
-              </IconButton>
-            }
-          />
           <CardContent className={classes.cardContent}>
             <div className={classes.container} ref={this.containerRef}>
               <div className={classes.sudoku} >
@@ -118,36 +107,9 @@ class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
             </IconButton>
           </CardActions>
         </Card>
-        <Menu
-          id="simple-menu"
-          anchorEl={this.state.menuAnchor}
-          open={!!this.state.menuAnchor}
-          onClose={() => this.closeMenu()}
-        >
-          <MenuItem disabled>Save Progress</MenuItem>
-          <MenuItem onClick={() => this.reset()}>Reset Sudoku</MenuItem>
-        </Menu>
       </React.Fragment>
     );
   }
-
-  private openMenu(event: React.MouseEvent) {
-    this.setState({
-      menuAnchor: event.currentTarget
-    })
-  }
-
-  private closeMenu() {
-    this.setState({
-      menuAnchor: null
-    })
-  }
-
-  private reset() {
-    this.props.resetSudoku()
-    this.closeMenu()
-  }
-
   public componentDidMount(): void {
     this.setCellSize();
   }
