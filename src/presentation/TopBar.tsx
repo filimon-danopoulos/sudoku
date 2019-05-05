@@ -28,6 +28,7 @@ import { Fab } from '@material-ui/core';
 import PenIcon from "@material-ui/icons/Edit";
 import PenIconOutline from "@material-ui/icons/EditOutlined";
 import { MODE } from '../store/types';
+import ServiceWorkerUpdated from "../utils/ServiceWorkerUpdated";
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -98,6 +99,7 @@ export interface ITopBarState {
   drawerOpen: boolean;
   difficultyOpen: boolean;
   helpOpen: boolean;
+  hasUpdates: boolean;
 }
 
 const DIFFICUTIES = [{
@@ -123,8 +125,15 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     this.state = {
       drawerOpen: false,
       difficultyOpen: false,
-      helpOpen: false
+      helpOpen: false,
+      hasUpdates: false
     }
+
+    ServiceWorkerUpdated.then(() => {
+      this.setState({
+        hasUpdates: true
+      })
+    })
   }
 
   public render(): JSX.Element {
@@ -219,7 +228,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
               </List>
             </Collapse>
             <ListSubheader className={classes.listHeader}>Settings</ListSubheader>
-            <ListItem button onClick={() => this.forceRefresh()}>
+            <ListItem disabled={!this.state.hasUpdates} button onClick={() => this.forceRefresh()}>
               <ListItemIcon>
                 <UpdateIcon />
               </ListItemIcon>

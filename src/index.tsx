@@ -8,6 +8,7 @@ import * as serviceWorker from "./serviceWorker";
 import configureStore from "./store";
 import App from "./presentation/App";
 import pregenerate from "./utils/pregenerate";
+import { registerUpdate } from "./utils/ServiceWorkerUpdated";
 
 const store = configureStore();
 
@@ -23,3 +24,9 @@ serviceWorker.register();
 if (process.env.NODE_ENV === "development") {
   (window as any).pregenerate = pregenerate;
 }
+
+serviceWorker.register({
+  onUpdate: () => {
+    registerUpdate()
+  }
+})
