@@ -15,7 +15,10 @@ import {
   TOGGLE_NIGHT_MODE,
   RESET_SUDOKU,
   FILL_CANDIDATES,
-  CLEAR_CANDIDATES
+  CLEAR_CANDIDATES,
+  TOGGLE_SETTING_USE_NOTES as TOGGLE_SETTING_NOTES_ENABLED,
+  TOGGLE_SETTING_MARK_COMPLETED,
+  TOGGLE_SETTING_PROGRESS
 } from "./types";
 import { DIFFICULTY } from "../models/Difficulty";
 
@@ -112,9 +115,26 @@ export function fillCandidates(): OptionActions {
   };
 }
 
-
 export function clearCandidates(): OptionActions {
   return {
     type: CLEAR_CANDIDATES
+  };
+}
+
+export function toggleNotesEnabled(): OptionActions {
+  return {
+    type: TOGGLE_SETTING_NOTES_ENABLED
+  };
+}
+
+export function toggleMarkCompleted(): OptionActions {
+  return {
+    type: TOGGLE_SETTING_MARK_COMPLETED
+  };
+}
+
+export function toggleProgress(): OptionActions {
+  return {
+    type: TOGGLE_SETTING_PROGRESS
   };
 }

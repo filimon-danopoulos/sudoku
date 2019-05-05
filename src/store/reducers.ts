@@ -8,39 +8,38 @@ import {
   SET_DIGIT,
   NAVIGATE_CELLS,
   REMOVE_DIGIT,
-  TOGGLE_NOTE_MODE as SET_MODE,
+  TOGGLE_NOTE_MODE,
   UNDO,
   REDO,
   MODE,
   TOGGLE_NIGHT_MODE,
   RESET_SUDOKU,
   FILL_CANDIDATES,
-  CLEAR_CANDIDATES
+  CLEAR_CANDIDATES,
+  TOGGLE_SETTING_USE_NOTES,
+  TOGGLE_SETTING_MARK_COMPLETED,
+  TOGGLE_SETTING_PROGRESS
 } from "./types";
-import { DIFFICULTY } from "../models/Difficulty";
 import PuzzleStorage from "../PuzzleStorage"
+import Settings from "../models/Settings";
 
 
-const initialDifficulty = readDifficulty(DIFFICULTY.Easy)
-const initialNightMode = readNightMode(false);
+const initialSettings = new Settings();
 const initialState: IGameState = {
-  difficulty: initialDifficulty,
   sudoku: {
     past: [],
-    current: PuzzleStorage.getPuzzle(initialDifficulty).activateCell(1, 1),
+    current: PuzzleStorage.getPuzzle(initialSettings.Difficulty).activateCell(1, 1),
     future: []
   },
-  mode: MODE.Input,
-  nightMode: initialNightMode
+  settings: initialSettings
 };
 
 export function gameReducer(state = initialState, action: OptionActions): IGameState {
   switch (action.type) {
     case CHANGE_DIFFICULTY:
-      writeDifficulty(action.payload);
       return {
         ...state,
-        difficulty: action.payload,
+        settings: state.settings.setDifficulty(action.payload),
         sudoku: {
           past: [],
           current: PuzzleStorage.getPuzzle(action.payload).activateCell(1, 1),
@@ -48,12 +47,11 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         }
       };
     case NEW_GAME:
-
       return {
         ...state,
         sudoku: {
           past: [],
-          current: PuzzleStorage.getPuzzle(state.difficulty).activateCell(1, 1),
+          current: PuzzleStorage.getPuzzle(state.settings.Difficulty).activateCell(1, 1),
           future: []
         }
       };
@@ -78,7 +76,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         ...state,
         sudoku: {
           past: [...state.sudoku.past, state.sudoku.current],
-          current: state.sudoku.current.setDigit(action.payload.digit, action.payload.force ? MODE.Input : state.mode),
+          current: state.sudoku.current.setDigit(action.payload.digit, action.payload.force ? MODE.Input : state.settings.InputMode),
           future: []
         }
       };
@@ -99,10 +97,10 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           current: state.sudoku.current.navigate(action.payload.direction)
         }
       };
-    case SET_MODE:
+    case TOGGLE_NOTE_MODE:
       return {
         ...state,
-        mode: action.payload.mode
+        settings: state.settings.setInputMode(action.payload.mode)
       };
     case UNDO:
       if (!state.sudoku.past.length) {
@@ -131,11 +129,9 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         }
       }
     case TOGGLE_NIGHT_MODE:
-      const nightMode = !state.nightMode;
-      writeNightMode(nightMode);
       return {
         ...state,
-        nightMode
+        settings: state.settings.toggleNightModeEnabled()
       }
     case RESET_SUDOKU:
       return {
@@ -164,29 +160,26 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           future: []
         }
       }
+    case TOGGLE_SETTING_USE_NOTES:
+      return {
+        ...state,
+        sudoku: {
+          ...state.sudoku,
+          current: state.settings.NotesEnabled ? state.sudoku.current.clearCandidates() : state.sudoku.current
+        },
+        settings: state.settings.toggleNotesEnabled()
+      }
+    case TOGGLE_SETTING_MARK_COMPLETED:
+      return {
+        ...state,
+        settings: state.settings.toggleMarkCompletedNumbersEnabled()
+      }
+    case TOGGLE_SETTING_PROGRESS:
+      return {
+        ...state,
+        settings: state.settings.toggleProgressEnabled()
+      }
     default:
       return state;
   }
-}
-
-function readDifficulty(fallBack: DIFFICULTY): DIFFICULTY {
-  const data = window.localStorage.getItem('DIFFICULTY');
-  if (!data) {
-    return fallBack;
-  }
-  return +data as DIFFICULTY;
-}
-function writeDifficulty(difficulty: DIFFICULTY) {
-  window.localStorage.setItem('DIFFICULTY', difficulty.toString());
-}
-
-function readNightMode(fallBack: boolean): boolean {
-  const data = window.localStorage.getItem('NIGHT_MODE');
-  if (!data) {
-    return fallBack;
-  }
-  return data === 'true';
-}
-function writeNightMode(nightMode: boolean) {
-  window.localStorage.setItem('NIGHT_MODE', nightMode.toString());
 }

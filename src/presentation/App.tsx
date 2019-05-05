@@ -5,7 +5,7 @@ import "../layout/App.scss";
 import SudokuComponent from "./Sudoku";
 import Numbers from "./Numbers";
 import { AppState } from "../store";
-import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, setMode, redo, undo, toggleNightMode, resetSudoku, fillCandidates, clearCandidates } from "../store/actions";
+import { changeDifficulty, createNewGame, validateSolution, toggleCell, setDigit, removeDigit, navigateCells, setMode, redo, undo, toggleNightMode, resetSudoku, fillCandidates, clearCandidates, toggleNotesEnabled, toggleMarkCompleted, toggleProgress } from "../store/actions";
 import { DIFFICULTY } from "../models/Difficulty";
 import Sudoku from "../models/Sudoku";
 import { DIRECTION, MODE } from "../store/types";
@@ -14,6 +14,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import CompletedDialog from "./CompletedDialog";
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import theme from "../theme";
+import Settings from "../models/Settings";
 
 interface IAppProps {
   changeDifficulty: typeof changeDifficulty;
@@ -26,16 +27,17 @@ interface IAppProps {
   setMode: typeof setMode;
   undo: typeof undo,
   redo: typeof redo,
-  mode: MODE;
   sudoku: Sudoku;
   past: Sudoku[];
   future: Sudoku[];
-  difficulty: DIFFICULTY;
-  nightMode: boolean;
   toggleNightMode: typeof toggleNightMode;
   resetSudoku: typeof resetSudoku;
   fillCandidates: typeof fillCandidates;
   clearCandidates: typeof clearCandidates;
+  settings: Settings;
+  toggleNotesEnabled: typeof toggleNotesEnabled;
+  toggleMarkCompleted: typeof toggleMarkCompleted;
+  toggleProgress: typeof toggleProgress;
 }
 
 class App extends Component<IAppProps> {
@@ -44,7 +46,7 @@ class App extends Component<IAppProps> {
   }
 
   public render(): JSX.Element {
-    const t = theme(this.props.nightMode)
+    const t = theme(this.props.settings.NightModeEnabled)
     return (
       <div className="App">
         <MuiThemeProvider theme={t}>
@@ -91,9 +93,7 @@ const mapStateToProps = (state: AppState) => ({
   sudoku: state.game.sudoku.current,
   past: state.game.sudoku.past,
   future: state.game.sudoku.future,
-  difficulty: state.game.difficulty,
-  mode: state.game.mode,
-  nightMode: state.game.nightMode
+  settings: state.game.settings
 });
 
 export default connect(
@@ -112,6 +112,9 @@ export default connect(
     toggleNightMode,
     resetSudoku,
     fillCandidates,
-    clearCandidates
+    clearCandidates,
+    toggleNotesEnabled,
+    toggleMarkCompleted,
+    toggleProgress
   }
 )(App);

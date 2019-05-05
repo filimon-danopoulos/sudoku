@@ -11,7 +11,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { DIFFICULTY } from '../models/Difficulty';
-import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates, clearCandidates, setMode } from '../store/actions';
+import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates, clearCandidates, setMode, toggleNotesEnabled, toggleMarkCompleted, toggleProgress } from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -22,13 +22,15 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import NewIcon from '@material-ui/icons/Casino'
 import ResetIcon from '@material-ui/icons/Replay'
 import HelpIcon from '@material-ui/icons/Help'
+import FeatureIcon from '@material-ui/icons/Settings'
 import DifficultyIcon from '@material-ui/icons/FitnessCenter'
 import UpdateIcon from '@material-ui/icons/SyncProblem'
-import { Fab } from '@material-ui/core';
+import Fab from '@material-ui/core/Fab';
 import PenIcon from "@material-ui/icons/Edit";
 import PenIconOutline from "@material-ui/icons/EditOutlined";
 import { MODE } from '../store/types';
 import ServiceWorkerUpdated from "../utils/ServiceWorkerUpdated";
+import Settings from '../models/Settings';
 
 const styles = (theme: Theme) => createStyles({
   grow: {
@@ -37,8 +39,8 @@ const styles = (theme: Theme) => createStyles({
   modeFab: {
     position: 'fixed',
     zIndex: 1,
-    bottom: 4 * theme.spacing.unit,
-    right: 4 * theme.spacing.unit
+    bottom: 2 * theme.spacing.unit,
+    right: 2 * theme.spacing.unit
   },
   menuButton: {
     marginLeft: -12,
@@ -74,31 +76,34 @@ const styles = (theme: Theme) => createStyles({
   notesToggle: {
     color: theme.palette.common.white
   },
-  nested: {
-    paddingLeft: theme.spacing.unit * 9
-  },
   subMenuButton: {
     color: theme.palette.type === "dark" ? theme.palette.primary.contrastText : theme.palette.grey[600]
+  },
+  feature: {
+    paddingTop: 0,
+    paddingBottom: 0
   }
 });
 
 export interface ITopBarProps extends WithStyles<typeof styles> {
-  difficulty: DIFFICULTY;
   changeDifficulty: typeof changeDifficulty;
   validateSolution: typeof validateSolution;
   createNewGame: typeof createNewGame;
   toggleNightMode: typeof toggleNightMode;
-  nightMode: boolean;
   resetSudoku: typeof resetSudoku;
   fillCandidates: typeof fillCandidates;
   clearCandidates: typeof clearCandidates;
-  mode: MODE;
   setMode: typeof setMode;
+  settings: Settings;
+  toggleNotesEnabled: typeof toggleNotesEnabled;
+  toggleMarkCompleted: typeof toggleMarkCompleted;
+  toggleProgress: typeof toggleProgress;
 }
 export interface ITopBarState {
   drawerOpen: boolean;
   difficultyOpen: boolean;
   helpOpen: boolean;
+  featuresOpen: boolean;
   hasUpdates: boolean;
 }
 
@@ -125,8 +130,9 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     this.state = {
       drawerOpen: false,
       difficultyOpen: false,
-      helpOpen: true,
-      hasUpdates: false
+      helpOpen: false,
+      hasUpdates: false,
+      featuresOpen: false
     }
 
     ServiceWorkerUpdated.then(() => {
@@ -137,7 +143,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   }
 
   public render(): JSX.Element {
-    const isNoteMode = this.props.mode === MODE.Note
+    const isNoteMode = this.props.settings.InputMode === MODE.Note
     const toggleMode = () => {
       if (isNoteMode) {
         this.props.setMode(MODE.Input);
@@ -162,7 +168,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
               label="Night mode"
               labelPlacement="start"
               onClick={() => this.props.toggleNightMode()}
-              control={<Switch checked={this.props.nightMode} />}
+              control={<Switch checked={this.props.settings.NightModeEnabled} />}
             />
           </Toolbar>
         </AppBar>
@@ -201,14 +207,14 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             </ListItem>
             <Collapse in={this.state.helpOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
-                <ListItem className={this.props.classes.nested} button onClick={() => this.validate()} >
+                <ListItem button onClick={() => this.validate()} >
                   <ListItemText primary="Validate" />
                 </ListItem>
-                <ListItem className={this.props.classes.nested} button onClick={() => this.fillCandidates()} >
-                  <ListItemText primary="Show candidates" />
+                <ListItem button onClick={() => this.fillCandidates()} >
+                  <ListItemText primary="Add notes" />
                 </ListItem>
-                <ListItem className={this.props.classes.nested} button onClick={() => this.clearCandidates()} >
-                  <ListItemText primary="Clear candidates" />
+                <ListItem button onClick={() => this.clearCandidates()} >
+                  <ListItemText primary="Clear notes" />
                 </ListItem>
               </List>
             </Collapse>
@@ -228,6 +234,32 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
               </List>
             </Collapse>
             <ListSubheader className={classes.listHeader}>Settings</ListSubheader>
+            <ListItem button onClick={() => this.toggleFeatures()}>
+              <ListItemIcon>
+                <FeatureIcon />
+              </ListItemIcon>
+              <ListItemText primary="Features" />
+              {this.state.featuresOpen ?
+                <CollapseIcon className={classes.subMenuButton} /> :
+                <ExpandIcon className={classes.subMenuButton} />
+              }
+            </ListItem>
+            <Collapse in={this.state.featuresOpen} timeout="auto" unmountOnExit>
+              <List disablePadding>
+                <ListItem button className={classes.feature} onClick={() => this.props.toggleNotesEnabled()}>
+                  <ListItemText primary="Use notes" />
+                  <Switch checked={this.props.settings.NotesEnabled} />
+                </ListItem>
+                <ListItem button className={classes.feature} onClick={() => this.props.toggleMarkCompleted()}>
+                  <ListItemText primary="Mark completed mumbers" />
+                  <Switch checked={this.props.settings.MarkCompletedNumbersEnabled} />
+                </ListItem>
+                <ListItem button className={classes.feature} onClick={() => this.props.toggleProgress()}>
+                  <ListItemText primary="Show progress" />
+                  <Switch checked={this.props.settings.ProgressEnabled} />
+                </ListItem>
+              </List>
+            </Collapse>
             <ListItem disabled={!this.state.hasUpdates} button onClick={() => this.forceRefresh()}>
               <ListItemIcon>
                 <UpdateIcon />
@@ -236,10 +268,12 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             </ListItem>
           </List>
         </Drawer>
-
-        <Fab color={isNoteMode ? 'secondary' : 'default'} className={classes.modeFab} onClick={() => toggleMode()}>
-          {isNoteMode ? <PenIconOutline /> : <PenIcon />}
-        </Fab>
+        {
+          !this.props.settings.NotesEnabled ? null :
+            <Fab color={isNoteMode ? 'secondary' : 'default'} className={classes.modeFab} onClick={() => toggleMode()}>
+              {isNoteMode ? <PenIconOutline /> : <PenIcon />}
+            </Fab>
+        }
       </React.Fragment>
     );
   }
@@ -260,9 +294,8 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     return DIFFICUTIES.map(option => (
       <ListItem
         button
-        className={this.props.classes.nested}
         key={option.difficulty}
-        selected={this.props.difficulty === option.difficulty}
+        selected={this.props.settings.Difficulty === option.difficulty}
         onClick={() => this.setDifficulty(option.difficulty)}>
         <ListItemText primary={option.label} />
       </ListItem>
@@ -280,7 +313,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   }
 
   private getBarText(): string {
-    const difficulty = DIFFICUTIES.find(option => option.difficulty === this.props.difficulty);
+    const difficulty = DIFFICUTIES.find(option => option.difficulty === this.props.settings.Difficulty);
     if (difficulty) {
       return `${difficulty.label}`;
     }
@@ -316,11 +349,27 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   }
 
   private toggleDifficulty(): void {
-    this.setState({ difficultyOpen: !this.state.difficultyOpen })
+    this.setState({
+      featuresOpen: false,
+      helpOpen: false,
+      difficultyOpen: !this.state.difficultyOpen
+    })
   }
 
   private toggleHelp(): void {
-    this.setState({ helpOpen: !this.state.helpOpen })
+    this.setState({
+      featuresOpen: false,
+      difficultyOpen: false,
+      helpOpen: !this.state.helpOpen
+    })
+  }
+
+  private toggleFeatures(): void {
+    this.setState({
+      featuresOpen: !this.state.featuresOpen,
+      difficultyOpen: false,
+      helpOpen: false
+    })
   }
 }
 

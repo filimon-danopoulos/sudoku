@@ -3,6 +3,7 @@ import { withStyles, Dialog, DialogTitle, DialogContent, RadioGroup, FormControl
 import { createNewGame } from '../store/actions';
 import Sudoku from '../models/Sudoku';
 import { DIFFICULTY } from '../models/Difficulty';
+import Settings from '../models/Settings';
 
 const styles = (theme: Theme) => createStyles({
 
@@ -11,7 +12,7 @@ const styles = (theme: Theme) => createStyles({
 export interface ICompletedDialogProps extends WithStyles<typeof styles> {
   createNewGame: typeof createNewGame;
   sudoku: Sudoku;
-  difficulty: DIFFICULTY;
+  settings: Settings;
 }
 
 const CompletedDialog: React.FunctionComponent<ICompletedDialogProps> = (props: ICompletedDialogProps) => {
@@ -26,7 +27,7 @@ const CompletedDialog: React.FunctionComponent<ICompletedDialogProps> = (props: 
   }
 
   const difficultyText = () => {
-    switch (props.difficulty) {
+    switch (props.settings.Difficulty) {
       case DIFFICULTY.VeryEasy:
         return 'a very easy';
       case DIFFICULTY.Easy:

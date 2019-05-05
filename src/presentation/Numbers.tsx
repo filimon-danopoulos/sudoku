@@ -6,6 +6,7 @@ import { MODE } from '../store/types';
 import { Paper, createStyles, Theme, WithStyles, withStyles, LinearProgress } from '@material-ui/core';
 import Chip, { ChipProps } from '@material-ui/core/Chip'
 import { DIFFICULTY } from '../models/Difficulty';
+import Settings from '../models/Settings';
 
 const styles = (theme: Theme) => createStyles({
   container: {
@@ -31,10 +32,9 @@ const styles = (theme: Theme) => createStyles({
 interface INumbersProps extends WithStyles<typeof styles> {
   setDigit: typeof setDigit;
   removeDigit: typeof removeDigit;
-  mode: MODE;
   setMode: typeof setMode;
   sudoku: Sudoku;
-  difficulty: DIFFICULTY;
+  settings: Settings;
 }
 
 interface INumbersState {
@@ -70,14 +70,14 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
   }
 
   private getProgress() {
-    const cellsLeft = this.props.difficulty - this.props.sudoku.countEmptyCells();
-    const completionRatio = cellsLeft / this.props.difficulty;
+    const cellsLeft = this.props.settings.Difficulty - this.props.sudoku.countEmptyCells();
+    const completionRatio = cellsLeft / this.props.settings.Difficulty;
     return completionRatio * 100;
   }
 
   public render(): JSX.Element {
     const { classes } = this.props;
-    const isNoteMode = this.props.mode === MODE.Note;
+    const isNoteMode = this.props.settings.InputMode === MODE.Note;
     const sudoku = this.props.sudoku;
     const isSolved = sudoku.isSolved();
     const showRedProgressBar = sudoku.countEmptyCells() === 0 && !isSolved;
@@ -86,7 +86,7 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
         <Paper>
           {[...Array(10).keys()].slice(1).map(x => {
             let color: ChipProps['color'] = 'primary';
-            if (this.props.sudoku.isDigitSolved(x)) {
+            if (this.props.sudoku.isDigitSolved(x) && this.props.settings.MarkCompletedNumbersEnabled) {
               color = 'default';
             } else if (isNoteMode) {
               color = 'secondary';
@@ -111,13 +111,16 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
                 label={x} key={x} />
             );
           })}
-          <LinearProgress className={classes.progress}
-            classes={{
-              bar: showRedProgressBar ? classes.errorBar : ""
-            }}
-            variant="determinate"
-            value={this.getProgress()}
-          />
+          {
+            !this.props.settings.ProgressEnabled ? null :
+              <LinearProgress className={classes.progress}
+                classes={{
+                  bar: showRedProgressBar ? classes.errorBar : ""
+                }}
+                variant="determinate"
+                value={this.getProgress()}
+              />
+          }
         </Paper>
       </div >
     );

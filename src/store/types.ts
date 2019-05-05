@@ -1,15 +1,14 @@
 import Sudoku from "../models/Sudoku";
 import { DIFFICULTY } from "../models/Difficulty";
+import Settings from "../models/Settings";
 
 export interface IGameState {
-  difficulty: DIFFICULTY;
   sudoku: {
     past: Sudoku[];
     current: Sudoku;
     future: Sudoku[];
   };
-  mode: MODE;
-  nightMode: boolean;
+  settings: Settings;
 }
 
 export enum DIRECTION {
@@ -38,6 +37,9 @@ export const TOGGLE_NIGHT_MODE = "TOGGLE_NIGHT_MODE";
 export const RESET_SUDOKU = "RESET_SUDOKU";
 export const FILL_CANDIDATES = "FILL_CANDIDATES";
 export const CLEAR_CANDIDATES = "CLEAR_CANDIDATES";
+export const TOGGLE_SETTING_USE_NOTES = "TOGGLE_SETTING_USE_NOTES";
+export const TOGGLE_SETTING_MARK_COMPLETED = "TOGGLE_SETTING_MARK_COMPLETED";
+export const TOGGLE_SETTING_PROGRESS = "TOGGLE_SETTING_PROGRESS";
 
 interface IChangeDifficultyAction {
   type: typeof CHANGE_DIFFICULTY;
@@ -107,6 +109,18 @@ interface IClearCandidatesAction {
   type: typeof CLEAR_CANDIDATES;
 }
 
+interface IToggleNotesEnabledAction {
+  type: typeof TOGGLE_SETTING_USE_NOTES;
+}
+
+interface IToggleMarkCompletedAction {
+  type: typeof TOGGLE_SETTING_MARK_COMPLETED;
+}
+
+interface IToggleProgressAction {
+  type: typeof TOGGLE_SETTING_PROGRESS;
+}
+
 export type OptionActions = IChangeDifficultyAction
   | INewGameAction
   | IValidateSolutionAction
@@ -120,4 +134,7 @@ export type OptionActions = IChangeDifficultyAction
   | IToggleNightModeAction
   | IResetSudokuAction
   | IFillCandidatesAction
-  | IClearCandidatesAction;
+  | IClearCandidatesAction
+  | IToggleNotesEnabledAction
+  | IToggleMarkCompletedAction
+  | IToggleProgressAction;

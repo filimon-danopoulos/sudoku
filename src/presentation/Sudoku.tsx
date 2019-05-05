@@ -9,6 +9,7 @@ import RedoIcon from '@material-ui/icons/Redo';
 import ClearIcon from '@material-ui/icons/Clear';
 import { MODE } from "../store/types";
 import MenuIcon from '@material-ui/icons/MoreVert';
+import Settings from "../models/Settings";
 
 const styles = (theme: Theme) => createStyles({
   cardContent: {
@@ -55,10 +56,9 @@ const styles = (theme: Theme) => createStyles({
 
 export interface ISudokuProps extends WithStyles<typeof styles> {
   sudoku: Sudoku;
-  difficulty: DIFFICULTY;
+  settings: Settings;
   createNewGame: typeof createNewGame;
   toggleCell: typeof toggleCell;
-  mode: MODE;
   undo: typeof undo;
   redo: typeof redo;
   removeDigit: typeof removeDigit;
@@ -137,7 +137,7 @@ class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
       return null;
     }
     return this.props.sudoku.getRows().map((r, i) => (
-      <SudokuRow mode={this.props.mode} row={r} key={i} rowSize={this.state.rowSize} toggleCell={this.props.toggleCell} />
+      <SudokuRow mode={this.props.settings.InputMode} row={r} key={i} rowSize={this.state.rowSize} toggleCell={this.props.toggleCell} />
     ));
   }
 
