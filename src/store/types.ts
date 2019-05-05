@@ -21,8 +21,7 @@ export enum DIRECTION {
 
 export enum MODE {
   Input,
-  Note,
-  Guess
+  Note
 }
 
 export const CHANGE_DIFFICULTY = "CHANGE_DIFFICULTY";
@@ -65,6 +64,7 @@ interface ISetDigitAction {
   type: typeof SET_DIGIT;
   payload: {
     digit: number;
+    force: boolean;
   }
 }
 

@@ -37,39 +37,92 @@ interface INumbersProps extends WithStyles<typeof styles> {
   difficulty: DIFFICULTY;
 }
 
-const INumbers: React.FunctionComponent<INumbersProps> = props => {
-  const { classes } = props;
-  const isNoteMode = props.mode === MODE.Note;
-  const sudoku = props.sudoku;
-  const isSolved = sudoku.isSolved();
-  const showRedProgressBar = sudoku.countEmptyCells() === 0 && !isSolved;
-  const progress = ((props.difficulty - props.sudoku.countEmptyCells()) / props.difficulty) * 100
+interface INumbersState {
+  longPressTimeout: number | null;
+  clickHandledByLongPress: boolean;
+}
 
+class INumbers extends React.Component<INumbersProps, INumbersState> {
+  constructor(props: INumbersProps) {
+    super(props);
+    this.state = {
+      longPressTimeout: null,
+      clickHandledByLongPress: false
+    }
+  }
 
-  return (
-    <div className={classes.container}>
-      <Paper>
-        {[...Array(10).keys()].slice(1).map(x => {
-          let color: ChipProps['color'] = 'primary';
-          if (props.sudoku.isDigitSolved(x)) {
-            color = 'default';
-          } else if (isNoteMode) {
-            color = 'secondary';
-          }
-          return (
-            <Chip onClick={() => props.setDigit(x)} color={color} className={classes.chip} label={x} key={x} />
-          );
-        })}
-        <LinearProgress className={classes.progress}
-          classes={{
-            bar: showRedProgressBar ? classes.errorBar : ""
-          }}
-          variant="determinate"
-          value={progress}
-        />
-      </Paper>
-    </div >
-  );
+  private mouseDownHandler(value: number) {
+    const longPressTimeout = window.setTimeout(() => {
+      this.props.setDigit(value, true)
+      this.setState({
+        clickHandledByLongPress: true
+      })
+    }, 1000)
+    this.setState({
+      longPressTimeout
+    })
+  }
+
+  private mouseUpHandler() {
+    if (this.state.longPressTimeout) {
+      window.clearTimeout(this.state.longPressTimeout)
+    }
+  }
+
+  private getProgress() {
+    const cellsLeft = this.props.difficulty - this.props.sudoku.countEmptyCells();
+    const completionRatio = cellsLeft / this.props.difficulty;
+    return completionRatio * 100;
+  }
+
+  public render(): JSX.Element {
+    const { classes } = this.props;
+    const isNoteMode = this.props.mode === MODE.Note;
+    const sudoku = this.props.sudoku;
+    const isSolved = sudoku.isSolved();
+    const showRedProgressBar = sudoku.countEmptyCells() === 0 && !isSolved;
+    return (
+      <div className={classes.container}>
+        <Paper>
+          {[...Array(10).keys()].slice(1).map(x => {
+            let color: ChipProps['color'] = 'primary';
+            if (this.props.sudoku.isDigitSolved(x)) {
+              color = 'default';
+            } else if (isNoteMode) {
+              color = 'secondary';
+            }
+            return (
+              <Chip
+                onMouseDown={() => this.mouseDownHandler(x)}
+                onTouchStart={() => this.mouseDownHandler(x)}
+                onMouseUp={() => this.mouseUpHandler()}
+                onTouchEnd={() => this.mouseUpHandler()}
+                onClick={() => {
+                  if (!this.state.clickHandledByLongPress) {
+                    alert(2)
+                    this.props.setDigit(x);
+                  }
+                  this.setState({
+                    clickHandledByLongPress: false
+                  })
+                }}
+                color={color}
+                className={classes.chip}
+                label={x} key={x} />
+            );
+          })}
+          <LinearProgress className={classes.progress}
+            classes={{
+              bar: showRedProgressBar ? classes.errorBar : ""
+            }}
+            variant="determinate"
+            value={this.getProgress()}
+          />
+        </Paper>
+      </div >
+    );
+  }
+
 }
 
 export default withStyles(styles)(INumbers);

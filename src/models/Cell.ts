@@ -11,7 +11,6 @@ export default class Cell {
   private given: boolean;
   private active: boolean;
   private notes: boolean[];
-  private guess: boolean;
 
   private constructor(previous?: Cell) {
     this.value = previous ? previous.value : null;
@@ -22,7 +21,6 @@ export default class Cell {
     this.active = previous ? previous.active : false;
     this.valid = previous ? previous.valid : true;
     this.notes = previous ? previous.notes : [...NO_NOTES];
-    this.guess = previous ? previous.guess : false;
   }
 
   static create(solution: number, row: number, column: number, given: boolean): Cell {
@@ -107,13 +105,8 @@ export default class Cell {
       cell.notes = this.notes.map((x, i) => i === (digit - 1) ? !x : x)
       cell.value = null
     } else {
-      if (cell.guess) {
-        cell.value = digit;
-      } else {
-        cell.value = this.value === digit ? null : digit;
-      }
+      cell.value = this.value === digit ? null : digit;
     }
-    cell.guess = mode === MODE.Guess;
     cell.valid = true;
     return cell;
   }
@@ -135,10 +128,6 @@ export default class Cell {
 
   public getNotes(): boolean[] {
     return this.notes;
-  }
-
-  public isGuess(): boolean {
-    return this.guess;
   }
 
   public clearNotes(): Cell {

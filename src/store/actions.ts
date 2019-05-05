@@ -48,11 +48,12 @@ export function toggleCell(row: number, column: number): OptionActions {
   };
 }
 
-export function setDigit(digit: number): OptionActions {
+export function setDigit(digit: number, force: boolean = false): OptionActions {
   return {
     type: SET_DIGIT,
     payload: {
-      digit
+      digit,
+      force
     }
   };
 }

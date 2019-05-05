@@ -24,14 +24,6 @@ import ResetIcon from '@material-ui/icons/Replay'
 import HelpIcon from '@material-ui/icons/Help'
 import DifficultyIcon from '@material-ui/icons/FitnessCenter'
 import UpdateIcon from '@material-ui/icons/SyncProblem'
-import VeryEasyIcon from '@material-ui/icons/LooksOne'
-import EasyIcon from '@material-ui/icons/LooksTwo'
-import MediumIcon from '@material-ui/icons/Looks3'
-import HardIcon from '@material-ui/icons/Looks4'
-import VeryHardIcon from '@material-ui/icons/Looks5'
-import ValidateIcon from '@material-ui/icons/CheckCircle'
-import ShowCandidatesIcon from '@material-ui/icons/AddCircle'
-import RemoveCandidatesIcon from '@material-ui/icons/RemoveCircle'
 import { Fab } from '@material-ui/core';
 import PenIcon from "@material-ui/icons/Edit";
 import PenIconOutline from "@material-ui/icons/EditOutlined";
@@ -110,24 +102,19 @@ export interface ITopBarState {
 
 const DIFFICUTIES = [{
   difficulty: DIFFICULTY.VeryEasy,
-  label: "Very Easy",
-  icon: <VeryEasyIcon />
+  label: "Very Easy"
 }, {
   difficulty: DIFFICULTY.Easy,
-  label: "Easy",
-  icon: <EasyIcon />
+  label: "Easy"
 }, {
   difficulty: DIFFICULTY.Normal,
-  label: "Medium",
-  icon: <MediumIcon />
+  label: "Medium"
 }, {
   difficulty: DIFFICULTY.Hard,
-  label: "Hard",
-  icon: <HardIcon />
+  label: "Hard"
 }, {
   difficulty: DIFFICULTY.VeryHard,
-  label: "Very Hard",
-  icon: <VeryHardIcon />
+  label: "Very Hard"
 }]
 
 class TopBar extends Component<ITopBarProps, ITopBarState> {
@@ -206,22 +193,13 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             <Collapse in={this.state.helpOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
                 <ListItem className={this.props.classes.nested} button onClick={() => this.validate()} >
-                  <ListItemIcon>
-                    <ValidateIcon />
-                  </ListItemIcon>
                   <ListItemText primary="Validate" />
                 </ListItem>
                 <ListItem className={this.props.classes.nested} button onClick={() => this.fillCandidates()} >
-                  <ListItemIcon>
-                    <ShowCandidatesIcon />
-                  </ListItemIcon>
                   <ListItemText primary="Show candidates" />
                 </ListItem>
                 <ListItem className={this.props.classes.nested} button onClick={() => this.clearCandidates()} >
-                  <ListItemIcon>
-                    <RemoveCandidatesIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Remove candidates" />
+                  <ListItemText primary="Clear candidates" />
                 </ListItem>
               </List>
             </Collapse>
@@ -277,9 +255,6 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
         key={option.difficulty}
         selected={this.props.difficulty === option.difficulty}
         onClick={() => this.setDifficulty(option.difficulty)}>
-        <ListItemIcon>
-          {option.icon}
-        </ListItemIcon>
         <ListItemText primary={option.label} />
       </ListItem>
     ));

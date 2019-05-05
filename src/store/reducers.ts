@@ -78,7 +78,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
         ...state,
         sudoku: {
           past: [...state.sudoku.past, state.sudoku.current],
-          current: state.sudoku.current.setDigit(action.payload.digit, state.mode),
+          current: state.sudoku.current.setDigit(action.payload.digit, action.payload.force ? MODE.Input : state.mode),
           future: []
         }
       };
