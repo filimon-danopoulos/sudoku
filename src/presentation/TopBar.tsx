@@ -125,7 +125,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     this.state = {
       drawerOpen: false,
       difficultyOpen: false,
-      helpOpen: false,
+      helpOpen: true,
       hasUpdates: false
     }
 
