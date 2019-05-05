@@ -99,7 +99,6 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
                 onTouchEnd={() => this.mouseUpHandler()}
                 onClick={() => {
                   if (!this.state.clickHandledByLongPress) {
-                    alert(2)
                     this.props.setDigit(x);
                   }
                   this.setState({
