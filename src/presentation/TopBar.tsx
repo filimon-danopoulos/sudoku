@@ -251,7 +251,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
                   <Switch checked={this.props.settings.NotesEnabled} />
                 </ListItem>
                 <ListItem button className={classes.feature} onClick={() => this.props.toggleMarkCompleted()}>
-                  <ListItemText primary="Mark completed mumbers" />
+                  <ListItemText primary="Mark completed numbers" />
                   <Switch checked={this.props.settings.MarkCompletedNumbersEnabled} />
                 </ListItem>
                 <ListItem button className={classes.feature} onClick={() => this.props.toggleProgress()}>
