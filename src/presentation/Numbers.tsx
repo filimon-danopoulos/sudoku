@@ -5,7 +5,6 @@ import Sudoku from '../models/Sudoku';
 import { MODE } from '../store/types';
 import { Paper, createStyles, Theme, WithStyles, withStyles, LinearProgress } from '@material-ui/core';
 import Chip, { ChipProps } from '@material-ui/core/Chip'
-import { DIFFICULTY } from '../models/Difficulty';
 import Settings from '../models/Settings';
 
 const styles = (theme: Theme) => createStyles({
@@ -57,7 +56,7 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
       this.setState({
         clickHandledByLongPress: true
       })
-    }, 200)
+    }, 500)
     this.setState({
       longPressTimeout
     })
