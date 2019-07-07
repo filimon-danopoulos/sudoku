@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "9d360d54f56949e047c9",
+    "revision": "c61679b9388f0dad3c00",
     "url": "/sudoku/static/css/main.856ce89d.chunk.css"
   },
   {
-    "revision": "9d360d54f56949e047c9",
-    "url": "/sudoku/static/js/main.859697ae.chunk.js"
+    "revision": "c61679b9388f0dad3c00",
+    "url": "/sudoku/static/js/main.f7e11da2.chunk.js"
   },
   {
     "revision": "c6440607aefabbca9582",
@@ -52,12 +52,12 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-100.e9dbbe8a.woff"
   },
   {
-    "revision": "d704bb3d579b7d5e40880c75705c8a71",
-    "url": "/sudoku/static/media/roboto-latin-100italic.d704bb3d.woff"
-  },
-  {
     "revision": "6232f43d15b0e7a0bf0fe82e295bdd06",
     "url": "/sudoku/static/media/roboto-latin-100italic.6232f43d.woff2"
+  },
+  {
+    "revision": "d704bb3d579b7d5e40880c75705c8a71",
+    "url": "/sudoku/static/media/roboto-latin-100italic.d704bb3d.woff"
   },
   {
     "revision": "a1471d1d6431c893582a5f6a250db3f9",
@@ -88,16 +88,16 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-500.de8b7431.woff"
   },
   {
+    "revision": "cf6613d1adf490972c557a8e318e0868",
+    "url": "/sudoku/static/media/roboto-latin-700.cf6613d1.woff"
+  },
+  {
     "revision": "510dec37fa69fba39593e01a469ee018",
     "url": "/sudoku/static/media/roboto-latin-500italic.510dec37.woff2"
   },
   {
     "revision": "ffcc050b2d92d4b14a4fcb527ee0bcc8",
     "url": "/sudoku/static/media/roboto-latin-500italic.ffcc050b.woff"
-  },
-  {
-    "revision": "cf6613d1adf490972c557a8e318e0868",
-    "url": "/sudoku/static/media/roboto-latin-700.cf6613d1.woff"
   },
   {
     "revision": "010c1aeee3c6d1cbb1d5761d80353823",
@@ -120,7 +120,7 @@ self.__precacheManifest = [
     "url": "/sudoku/static/media/roboto-latin-900italic.bc833e72.woff"
   },
   {
-    "revision": "1f01dd3297fd82f96c9ff9019257d320",
+    "revision": "dab65b1202110d250be5d32cd8fc6ee5",
     "url": "/sudoku/index.html"
   }
 ];
