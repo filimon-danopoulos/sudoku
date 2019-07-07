@@ -57,7 +57,7 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
       this.setState({
         clickHandledByLongPress: true
       })
-    }, 1000)
+    }, 200)
     this.setState({
       longPressTimeout
     })
