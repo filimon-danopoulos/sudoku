@@ -99,7 +99,7 @@ export default class Sudoku {
   }
 
   public isDigitCompleted(digit: number): boolean {
-    return this.rows.flatMap(r => r.getCells().map(c => c.getValue())).length === 9;
+    return this.rows.flatMap(r => r.getCells().filter(c => c.getValue() === digit)).length === 9;
   }
 
   public countEmptyCells(): number {
