@@ -36,5 +36,10 @@ window.addEventListener('load', function() {
 });
 
 window.addEventListener('popstate', function() {
-  window.history.pushState({}, '');
+  const willExit = window.confirm(
+    'Do you want to exit the app? This will discard your current puzzle.'
+  );
+  if (!willExit) {
+    window.history.pushState({}, '');
+  }
 });
