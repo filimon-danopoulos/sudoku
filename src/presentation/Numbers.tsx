@@ -3,30 +3,38 @@ import React from 'react';
 import { setDigit, removeDigit, setMode, redo, undo } from '../store/actions';
 import Sudoku from '../models/Sudoku';
 import { MODE } from '../store/types';
-import { Paper, createStyles, Theme, WithStyles, withStyles, LinearProgress } from '@material-ui/core';
-import Chip, { ChipProps } from '@material-ui/core/Chip'
+import {
+  Paper,
+  createStyles,
+  Theme,
+  WithStyles,
+  withStyles,
+  LinearProgress
+} from '@material-ui/core';
+import Chip, { ChipProps } from '@material-ui/core/Chip';
 import Settings from '../models/Settings';
 
-const styles = (theme: Theme) => createStyles({
-  container: {
-    paddingTop: theme.spacing.unit,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-  progress: {
-    borderBottomRightRadius: theme.spacing.unit / 2,
-    borderBottomLeftRadius: theme.spacing.unit / 2
-  },
-  errorBar: {
-    backgroundColor: theme.palette.error.light
-  },
-  successBar: {
-    backgroundColor: '#66bb6a'
-  },
-  chip: {
-    margin: '4px 2px 4px 2px'
-  }
-});
+const styles = (theme: Theme) =>
+  createStyles({
+    container: {
+      paddingTop: theme.spacing.unit,
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    },
+    progress: {
+      borderBottomRightRadius: theme.spacing.unit / 2,
+      borderBottomLeftRadius: theme.spacing.unit / 2
+    },
+    errorBar: {
+      backgroundColor: theme.palette.error.light
+    },
+    successBar: {
+      backgroundColor: '#66bb6a'
+    },
+    chip: {
+      margin: '4px 2px 4px 2px'
+    }
+  });
 
 interface INumbersProps extends WithStyles<typeof styles> {
   setDigit: typeof setDigit;
@@ -47,24 +55,24 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
     this.state = {
       longPressTimeout: null,
       clickHandledByLongPress: false
-    }
+    };
   }
 
   private mouseDownHandler(value: number) {
     const longPressTimeout = window.setTimeout(() => {
-      this.props.setDigit(value, true)
+      this.props.setDigit(value, this.props.settings.NotesEnabled);
       this.setState({
         clickHandledByLongPress: true
-      })
-    }, 500)
+      });
+    }, 200);
     this.setState({
       longPressTimeout
-    })
+    });
   }
 
   private mouseUpHandler() {
     if (this.state.longPressTimeout) {
-      window.clearTimeout(this.state.longPressTimeout)
+      window.clearTimeout(this.state.longPressTimeout);
     }
   }
 
@@ -85,10 +93,11 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
         <Paper>
           {[...Array(10).keys()].slice(1).map(x => {
             let color: ChipProps['color'] = 'primary';
-            if (this.props.sudoku.isDigitSolved(x) && this.props.settings.MarkCompletedNumbersEnabled) {
+            if (
+              this.props.sudoku.isDigitCompleted(x) &&
+              this.props.settings.MarkCompletedNumbersEnabled
+            ) {
               color = 'default';
-            } else if (isNoteMode) {
-              color = 'secondary';
             }
             return (
               <Chip
@@ -102,28 +111,29 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
                   }
                   this.setState({
                     clickHandledByLongPress: false
-                  })
+                  });
                 }}
                 color={color}
                 className={classes.chip}
-                label={x} key={x} />
+                label={x}
+                key={x}
+              />
             );
           })}
-          {
-            !this.props.settings.ProgressEnabled ? null :
-              <LinearProgress className={classes.progress}
-                classes={{
-                  bar: showRedProgressBar ? classes.errorBar : ""
-                }}
-                variant="determinate"
-                value={this.getProgress()}
-              />
-          }
+          {!this.props.settings.ProgressEnabled ? null : (
+            <LinearProgress
+              className={classes.progress}
+              classes={{
+                bar: showRedProgressBar ? classes.errorBar : ''
+              }}
+              variant="determinate"
+              value={this.getProgress()}
+            />
+          )}
         </Paper>
-      </div >
+      </div>
     );
   }
-
 }
 
 export default withStyles(styles)(INumbers);

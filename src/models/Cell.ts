@@ -1,4 +1,4 @@
-import { MODE } from "../store/types";
+import { MODE } from '../store/types';
 
 const NO_NOTES = [false, false, false, false, false, false, false, false, false];
 
@@ -78,7 +78,7 @@ export default class Cell {
   }
 
   public validate(): Cell {
-    const cell = new Cell(this)
+    const cell = new Cell(this);
     cell.valid = this.value === null || this.value === this.solution;
     if (!cell.valid) {
       cell.active = false;
@@ -102,8 +102,8 @@ export default class Cell {
     }
     const cell = new Cell(this);
     if (mode === MODE.Note) {
-      cell.notes = this.notes.map((x, i) => i === (digit - 1) ? !x : x)
-      cell.value = null
+      cell.notes = this.notes.map((x, i) => (i === digit - 1 ? !x : x));
+      cell.value = null;
     } else {
       cell.value = this.value === digit ? null : digit;
     }

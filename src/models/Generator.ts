@@ -1,5 +1,5 @@
-import { DIFFICULTY } from "./Difficulty";
-import SudokuSolver from "../solver/SudokuSolver";
+import { DIFFICULTY } from './Difficulty';
+import SudokuSolver from '../solver/SudokuSolver';
 
 const BASE = [
   [3, 6, 1, 7, 2, 5, 9, 4, 8],
@@ -18,15 +18,15 @@ export default class Generator {
   private data: (null | number)[][];
 
   constructor(private difficulty: DIFFICULTY) {
-    this.solution = this.shuffle(BASE)
+    this.solution = this.shuffle(BASE);
     this.data = [];
   }
 
   public generate() {
-    const solver = new SudokuSolver()
-    const startAt = Date.now()
-    this.data = this.solution.map(r => [...r])
-    const removed = [] as string[]
+    const solver = new SudokuSolver();
+    const startAt = Date.now();
+    this.data = this.solution.map(r => [...r]);
+    const removed = [] as string[];
     let allowedAttempts = 1273;
     while (removed.length < this.difficulty && allowedAttempts--) {
       let row;
@@ -34,24 +34,26 @@ export default class Generator {
       do {
         row = ~~(Math.random() * 9);
         column = ~~(Math.random() * 9);
-      } while (removed.includes(`${row}:${column}`))
-      let value = this.data[row][column]
-      this.data[row][column] = null
-      const solutions = solver.solve(this.data)
+      } while (removed.includes(`${row}:${column}`));
+      let value = this.data[row][column];
+      this.data[row][column] = null;
+      const solutions = solver.solve(this.data);
       if (solutions.length === 1) {
-        removed.push(`${row}:${column}`)
+        removed.push(`${row}:${column}`);
       } else {
-        this.data[row][column] = value
+        this.data[row][column] = value;
       }
     }
-    const ellapsedTime = Date.now() - startAt
+    const ellapsedTime = Date.now() - startAt;
 
     if (allowedAttempts > 0) {
-      console.log(`It took ${ellapsedTime}ms to generate a ${DIFFICULTY[this.difficulty]} puzzle`)
-      return true
+      console.log(`It took ${ellapsedTime}ms to generate a ${DIFFICULTY[this.difficulty]} puzzle`);
+      return true;
     } else {
-      console.log(`Failed to generate a ${DIFFICULTY[this.difficulty]} puzzle after ${ellapsedTime}ms`)
-      return false
+      console.log(
+        `Failed to generate a ${DIFFICULTY[this.difficulty]} puzzle after ${ellapsedTime}ms`
+      );
+      return false;
     }
   }
 
@@ -64,11 +66,16 @@ export default class Generator {
   }
 
   public getPuzzleData(): ([number, boolean])[][] {
-    return this.data.map((r, i) => r.map((y, l) => [this.solution[i][l], this.solution[i][l] === this.data[i][l]] as [number, boolean]));
+    return this.data.map((r, i) =>
+      r.map(
+        (y, l) =>
+          [this.solution[i][l], this.solution[i][l] === this.data[i][l]] as [number, boolean]
+      )
+    );
   }
 
   private moveRowOrColumn(data: number[][]) {
-    const [from, to] = this.getFromAndTo()
+    const [from, to] = this.getFromAndTo();
     if (!!Math.round(Math.random())) {
       this.moveColumn(data, from, to);
     } else {

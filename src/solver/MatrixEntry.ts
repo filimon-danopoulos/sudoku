@@ -43,7 +43,7 @@ export default class MatrixEntry {
   }
 
   public incrementSize(): void {
-    ++this.size
+    ++this.size;
   }
 
   public decrementSize(): void {

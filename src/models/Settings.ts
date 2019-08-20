@@ -1,7 +1,7 @@
-import { MODE } from "../store/types";
-import { DIFFICULTY } from "./Difficulty";
+import { MODE } from '../store/types';
+import { DIFFICULTY } from './Difficulty';
 
-const SETTINGS_KEY = "SETTINGS"
+const SETTINGS_KEY = 'SETTINGS';
 
 export default class Settings {
   private notesEnabled: boolean;
@@ -18,7 +18,7 @@ export default class Settings {
     this.difficulty = DIFFICULTY.Normal;
     this.progressEnabled = true;
     this.markCompletedNumbersEnabled = true;
-    this.readSettingsFromLocalStorage()
+    this.readSettingsFromLocalStorage();
   }
 
   public get NotesEnabled(): boolean {
@@ -53,14 +53,20 @@ export default class Settings {
       const settings = JSON.parse(settingsString);
       Object.keys(settings).forEach(key => {
         switch (key) {
-          case "notesEnabled": return this.notesEnabled = settings[key] === true;
-          case "nightModeEnabled": return this.nightModeEnabled = settings[key] === true;
-          case "progressEnabled": return this.progressEnabled = settings[key] === true;
-          case "markCompletedNumbersEnabled": return this.markCompletedNumbersEnabled = settings[key] === true;
-          case "inputMode": return this.inputMode = +settings[key] as MODE;
-          case "difficulty": return this.difficulty = +settings[key] as DIFFICULTY;
+          case 'notesEnabled':
+            return (this.notesEnabled = settings[key] === true);
+          case 'nightModeEnabled':
+            return (this.nightModeEnabled = settings[key] === true);
+          case 'progressEnabled':
+            return (this.progressEnabled = settings[key] === true);
+          case 'markCompletedNumbersEnabled':
+            return (this.markCompletedNumbersEnabled = settings[key] === true);
+          case 'inputMode':
+            return (this.inputMode = +settings[key] as MODE);
+          case 'difficulty':
+            return (this.difficulty = +settings[key] as DIFFICULTY);
         }
-      })
+      });
     }
   }
 
@@ -104,13 +110,16 @@ export default class Settings {
   }
 
   private saveSettingsToLocalStorage(): void {
-    window.localStorage.setItem(SETTINGS_KEY, JSON.stringify({
-      notesEnabled: this.notesEnabled,
-      nightModeEnabled: this.nightModeEnabled,
-      progressEnabled: this.progressEnabled,
-      markCompletedNumbersEnabled: this.markCompletedNumbersEnabled,
-      inputMode: this.inputMode,
-      difficulty: this.difficulty
-    }))
+    window.localStorage.setItem(
+      SETTINGS_KEY,
+      JSON.stringify({
+        notesEnabled: this.notesEnabled,
+        nightModeEnabled: this.nightModeEnabled,
+        progressEnabled: this.progressEnabled,
+        markCompletedNumbersEnabled: this.markCompletedNumbersEnabled,
+        inputMode: this.inputMode,
+        difficulty: this.difficulty
+      })
+    );
   }
 }

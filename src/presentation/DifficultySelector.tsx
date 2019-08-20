@@ -1,6 +1,6 @@
-import React from "react";
-import { changeDifficulty } from "../store/actions";
-import { DIFFICULTY } from "../models/Difficulty";
+import React from 'react';
+import { changeDifficulty } from '../store/actions';
+import { DIFFICULTY } from '../models/Difficulty';
 
 export interface IDifficultySelectorProps {
   changeDifficulty: typeof changeDifficulty;
@@ -9,23 +9,23 @@ export interface IDifficultySelectorProps {
 
 const options = [
   {
-    label: "Very Easy",
+    label: 'Very Easy',
     value: DIFFICULTY.VeryEasy
   },
   {
-    label: "Easy",
+    label: 'Easy',
     value: DIFFICULTY.Easy
   },
   {
-    label: "Normal",
+    label: 'Normal',
     value: DIFFICULTY.Normal
   },
   {
-    label: "Hard",
+    label: 'Hard',
     value: DIFFICULTY.Hard
   },
   {
-    label: "Very Hard",
+    label: 'Very Hard',
     value: DIFFICULTY.VeryHard
   }
 ];

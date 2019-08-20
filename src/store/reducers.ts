@@ -19,10 +19,9 @@ import {
   TOGGLE_SETTING_USE_NOTES,
   TOGGLE_SETTING_MARK_COMPLETED,
   TOGGLE_SETTING_PROGRESS
-} from "./types";
-import PuzzleStorage from "../PuzzleStorage"
-import Settings from "../models/Settings";
-
+} from './types';
+import PuzzleStorage from '../PuzzleStorage';
+import Settings from '../models/Settings';
 
 const initialSettings = new Settings();
 const initialState: IGameState = {
@@ -78,11 +77,11 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           past: [...state.sudoku.past, state.sudoku.current],
           current: state.sudoku.current.setDigit(
             action.payload.digit,
-            action.payload.force ? (
-              state.settings.InputMode === MODE.Input ?
-                MODE.Note :
-                MODE.Input) :
-              state.settings.InputMode
+            action.payload.force
+              ? state.settings.InputMode === MODE.Input
+                ? MODE.Note
+                : MODE.Input
+              : state.settings.InputMode
           ),
           future: []
         }
@@ -121,7 +120,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           current: previous,
           future: [...state.sudoku.future, state.sudoku.current]
         }
-      }
+      };
     case REDO:
       if (!state.sudoku.future.length) {
         return state;
@@ -134,12 +133,12 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           current: next,
           future: state.sudoku.future.slice(0, -1)
         }
-      }
+      };
     case TOGGLE_NIGHT_MODE:
       return {
         ...state,
         settings: state.settings.toggleNightModeEnabled()
-      }
+      };
     case RESET_SUDOKU:
       return {
         ...state,
@@ -148,7 +147,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           current: state.sudoku.past.shift() || state.sudoku.current,
           future: []
         }
-      }
+      };
     case FILL_CANDIDATES:
       return {
         ...state,
@@ -157,7 +156,7 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           current: state.sudoku.current.fillCandidates(),
           future: []
         }
-      }
+      };
     case CLEAR_CANDIDATES:
       return {
         ...state,
@@ -166,26 +165,28 @@ export function gameReducer(state = initialState, action: OptionActions): IGameS
           current: state.sudoku.current.clearCandidates(),
           future: []
         }
-      }
+      };
     case TOGGLE_SETTING_USE_NOTES:
       return {
         ...state,
         sudoku: {
           ...state.sudoku,
-          current: state.settings.NotesEnabled ? state.sudoku.current.clearCandidates() : state.sudoku.current
+          current: state.settings.NotesEnabled
+            ? state.sudoku.current.clearCandidates()
+            : state.sudoku.current
         },
         settings: state.settings.toggleNotesEnabled()
-      }
+      };
     case TOGGLE_SETTING_MARK_COMPLETED:
       return {
         ...state,
         settings: state.settings.toggleMarkCompletedNumbersEnabled()
-      }
+      };
     case TOGGLE_SETTING_PROGRESS:
       return {
         ...state,
         settings: state.settings.toggleProgressEnabled()
-      }
+      };
     default:
       return state;
   }

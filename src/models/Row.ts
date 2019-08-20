@@ -1,5 +1,5 @@
-import Cell from "./Cell";
-import { DIRECTION, MODE } from "../store/types";
+import Cell from './Cell';
+import { DIRECTION, MODE } from '../store/types';
 
 export default class Row {
   private cells: Cell[];
@@ -46,11 +46,11 @@ export default class Row {
         });
       } else {
         row.active = false;
-        row.cells = this.cells.map(c => c.isActive() ? c.setActive(false) : c);
+        row.cells = this.cells.map(c => (c.isActive() ? c.setActive(false) : c));
       }
     } else if (this.index === index) {
       row.active = true;
-      row.cells = this.cells.map(c => c.getColumn() === column ? c.setActive(true) : c);
+      row.cells = this.cells.map(c => (c.getColumn() === column ? c.setActive(true) : c));
     }
     return row;
   }
@@ -82,5 +82,4 @@ export default class Row {
     row.cells = this.cells.map(c => c.clearNotes());
     return row;
   }
-
 }

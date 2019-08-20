@@ -19,8 +19,8 @@ import {
   TOGGLE_SETTING_USE_NOTES as TOGGLE_SETTING_NOTES_ENABLED,
   TOGGLE_SETTING_MARK_COMPLETED,
   TOGGLE_SETTING_PROGRESS
-} from "./types";
-import { DIFFICULTY } from "../models/Difficulty";
+} from './types';
+import { DIFFICULTY } from '../models/Difficulty';
 
 export function changeDifficulty(difficulty: DIFFICULTY): OptionActions {
   return {
@@ -82,12 +82,12 @@ export function setMode(mode: MODE): OptionActions {
     payload: {
       mode
     }
-  }
+  };
 }
 
 export function undo(): OptionActions {
   return {
-    type: UNDO,
+    type: UNDO
   };
 }
 

@@ -1,10 +1,9 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
-
 export default (nightMode: boolean) => {
   return createMuiTheme({
     typography: {
-      useNextVariants: true,
+      useNextVariants: true
     },
     palette: {
       type: nightMode ? 'dark' : 'light',
@@ -14,6 +13,6 @@ export default (nightMode: boolean) => {
       secondary: {
         main: '#616161'
       }
-    },
+    }
   });
 };

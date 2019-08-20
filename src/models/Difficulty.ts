@@ -1,4 +1,3 @@
-
 export enum DIFFICULTY {
   VeryEasy = 30,
   Easy = 36,

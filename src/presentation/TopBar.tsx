@@ -11,7 +11,19 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { DIFFICULTY } from '../models/Difficulty';
-import { changeDifficulty, validateSolution, createNewGame, toggleNightMode, resetSudoku, fillCandidates, clearCandidates, setMode, toggleNotesEnabled, toggleMarkCompleted, toggleProgress } from '../store/actions';
+import {
+  changeDifficulty,
+  validateSolution,
+  createNewGame,
+  toggleNightMode,
+  resetSudoku,
+  fillCandidates,
+  clearCandidates,
+  setMode,
+  toggleNotesEnabled,
+  toggleMarkCompleted,
+  toggleProgress
+} from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -19,71 +31,73 @@ import Collapse from '@material-ui/core/Collapse';
 import CollapseIcon from '@material-ui/icons/ExpandLess';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import NewIcon from '@material-ui/icons/Casino'
-import ResetIcon from '@material-ui/icons/Replay'
-import HelpIcon from '@material-ui/icons/Help'
-import FeatureIcon from '@material-ui/icons/Settings'
-import DifficultyIcon from '@material-ui/icons/FitnessCenter'
-import UpdateIcon from '@material-ui/icons/SyncProblem'
-import Fab from '@material-ui/core/Fab';
-import PenIcon from "@material-ui/icons/Edit";
-import PenIconOutline from "@material-ui/icons/EditOutlined";
+import NewIcon from '@material-ui/icons/Casino';
+import ResetIcon from '@material-ui/icons/Replay';
+import HelpIcon from '@material-ui/icons/Help';
+import FeatureIcon from '@material-ui/icons/Settings';
+import DifficultyIcon from '@material-ui/icons/FitnessCenter';
+import UpdateIcon from '@material-ui/icons/SyncProblem';
 import { MODE } from '../store/types';
-import ServiceWorkerUpdated from "../utils/ServiceWorkerUpdated";
+import ServiceWorkerUpdated from '../utils/ServiceWorkerUpdated';
 import Settings from '../models/Settings';
 
-const styles = (theme: Theme) => createStyles({
-  grow: {
-    flexGrow: 1,
-  },
-  modeFab: {
-    position: 'fixed',
-    zIndex: 1,
-    bottom: 2 * theme.spacing.unit,
-    right: 2 * theme.spacing.unit
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingTop: theme.spacing.unit / 2,
-    paddingBottom: theme.spacing.unit / 2,
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    color: theme.palette.type === "dark" ? theme.palette.primary.contrastText : theme.palette.secondary.main,
-  },
-  drawerList: {
-    paddingTop: 0
-  },
-  drawerPaper: {
-    [theme.breakpoints.down('xs')]: {
-      minWidth: '70%'
+const styles = (theme: Theme) =>
+  createStyles({
+    grow: {
+      flexGrow: 1
     },
-    [theme.breakpoints.up('sm')]: {
-      minWidth: '40%'
+    modeFab: {
+      position: 'fixed',
+      zIndex: 1,
+      bottom: 2 * theme.spacing.unit,
+      right: 2 * theme.spacing.unit
     },
-    [theme.breakpoints.up('lg')]: {
-      minWidth: '30%'
+    menuButton: {
+      marginLeft: -12,
+      marginRight: 20
+    },
+    drawerHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      paddingTop: theme.spacing.unit / 2,
+      paddingBottom: theme.spacing.unit / 2,
+      paddingLeft: theme.spacing.unit,
+      paddingRight: theme.spacing.unit,
+      color:
+        theme.palette.type === 'dark'
+          ? theme.palette.primary.contrastText
+          : theme.palette.secondary.main
+    },
+    drawerList: {
+      paddingTop: 0
+    },
+    drawerPaper: {
+      [theme.breakpoints.down('xs')]: {
+        minWidth: '70%'
+      },
+      [theme.breakpoints.up('sm')]: {
+        minWidth: '40%'
+      },
+      [theme.breakpoints.up('lg')]: {
+        minWidth: '30%'
+      }
+    },
+    listHeader: {
+      backgroundColor: theme.palette.background.default,
+      textTransform: 'uppercase'
+    },
+    notesToggle: {
+      color: theme.palette.common.white
+    },
+    subMenuButton: {
+      color:
+        theme.palette.type === 'dark' ? theme.palette.primary.contrastText : theme.palette.grey[600]
+    },
+    feature: {
+      paddingTop: 0,
+      paddingBottom: 0
     }
-  },
-  listHeader: {
-    backgroundColor: theme.palette.background.default,
-    textTransform: "uppercase"
-  },
-  notesToggle: {
-    color: theme.palette.common.white
-  },
-  subMenuButton: {
-    color: theme.palette.type === "dark" ? theme.palette.primary.contrastText : theme.palette.grey[600]
-  },
-  feature: {
-    paddingTop: 0,
-    paddingBottom: 0
-  }
-});
+  });
 
 export interface ITopBarProps extends WithStyles<typeof styles> {
   changeDifficulty: typeof changeDifficulty;
@@ -107,22 +121,28 @@ export interface ITopBarState {
   hasUpdates: boolean;
 }
 
-const DIFFICUTIES = [{
-  difficulty: DIFFICULTY.VeryEasy,
-  label: "Very Easy"
-}, {
-  difficulty: DIFFICULTY.Easy,
-  label: "Easy"
-}, {
-  difficulty: DIFFICULTY.Normal,
-  label: "Medium"
-}, {
-  difficulty: DIFFICULTY.Hard,
-  label: "Hard"
-}, {
-  difficulty: DIFFICULTY.VeryHard,
-  label: "Very Hard"
-}]
+const DIFFICUTIES = [
+  {
+    difficulty: DIFFICULTY.VeryEasy,
+    label: 'Very Easy'
+  },
+  {
+    difficulty: DIFFICULTY.Easy,
+    label: 'Easy'
+  },
+  {
+    difficulty: DIFFICULTY.Normal,
+    label: 'Medium'
+  },
+  {
+    difficulty: DIFFICULTY.Hard,
+    label: 'Hard'
+  },
+  {
+    difficulty: DIFFICULTY.VeryHard,
+    label: 'Very Hard'
+  }
+];
 
 class TopBar extends Component<ITopBarProps, ITopBarState> {
   constructor(props: ITopBarProps) {
@@ -133,31 +153,34 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
       helpOpen: false,
       hasUpdates: false,
       featuresOpen: false
-    }
+    };
 
     ServiceWorkerUpdated.then(() => {
       this.setState({
         hasUpdates: true
-      })
-    })
+      });
+    });
   }
 
   public render(): JSX.Element {
-    const isNoteMode = this.props.settings.InputMode === MODE.Note
+    const isNoteMode = this.props.settings.InputMode === MODE.Note;
     const toggleMode = () => {
       if (isNoteMode) {
         this.props.setMode(MODE.Input);
       } else {
         this.props.setMode(MODE.Note);
       }
-    }
+    };
 
     const { classes } = this.props;
     return (
       <React.Fragment>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" onClick={() => this.openDrawer()}>
+            <IconButton
+              className={classes.menuButton}
+              color="inherit"
+              onClick={() => this.openDrawer()}>
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" className={classes.grow}>
@@ -172,11 +195,15 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             />
           </Toolbar>
         </AppBar>
-        <Drawer variant="temporary" classes={{ paper: classes.drawerPaper }} open={this.state.drawerOpen} onClose={() => this.closeDrawer()}>
+        <Drawer
+          variant="temporary"
+          classes={{ paper: classes.drawerPaper }}
+          open={this.state.drawerOpen}
+          onClose={() => this.closeDrawer()}>
           <div className={classes.drawerHeader}>
             <Typography variant="h6" color="inherit" className={classes.grow}>
               Options
-              </Typography>
+            </Typography>
             <IconButton onClick={() => this.closeDrawer()}>
               <ChevronLeftIcon />
             </IconButton>
@@ -189,7 +216,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
               </ListItemIcon>
               <ListItemText primary="New puzzle" />
             </ListItem>
-            <ListItem button onClick={() => this.reset()} >
+            <ListItem button onClick={() => this.reset()}>
               <ListItemIcon>
                 <ResetIcon />
               </ListItemIcon>
@@ -200,20 +227,21 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
                 <HelpIcon />
               </ListItemIcon>
               <ListItemText primary="Help" />
-              {this.state.helpOpen ?
-                <CollapseIcon className={classes.subMenuButton} /> :
+              {this.state.helpOpen ? (
+                <CollapseIcon className={classes.subMenuButton} />
+              ) : (
                 <ExpandIcon className={classes.subMenuButton} />
-              }
+              )}
             </ListItem>
             <Collapse in={this.state.helpOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
-                <ListItem button onClick={() => this.validate()} >
+                <ListItem button onClick={() => this.validate()}>
                   <ListItemText primary="Validate" />
                 </ListItem>
-                <ListItem button onClick={() => this.fillCandidates()} >
+                <ListItem button onClick={() => this.fillCandidates()}>
                   <ListItemText primary="Add notes" />
                 </ListItem>
-                <ListItem button onClick={() => this.clearCandidates()} >
+                <ListItem button onClick={() => this.clearCandidates()}>
                   <ListItemText primary="Clear notes" />
                 </ListItem>
               </List>
@@ -223,15 +251,14 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
                 <DifficultyIcon />
               </ListItemIcon>
               <ListItemText primary="Difficulty" />
-              {this.state.difficultyOpen ?
-                <CollapseIcon className={classes.subMenuButton} /> :
+              {this.state.difficultyOpen ? (
+                <CollapseIcon className={classes.subMenuButton} />
+              ) : (
                 <ExpandIcon className={classes.subMenuButton} />
-              }
+              )}
             </ListItem>
             <Collapse in={this.state.difficultyOpen} timeout="auto" unmountOnExit>
-              <List disablePadding>
-                {this.renderDifficulties()}
-              </List>
+              <List disablePadding>{this.renderDifficulties()}</List>
             </Collapse>
             <ListSubheader className={classes.listHeader}>Settings</ListSubheader>
             <ListItem button onClick={() => this.toggleFeatures()}>
@@ -239,22 +266,32 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
                 <FeatureIcon />
               </ListItemIcon>
               <ListItemText primary="Features" />
-              {this.state.featuresOpen ?
-                <CollapseIcon className={classes.subMenuButton} /> :
+              {this.state.featuresOpen ? (
+                <CollapseIcon className={classes.subMenuButton} />
+              ) : (
                 <ExpandIcon className={classes.subMenuButton} />
-              }
+              )}
             </ListItem>
             <Collapse in={this.state.featuresOpen} timeout="auto" unmountOnExit>
               <List disablePadding>
-                <ListItem button className={classes.feature} onClick={() => this.props.toggleNotesEnabled()}>
+                <ListItem
+                  button
+                  className={classes.feature}
+                  onClick={() => this.props.toggleNotesEnabled()}>
                   <ListItemText primary="Use notes" />
                   <Switch checked={this.props.settings.NotesEnabled} />
                 </ListItem>
-                <ListItem button className={classes.feature} onClick={() => this.props.toggleMarkCompleted()}>
+                <ListItem
+                  button
+                  className={classes.feature}
+                  onClick={() => this.props.toggleMarkCompleted()}>
                   <ListItemText primary="Mark completed numbers" />
                   <Switch checked={this.props.settings.MarkCompletedNumbersEnabled} />
                 </ListItem>
-                <ListItem button className={classes.feature} onClick={() => this.props.toggleProgress()}>
+                <ListItem
+                  button
+                  className={classes.feature}
+                  onClick={() => this.props.toggleProgress()}>
                   <ListItemText primary="Show progress" />
                   <Switch checked={this.props.settings.ProgressEnabled} />
                 </ListItem>
@@ -268,12 +305,6 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
             </ListItem>
           </List>
         </Drawer>
-        {
-          !this.props.settings.NotesEnabled ? null :
-            <Fab color={isNoteMode ? 'secondary' : 'default'} className={classes.modeFab} onClick={() => toggleMode()}>
-              {isNoteMode ? <PenIconOutline /> : <PenIcon />}
-            </Fab>
-        }
       </React.Fragment>
     );
   }
@@ -286,7 +317,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
 
   private closeDrawer(): void {
     this.setState({
-      drawerOpen: false,
+      drawerOpen: false
     });
   }
 
@@ -313,11 +344,13 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   }
 
   private getBarText(): string {
-    const difficulty = DIFFICUTIES.find(option => option.difficulty === this.props.settings.Difficulty);
+    const difficulty = DIFFICUTIES.find(
+      option => option.difficulty === this.props.settings.Difficulty
+    );
     if (difficulty) {
       return `${difficulty.label}`;
     }
-    return "";
+    return '';
   }
   private createNewGame(): void {
     this.closeDrawer();
@@ -340,11 +373,11 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
   }
 
   private async forceRefresh() {
-    let serviceWorker = await navigator.serviceWorker.getRegistration()
+    let serviceWorker = await navigator.serviceWorker.getRegistration();
     if (serviceWorker) {
       await serviceWorker.unregister();
     }
-    localStorage.clear()
+    localStorage.clear();
     window.location.reload(true);
   }
 
@@ -353,7 +386,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
       featuresOpen: false,
       helpOpen: false,
       difficultyOpen: !this.state.difficultyOpen
-    })
+    });
   }
 
   private toggleHelp(): void {
@@ -361,7 +394,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
       featuresOpen: false,
       difficultyOpen: false,
       helpOpen: !this.state.helpOpen
-    })
+    });
   }
 
   private toggleFeatures(): void {
@@ -369,7 +402,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
       featuresOpen: !this.state.featuresOpen,
       difficultyOpen: false,
       helpOpen: false
-    })
+    });
   }
 }
 

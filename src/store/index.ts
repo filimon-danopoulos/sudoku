@@ -1,18 +1,16 @@
-import "typeface-roboto";
-import { createStore, combineReducers } from "redux";
+import 'typeface-roboto';
+import { createStore, combineReducers } from 'redux';
 
-import { gameReducer } from "./reducers";
+import { gameReducer } from './reducers';
 
 const rootReducer = combineReducers({
-  game: gameReducer,
+  game: gameReducer
 });
 
 export type AppState = ReturnType<typeof rootReducer>;
 
 export default function configureStore() {
-  const store = createStore(
-    rootReducer
-  );
+  const store = createStore(rootReducer);
 
   return store;
 }
