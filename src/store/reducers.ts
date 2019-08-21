@@ -18,7 +18,8 @@ import {
   CLEAR_CANDIDATES,
   TOGGLE_SETTING_USE_NOTES,
   TOGGLE_SETTING_MARK_COMPLETED,
-  TOGGLE_SETTING_PROGRESS
+  TOGGLE_SETTING_PROGRESS,
+  TOGGLE_EXIT_PROMPT
 } from './types';
 import PuzzleStorage from '../PuzzleStorage';
 import Settings from '../models/Settings';
@@ -30,11 +31,17 @@ const initialState: IGameState = {
     current: PuzzleStorage.getPuzzle(initialSettings.Difficulty).activateCell(1, 1),
     future: []
   },
-  settings: initialSettings
+  settings: initialSettings,
+  showExitPrompt: false
 };
 
 export function gameReducer(state = initialState, action: OptionActions): IGameState {
   switch (action.type) {
+    case TOGGLE_EXIT_PROMPT:
+      return {
+        ...state,
+        showExitPrompt: !state.showExitPrompt
+      };
     case CHANGE_DIFFICULTY:
       return {
         ...state,

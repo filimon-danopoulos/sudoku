@@ -9,6 +9,7 @@ import configureStore from './store';
 import App from './presentation/App';
 import pregenerate from './utils/pregenerate';
 import { registerUpdate } from './utils/ServiceWorkerUpdated';
+import { toggleExitPrompt } from './store/actions';
 
 const store = configureStore();
 
@@ -31,15 +32,10 @@ serviceWorker.register({
   }
 });
 
-window.addEventListener('load', function() {
+window.addEventListener('load', () => {
   window.history.pushState({}, '');
 });
 
-window.addEventListener('popstate', function() {
-  const willExit = window.confirm(
-    'Do you want to exit the app? This will discard your current puzzle.'
-  );
-  if (!willExit) {
-    window.history.pushState({}, '');
-  }
+window.addEventListener('popstate', e => {
+  store.dispatch(toggleExitPrompt());
 });

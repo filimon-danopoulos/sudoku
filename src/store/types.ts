@@ -9,6 +9,7 @@ export interface IGameState {
     future: Sudoku[];
   };
   settings: Settings;
+  showExitPrompt: boolean;
 }
 
 export enum DIRECTION {
@@ -40,6 +41,7 @@ export const CLEAR_CANDIDATES = 'CLEAR_CANDIDATES';
 export const TOGGLE_SETTING_USE_NOTES = 'TOGGLE_SETTING_USE_NOTES';
 export const TOGGLE_SETTING_MARK_COMPLETED = 'TOGGLE_SETTING_MARK_COMPLETED';
 export const TOGGLE_SETTING_PROGRESS = 'TOGGLE_SETTING_PROGRESS';
+export const TOGGLE_EXIT_PROMPT = 'TOGGLE_EXIT_PROMPT';
 
 interface IChangeDifficultyAction {
   type: typeof CHANGE_DIFFICULTY;
@@ -121,6 +123,10 @@ interface IToggleProgressAction {
   type: typeof TOGGLE_SETTING_PROGRESS;
 }
 
+interface IToggleExitPrompt {
+  type: typeof TOGGLE_EXIT_PROMPT;
+}
+
 export type OptionActions =
   | IChangeDifficultyAction
   | INewGameAction
@@ -138,4 +144,5 @@ export type OptionActions =
   | IClearCandidatesAction
   | IToggleNotesEnabledAction
   | IToggleMarkCompletedAction
-  | IToggleProgressAction;
+  | IToggleProgressAction
+  | IToggleExitPrompt;

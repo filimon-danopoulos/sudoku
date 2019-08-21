@@ -22,17 +22,18 @@ import {
   clearCandidates,
   toggleNotesEnabled,
   toggleMarkCompleted,
-  toggleProgress
+  toggleProgress,
+  toggleExitPrompt
 } from '../store/actions';
-import { DIFFICULTY } from '../models/Difficulty';
 import Sudoku from '../models/Sudoku';
-import { DIRECTION, MODE } from '../store/types';
+import { DIRECTION } from '../store/types';
 import TopBar from './TopBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CompletedDialog from './CompletedDialog';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import theme from '../theme';
 import Settings from '../models/Settings';
+import ExitPrompt from './ExitPrompt';
 
 interface IAppProps {
   changeDifficulty: typeof changeDifficulty;
@@ -56,6 +57,8 @@ interface IAppProps {
   toggleNotesEnabled: typeof toggleNotesEnabled;
   toggleMarkCompleted: typeof toggleMarkCompleted;
   toggleProgress: typeof toggleProgress;
+  showExitPrompt: boolean;
+  toggleExitPrompt: typeof toggleExitPrompt;
 }
 
 class App extends Component<IAppProps> {
@@ -75,6 +78,7 @@ class App extends Component<IAppProps> {
             <Numbers {...this.props} />
           </div>
           <CompletedDialog {...this.props} />
+          <ExitPrompt open={this.props.showExitPrompt} toggle={this.props.toggleExitPrompt} />
         </MuiThemeProvider>
       </div>
     );
@@ -116,7 +120,8 @@ const mapStateToProps = (state: AppState) => ({
   sudoku: state.game.sudoku.current,
   past: state.game.sudoku.past,
   future: state.game.sudoku.future,
-  settings: state.game.settings
+  settings: state.game.settings,
+  showExitPrompt: state.game.showExitPrompt
 });
 
 export default connect(
@@ -138,6 +143,7 @@ export default connect(
     clearCandidates,
     toggleNotesEnabled,
     toggleMarkCompleted,
-    toggleProgress
+    toggleProgress,
+    toggleExitPrompt
   }
 )(App);

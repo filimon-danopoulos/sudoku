@@ -18,7 +18,8 @@ import {
   CLEAR_CANDIDATES,
   TOGGLE_SETTING_USE_NOTES as TOGGLE_SETTING_NOTES_ENABLED,
   TOGGLE_SETTING_MARK_COMPLETED,
-  TOGGLE_SETTING_PROGRESS
+  TOGGLE_SETTING_PROGRESS,
+  TOGGLE_EXIT_PROMPT
 } from './types';
 import { DIFFICULTY } from '../models/Difficulty';
 
@@ -136,5 +137,11 @@ export function toggleMarkCompleted(): OptionActions {
 export function toggleProgress(): OptionActions {
   return {
     type: TOGGLE_SETTING_PROGRESS
+  };
+}
+
+export function toggleExitPrompt(): OptionActions {
+  return {
+    type: TOGGLE_EXIT_PROMPT
   };
 }
