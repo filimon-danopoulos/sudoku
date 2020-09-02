@@ -8,7 +8,7 @@ import {
   Button,
   createStyles,
   WithStyles,
-  Typography
+  Typography,
 } from '@material-ui/core';
 
 const styles = () => createStyles({});
@@ -24,8 +24,8 @@ const ExitPrompt: React.FunctionComponent<IExitPromptProps> = (props: IExitPromp
       <DialogTitle id="confirmation-dialog-title">Quit?</DialogTitle>
       <DialogContent>
         <Typography variant="body1">
-          If you exit the application the current puzzle will be discarded. To quit the application
-          press the back button again.
+          If you exit the application the history of the current puzzle will be lost. To quit the
+          application press the back button again.
         </Typography>
       </DialogContent>
       <DialogActions>

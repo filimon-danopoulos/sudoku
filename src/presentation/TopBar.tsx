@@ -22,7 +22,7 @@ import {
   setMode,
   toggleNotesEnabled,
   toggleMarkCompleted,
-  toggleProgress
+  toggleProgress,
 } from '../store/actions';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -37,24 +37,23 @@ import HelpIcon from '@material-ui/icons/Help';
 import FeatureIcon from '@material-ui/icons/Settings';
 import DifficultyIcon from '@material-ui/icons/FitnessCenter';
 import UpdateIcon from '@material-ui/icons/SyncProblem';
-import { MODE } from '../store/types';
 import ServiceWorkerUpdated from '../utils/ServiceWorkerUpdated';
 import Settings from '../models/Settings';
 
 const styles = (theme: Theme) =>
   createStyles({
     grow: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     modeFab: {
       position: 'fixed',
       zIndex: 1,
       bottom: 2 * theme.spacing.unit,
-      right: 2 * theme.spacing.unit
+      right: 2 * theme.spacing.unit,
     },
     menuButton: {
       marginLeft: -12,
-      marginRight: 20
+      marginRight: 20,
     },
     drawerHeader: {
       display: 'flex',
@@ -66,37 +65,39 @@ const styles = (theme: Theme) =>
       color:
         theme.palette.type === 'dark'
           ? theme.palette.primary.contrastText
-          : theme.palette.secondary.main
+          : theme.palette.secondary.main,
     },
     drawerList: {
-      paddingTop: 0
+      paddingTop: 0,
     },
     drawerPaper: {
       [theme.breakpoints.down('xs')]: {
-        minWidth: '70%'
+        minWidth: '70%',
       },
       [theme.breakpoints.up('sm')]: {
-        minWidth: '40%'
+        minWidth: '40%',
       },
       [theme.breakpoints.up('lg')]: {
-        minWidth: '30%'
-      }
+        minWidth: '30%',
+      },
     },
     listHeader: {
       backgroundColor: theme.palette.background.default,
-      textTransform: 'uppercase'
+      textTransform: 'uppercase',
     },
     notesToggle: {
-      color: theme.palette.common.white
+      color: theme.palette.common.white,
     },
     subMenuButton: {
       color:
-        theme.palette.type === 'dark' ? theme.palette.primary.contrastText : theme.palette.grey[600]
+        theme.palette.type === 'dark'
+          ? theme.palette.primary.contrastText
+          : theme.palette.grey[600],
     },
     feature: {
       paddingTop: 0,
-      paddingBottom: 0
-    }
+      paddingBottom: 0,
+    },
   });
 
 export interface ITopBarProps extends WithStyles<typeof styles> {
@@ -124,24 +125,24 @@ export interface ITopBarState {
 const DIFFICUTIES = [
   {
     difficulty: DIFFICULTY.VeryEasy,
-    label: 'Very Easy'
+    label: 'Very Easy',
   },
   {
     difficulty: DIFFICULTY.Easy,
-    label: 'Easy'
+    label: 'Easy',
   },
   {
     difficulty: DIFFICULTY.Normal,
-    label: 'Medium'
+    label: 'Medium',
   },
   {
     difficulty: DIFFICULTY.Hard,
-    label: 'Hard'
+    label: 'Hard',
   },
   {
     difficulty: DIFFICULTY.VeryHard,
-    label: 'Very Hard'
-  }
+    label: 'Very Hard',
+  },
 ];
 
 class TopBar extends Component<ITopBarProps, ITopBarState> {
@@ -152,26 +153,17 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
       difficultyOpen: false,
       helpOpen: false,
       hasUpdates: false,
-      featuresOpen: false
+      featuresOpen: false,
     };
 
     ServiceWorkerUpdated.then(() => {
       this.setState({
-        hasUpdates: true
+        hasUpdates: true,
       });
     });
   }
 
   public render(): JSX.Element {
-    const isNoteMode = this.props.settings.InputMode === MODE.Note;
-    const toggleMode = () => {
-      if (isNoteMode) {
-        this.props.setMode(MODE.Input);
-      } else {
-        this.props.setMode(MODE.Note);
-      }
-    };
-
     const { classes } = this.props;
     return (
       <React.Fragment>
@@ -311,13 +303,13 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
 
   private openDrawer(): void {
     this.setState({
-      drawerOpen: true
+      drawerOpen: true,
     });
   }
 
   private closeDrawer(): void {
     this.setState({
-      drawerOpen: false
+      drawerOpen: false,
     });
   }
 
@@ -385,7 +377,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     this.setState({
       featuresOpen: false,
       helpOpen: false,
-      difficultyOpen: !this.state.difficultyOpen
+      difficultyOpen: !this.state.difficultyOpen,
     });
   }
 
@@ -393,7 +385,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     this.setState({
       featuresOpen: false,
       difficultyOpen: false,
-      helpOpen: !this.state.helpOpen
+      helpOpen: !this.state.helpOpen,
     });
   }
 
@@ -401,7 +393,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
     this.setState({
       featuresOpen: !this.state.featuresOpen,
       difficultyOpen: false,
-      helpOpen: false
+      helpOpen: false,
     });
   }
 }

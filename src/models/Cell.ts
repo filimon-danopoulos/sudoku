@@ -2,6 +2,17 @@ import { MODE } from '../store/types';
 
 const NO_NOTES = [false, false, false, false, false, false, false, false, false];
 
+export interface ISerializedCell {
+  active: true;
+  column: number;
+  given: boolean;
+  notes: boolean[];
+  row: number;
+  solution: number;
+  valid: true;
+  value: null | number;
+}
+
 export default class Cell {
   private value: number | null;
   private valid: boolean;
@@ -30,6 +41,21 @@ export default class Cell {
     cell.column = column;
     cell.given = given;
     cell.value = given ? solution : null;
+    return cell;
+  }
+
+  static deserialize(data: ISerializedCell) {
+    const cell = new Cell();
+
+    cell.value = data.value;
+    cell.solution = data.solution;
+    cell.row = data.row;
+    cell.column = data.column;
+    cell.given = data.given;
+    cell.active = data.active;
+    cell.valid = data.valid;
+    cell.notes = data.notes;
+
     return cell;
   }
 

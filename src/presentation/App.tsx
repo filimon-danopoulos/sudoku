@@ -23,7 +23,7 @@ import {
   toggleNotesEnabled,
   toggleMarkCompleted,
   toggleProgress,
-  toggleExitPrompt
+  toggleExitPrompt,
 } from '../store/actions';
 import Sudoku from '../models/Sudoku';
 import { DIRECTION } from '../store/types';
@@ -62,10 +62,6 @@ interface IAppProps {
 }
 
 class App extends Component<IAppProps> {
-  constructor(props: IAppProps) {
-    super(props);
-  }
-
   public render(): JSX.Element {
     const t = theme(this.props.settings.NightModeEnabled);
     return (
@@ -121,29 +117,26 @@ const mapStateToProps = (state: AppState) => ({
   past: state.game.sudoku.past,
   future: state.game.sudoku.future,
   settings: state.game.settings,
-  showExitPrompt: state.game.showExitPrompt
+  showExitPrompt: state.game.showExitPrompt,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    changeDifficulty,
-    createNewGame,
-    validateSolution,
-    toggleCell,
-    setDigit,
-    removeDigit,
-    navigateCells,
-    setMode,
-    undo,
-    redo,
-    toggleNightMode,
-    resetSudoku,
-    fillCandidates,
-    clearCandidates,
-    toggleNotesEnabled,
-    toggleMarkCompleted,
-    toggleProgress,
-    toggleExitPrompt
-  }
-)(App);
+export default connect(mapStateToProps, {
+  changeDifficulty,
+  createNewGame,
+  validateSolution,
+  toggleCell,
+  setDigit,
+  removeDigit,
+  navigateCells,
+  setMode,
+  undo,
+  redo,
+  toggleNightMode,
+  resetSudoku,
+  fillCandidates,
+  clearCandidates,
+  toggleNotesEnabled,
+  toggleMarkCompleted,
+  toggleProgress,
+  toggleExitPrompt,
+})(App);

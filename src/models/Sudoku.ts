@@ -1,7 +1,16 @@
-import Row from './Row';
+import Row, { ISerializedRow } from './Row';
 import { DIRECTION, MODE } from '../store/types';
 import Cell from './Cell';
 import Analyzer from './Analyzer';
+
+export interface ISerializedSudoku {
+  activeCell: {
+    row: number;
+    column: number;
+  };
+  createdAt: number;
+  rows: ISerializedRow[];
+}
 
 export default class Sudoku {
   private rows: Row[];
@@ -14,7 +23,7 @@ export default class Sudoku {
     this.createdAt = previous ? previous.createdAt : 0;
   }
 
-  static create(data: ([number, boolean])[][]): Sudoku {
+  static create(data: [number, boolean][][]): Sudoku {
     const sudoku = new Sudoku();
     sudoku.createdAt = Date.now();
     sudoku.rows = data.map((d, i) => Row.create(d, i + 1));
@@ -56,7 +65,11 @@ export default class Sudoku {
 
   public getSolvedNumbers(): number[] {
     const allNumbers = this.rows.reduce(
-      (acc: number[], next: Row) => acc.concat(next.getCells().map(c => c.getValue() || 0), []),
+      (acc: number[], next: Row) =>
+        acc.concat(
+          next.getCells().map(c => c.getValue() || 0),
+          []
+        ),
       []
     );
     const solved = [];
@@ -137,6 +150,19 @@ export default class Sudoku {
   public clearCandidates(): Sudoku {
     const sudoku = new Sudoku(this);
     sudoku.rows = sudoku.rows.map(row => row.clearCandidates());
+    return sudoku;
+  }
+
+  public serialize(): string {
+    return JSON.stringify(this);
+  }
+
+  public static deserialize(serialized: string): Sudoku {
+    const data = JSON.parse(serialized) as ISerializedSudoku;
+    const sudoku = new Sudoku();
+    Object.assign(sudoku.activeCell, data.activeCell);
+    sudoku.createdAt = data.createdAt;
+    sudoku.rows = data.rows.map(Row.deserialize);
     return sudoku;
   }
 }

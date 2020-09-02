@@ -1,4 +1,4 @@
-import React, { Component, CSSProperties } from 'react';
+import React, { Component } from 'react';
 import Cell from '../models/Cell';
 import { toggleCell } from '../store/actions';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
@@ -16,7 +16,7 @@ const styles = (theme: Theme) => {
       paddingBottom: '11.111111%',
       textAlign: 'center',
       userSelect: 'none',
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     },
     content: {
       display: 'flex',
@@ -29,99 +29,99 @@ const styles = (theme: Theme) => {
       left: 0,
       borderRight: borderThin,
       borderBottom: borderThin,
-      color: theme.palette.type === 'dark' ? theme.palette.grey[400] : theme.palette.primary.dark
+      color: theme.palette.type === 'dark' ? theme.palette.grey[400] : theme.palette.primary.dark,
     },
     thickBorderTop: {
-      borderTop: borderThick
+      borderTop: borderThick,
     },
     thickBorderBottom: {
-      borderBottom: borderThick
+      borderBottom: borderThick,
     },
     thickBorderLeft: {
-      borderLeft: borderThick
+      borderLeft: borderThick,
     },
     thickBorderRight: {
-      borderRight: borderThick
+      borderRight: borderThick,
     },
     dark: {
       backgroundColor:
-        theme.palette.type === 'dark' ? theme.palette.primary.light : theme.palette.grey[200]
+        theme.palette.type === 'dark' ? theme.palette.primary.light : theme.palette.grey[200],
     },
     given: {
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     },
     note: {
-      position: 'absolute'
+      position: 'absolute',
     },
     inactiveNote: {
-      opacity: 0.1
+      opacity: 0.1,
     },
     activeNote: {
-      opacity: 1
+      opacity: 1,
     },
     note1: {
       top: 0,
       left: 0,
       bottom: '66.666667%',
-      right: '66.666667%'
+      right: '66.666667%',
     },
     note2: {
       top: '0',
       left: '33.333333%',
       bottom: '66.666667%',
-      right: '33.333333%'
+      right: '33.333333%',
     },
     note3: {
       top: '0',
       left: '66.666667%',
       bottom: '66.666667%',
-      right: '0'
+      right: '0',
     },
     note4: {
       top: '33.333333%',
       left: '0',
       bottom: '33.333333%',
-      right: '66.666667%'
+      right: '66.666667%',
     },
     note5: {
       top: '33.333333%',
       left: '33.333333%',
       bottom: '33.333333%',
-      right: '33.333333%'
+      right: '33.333333%',
     },
     note6: {
       top: '33.333333%',
       left: '66.666667%',
       bottom: '33.333333%',
-      right: '0'
+      right: '0',
     },
     note7: {
       top: '66.666667%',
       left: '0',
       bottom: '0',
-      right: '66.666667%'
+      right: '66.666667%',
     },
     note8: {
       top: '66.666667%',
       left: '33.333333%',
       bottom: '0',
-      right: '33.333333%'
+      right: '33.333333%',
     },
     note9: {
       top: '66.666667%',
       left: '66.666667%',
       bottom: '0',
-      right: '0'
+      right: '0',
     },
     invalid: {
       backgroundColor: theme.palette.error.light,
-      color: theme.palette.error.contrastText
+      color: theme.palette.error.contrastText,
     },
     active: {
       backgroundColor:
         theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.primary.light,
-      color: theme.palette.primary.contrastText
-    }
+      color: theme.palette.primary.contrastText,
+    },
   });
 };
 
@@ -159,7 +159,7 @@ class SudokuCellComponent extends Component<ISudokuCellComponentProps> {
       classes.note6,
       classes.note7,
       classes.note8,
-      classes.note9
+      classes.note9,
     ];
     return (
       <React.Fragment>
@@ -197,7 +197,7 @@ class SudokuCellComponent extends Component<ISudokuCellComponentProps> {
       [classes.dark]: block % 2 === 0,
       [classes.given]: cell.isGiven(),
       [classes.invalid]: !cell.isValid(),
-      [classes.active]: cell.isActive()
+      [classes.active]: cell.isActive(),
     };
     return Object.keys(result)
       .filter(key => result[key])

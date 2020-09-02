@@ -1,15 +1,14 @@
 import React from 'react';
 
-import { setDigit, removeDigit, setMode, redo, undo } from '../store/actions';
+import { setDigit, removeDigit, setMode } from '../store/actions';
 import Sudoku from '../models/Sudoku';
-import { MODE } from '../store/types';
 import {
   Paper,
   createStyles,
   Theme,
   WithStyles,
   withStyles,
-  LinearProgress
+  LinearProgress,
 } from '@material-ui/core';
 import Chip, { ChipProps } from '@material-ui/core/Chip';
 import Settings from '../models/Settings';
@@ -19,21 +18,21 @@ const styles = (theme: Theme) =>
     container: {
       paddingTop: theme.spacing.unit,
       marginLeft: 'auto',
-      marginRight: 'auto'
+      marginRight: 'auto',
     },
     progress: {
       borderBottomRightRadius: theme.spacing.unit / 2,
-      borderBottomLeftRadius: theme.spacing.unit / 2
+      borderBottomLeftRadius: theme.spacing.unit / 2,
     },
     errorBar: {
-      backgroundColor: theme.palette.error.light
+      backgroundColor: theme.palette.error.light,
     },
     successBar: {
-      backgroundColor: '#66bb6a'
+      backgroundColor: '#66bb6a',
     },
     chip: {
-      margin: '4px 2px 4px 2px'
-    }
+      margin: '4px 2px 4px 2px',
+    },
   });
 
 interface INumbersProps extends WithStyles<typeof styles> {
@@ -54,7 +53,7 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
     super(props);
     this.state = {
       longPressTimeout: null,
-      clickHandledByLongPress: false
+      clickHandledByLongPress: false,
     };
   }
 
@@ -62,11 +61,11 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
     const longPressTimeout = window.setTimeout(() => {
       this.props.setDigit(value, this.props.settings.NotesEnabled);
       this.setState({
-        clickHandledByLongPress: true
+        clickHandledByLongPress: true,
       });
     }, 200);
     this.setState({
-      longPressTimeout
+      longPressTimeout,
     });
   }
 
@@ -84,7 +83,6 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
 
   public render(): JSX.Element {
     const { classes } = this.props;
-    const isNoteMode = this.props.settings.InputMode === MODE.Note;
     const sudoku = this.props.sudoku;
     const isSolved = sudoku.isSolved();
     const showRedProgressBar = sudoku.countEmptyCells() === 0 && !isSolved;
@@ -110,7 +108,7 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
                     this.props.setDigit(x);
                   }
                   this.setState({
-                    clickHandledByLongPress: false
+                    clickHandledByLongPress: false,
                   });
                 }}
                 color={color}
@@ -124,7 +122,7 @@ class INumbers extends React.Component<INumbersProps, INumbersState> {
             <LinearProgress
               className={classes.progress}
               classes={{
-                bar: showRedProgressBar ? classes.errorBar : ''
+                bar: showRedProgressBar ? classes.errorBar : '',
               }}
               variant="determinate"
               value={this.getProgress()}

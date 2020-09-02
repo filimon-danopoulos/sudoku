@@ -1,6 +1,10 @@
-import Cell from './Cell';
-import { DIRECTION, MODE } from '../store/types';
-
+import Cell, { ISerializedCell } from './Cell';
+import { MODE } from '../store/types';
+export interface ISerializedRow {
+  active: boolean;
+  cells: ISerializedCell[];
+  index: number;
+}
 export default class Row {
   private cells: Cell[];
   private index: number;
@@ -16,6 +20,14 @@ export default class Row {
     const row = new Row();
     row.cells = [...data.map(([value, given], i) => Cell.create(value, index, i + 1, given))];
     row.index = index;
+    return row;
+  }
+
+  static deserialize(data: ISerializedRow): Row {
+    const row = new Row();
+    row.active = data.active;
+    row.index = data.index;
+    row.cells = data.cells.map(Cell.deserialize);
     return row;
   }
 

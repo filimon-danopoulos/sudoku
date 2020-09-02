@@ -4,23 +4,18 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   DialogActions,
   Button,
   createStyles,
-  Theme,
-  WithTheme,
   WithStyles,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import { createNewGame } from '../store/actions';
 import Sudoku from '../models/Sudoku';
 import { DIFFICULTY } from '../models/Difficulty';
 import Settings from '../models/Settings';
 
-const styles = (theme: Theme) => createStyles({});
+const styles = () => createStyles({});
 
 export interface ICompletedDialogProps extends WithStyles<typeof styles> {
   createNewGame: typeof createNewGame;
@@ -32,10 +27,7 @@ const CompletedDialog: React.FunctionComponent<ICompletedDialogProps> = (
   props: ICompletedDialogProps
 ) => {
   const formatMillisecons = (milliSeconds: number) => {
-    const pad = (num: number) =>
-      Math.round(num)
-        .toString()
-        .padStart(2, '0');
+    const pad = (num: number) => Math.round(num).toString().padStart(2, '0');
 
     const seconds = pad((milliSeconds / 1000) % 60);
     const minutes = pad((milliSeconds / (1000 * 60)) % 60);
