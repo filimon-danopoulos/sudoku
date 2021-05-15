@@ -19,6 +19,8 @@ const Root = () => (
   </Provider>
 );
 
+debugger;
+
 ReactDOM.render(<Root />, document.getElementById('root'));
 serviceWorker.register();
 
@@ -41,6 +43,9 @@ window.addEventListener('popstate', e => {
 });
 
 window.addEventListener('visibilitychange', () => {
+  if (store.getState().game.showExitPrompt) {
+    return;
+  }
   if (document.hidden) {
     localStorage.setItem('hidden-at', Date.now().toString());
   } else {
