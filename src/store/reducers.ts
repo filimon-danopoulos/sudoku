@@ -74,6 +74,7 @@ function gameReducerImplemenation(state = initialState, action: OptionActions): 
         },
       };
       result.sudoku.current.serialize();
+      localStorage.setItem('hidden-for', '0');
       return result;
     case VALIDATE_SOLUTION:
       return {

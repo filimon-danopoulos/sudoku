@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'development') {
 serviceWorker.register({
   onUpdate: () => {
     registerUpdate();
-  }
+  },
 });
 
 window.addEventListener('load', () => {
@@ -38,4 +38,15 @@ window.addEventListener('load', () => {
 
 window.addEventListener('popstate', e => {
   store.dispatch(toggleExitPrompt());
+});
+
+window.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    localStorage.setItem('hidden-at', Date.now().toString());
+  } else {
+    const hiddenAt = +(localStorage.getItem('hidden-at') || 0);
+    const hiddenFor = +(localStorage.getItem('hidden-for') || 0);
+    localStorage.setItem('hidden-for', (hiddenFor + Date.now() - hiddenAt).toString());
+    localStorage.removeItem('hidden-at');
+  }
 });

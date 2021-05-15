@@ -19,26 +19,26 @@ import {
   TOGGLE_SETTING_USE_NOTES as TOGGLE_SETTING_NOTES_ENABLED,
   TOGGLE_SETTING_MARK_COMPLETED,
   TOGGLE_SETTING_PROGRESS,
-  TOGGLE_EXIT_PROMPT
+  TOGGLE_EXIT_PROMPT,
 } from './types';
 import { DIFFICULTY } from '../models/Difficulty';
 
 export function changeDifficulty(difficulty: DIFFICULTY): OptionActions {
   return {
     type: CHANGE_DIFFICULTY,
-    payload: difficulty
+    payload: difficulty,
   };
 }
 
 export function createNewGame(): OptionActions {
   return {
-    type: NEW_GAME
+    type: NEW_GAME,
   };
 }
 
 export function validateSolution(): OptionActions {
   return {
-    type: VALIDATE_SOLUTION
+    type: VALIDATE_SOLUTION,
   };
 }
 
@@ -47,8 +47,8 @@ export function toggleCell(row: number, column: number): OptionActions {
     type: TOGGLE_CELL,
     payload: {
       row,
-      column
-    }
+      column,
+    },
   };
 }
 
@@ -57,14 +57,14 @@ export function setDigit(digit: number, force: boolean = false): OptionActions {
     type: SET_DIGIT,
     payload: {
       digit,
-      force
-    }
+      force,
+    },
   };
 }
 
 export function removeDigit(): OptionActions {
   return {
-    type: REMOVE_DIGIT
+    type: REMOVE_DIGIT,
   };
 }
 
@@ -72,8 +72,8 @@ export function navigateCells(direction: DIRECTION): OptionActions {
   return {
     type: NAVIGATE_CELLS,
     payload: {
-      direction
-    }
+      direction,
+    },
   };
 }
 
@@ -81,67 +81,67 @@ export function setMode(mode: MODE): OptionActions {
   return {
     type: TOGGLE_NOTE_MODE,
     payload: {
-      mode
-    }
+      mode,
+    },
   };
 }
 
 export function undo(): OptionActions {
   return {
-    type: UNDO
+    type: UNDO,
   };
 }
 
 export function redo(): OptionActions {
   return {
-    type: REDO
+    type: REDO,
   };
 }
 
 export function toggleNightMode(): OptionActions {
   return {
-    type: TOGGLE_NIGHT_MODE
+    type: TOGGLE_NIGHT_MODE,
   };
 }
 
 export function resetSudoku(): OptionActions {
   return {
-    type: RESET_SUDOKU
+    type: RESET_SUDOKU,
   };
 }
 
 export function fillCandidates(): OptionActions {
   return {
-    type: FILL_CANDIDATES
+    type: FILL_CANDIDATES,
   };
 }
 
 export function clearCandidates(): OptionActions {
   return {
-    type: CLEAR_CANDIDATES
+    type: CLEAR_CANDIDATES,
   };
 }
 
 export function toggleNotesEnabled(): OptionActions {
   return {
-    type: TOGGLE_SETTING_NOTES_ENABLED
+    type: TOGGLE_SETTING_NOTES_ENABLED,
   };
 }
 
 export function toggleMarkCompleted(): OptionActions {
   return {
-    type: TOGGLE_SETTING_MARK_COMPLETED
+    type: TOGGLE_SETTING_MARK_COMPLETED,
   };
 }
 
 export function toggleProgress(): OptionActions {
   return {
-    type: TOGGLE_SETTING_PROGRESS
+    type: TOGGLE_SETTING_PROGRESS,
   };
 }
 
 export function toggleExitPrompt(): OptionActions {
   return {
-    type: TOGGLE_EXIT_PROMPT
+    type: TOGGLE_EXIT_PROMPT,
   };
 }

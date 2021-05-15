@@ -53,7 +53,10 @@ const CompletedDialog: React.FunctionComponent<ICompletedDialogProps> = (
     }
   };
 
-  const ellapsedTime = formatMillisecons(Date.now() - props.sudoku.getCreationTimestamp());
+  const hiddenFor = +(localStorage.getItem('hidden-for') || 0);
+  const ellapsedTime = formatMillisecons(
+    Date.now() - props.sudoku.getCreationTimestamp() - hiddenFor
+  );
 
   return (
     <Dialog
