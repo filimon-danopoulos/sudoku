@@ -125,7 +125,7 @@ const styles = (theme: Theme) => {
     passive: {
       backgroundColor:
         theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.grey[400],
-      color: theme.palette.type === 'dark' ? theme.palette.grey[600] : theme.palette.grey[900],
+      color: theme.palette.type === 'dark' ? theme.palette.grey[600] : theme.palette.grey[700],
     }
   });
 };
