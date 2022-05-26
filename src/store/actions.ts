@@ -16,6 +16,7 @@ import {
   RESET_SUDOKU,
   FILL_CANDIDATES,
   CLEAR_CANDIDATES,
+  TOGGLE_SETTING_HIGHLIGHTS_ENABLED,
   TOGGLE_SETTING_USE_NOTES as TOGGLE_SETTING_NOTES_ENABLED,
   TOGGLE_SETTING_MARK_COMPLETED,
   TOGGLE_SETTING_PROGRESS,
@@ -119,6 +120,12 @@ export function fillCandidates(): OptionActions {
 export function clearCandidates(): OptionActions {
   return {
     type: CLEAR_CANDIDATES,
+  };
+}
+
+export function toggleHighlightsEnabled(): OptionActions {
+  return {
+    type: TOGGLE_SETTING_HIGHLIGHTS_ENABLED,
   };
 }
 

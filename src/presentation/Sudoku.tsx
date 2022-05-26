@@ -148,10 +148,12 @@ class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
     if (!this.state.rowSize) {
       return null;
     }
+
     return this.props.sudoku
       .getRows()
       .map((r, i) => (
         <SudokuRow
+          activeValue={this.props.settings.HightlightsEnabled ? this.props.sudoku.getActiveValue() : null}
           mode={this.props.settings.InputMode}
           row={r}
           key={i}

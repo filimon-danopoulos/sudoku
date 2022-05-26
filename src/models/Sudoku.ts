@@ -40,6 +40,16 @@ export default class Sudoku {
     return sudoku;
   }
 
+  public getActiveValue(): number | null {
+    const hasAtiveCell = this.activeCell.column !== -1 && this.activeCell.row !== -1;
+    if (hasAtiveCell) {
+      const activeRow = this.getRows()[this.activeCell.row - 1];
+      const activeCell = activeRow && activeRow.getCells()[this.activeCell.column - 1];
+      return activeCell ? activeCell.getValue() : null;
+    }
+    return null;
+  }
+
   public activateCell(row: number, column: number): Sudoku {
     const sudoku = new Sudoku(this);
     if (sudoku.activeCell.row === row && sudoku.activeCell.column === column) {

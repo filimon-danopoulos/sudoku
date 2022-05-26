@@ -4,6 +4,7 @@ import { DIFFICULTY } from './Difficulty';
 const SETTINGS_KEY = 'SETTINGS';
 
 export default class Settings {
+  private hightlightsEnabled: boolean;
   private notesEnabled: boolean;
   private nightModeEnabled: boolean;
   private inputMode: MODE;
@@ -12,6 +13,7 @@ export default class Settings {
   private markCompletedNumbersEnabled: boolean;
 
   constructor() {
+    this.hightlightsEnabled = true;
     this.notesEnabled = true;
     this.nightModeEnabled = false;
     this.inputMode = MODE.Input;
@@ -19,6 +21,10 @@ export default class Settings {
     this.progressEnabled = true;
     this.markCompletedNumbersEnabled = true;
     this.readSettingsFromLocalStorage();
+  }
+
+  public get HightlightsEnabled(): boolean {
+    return this.hightlightsEnabled;
   }
 
   public get NotesEnabled(): boolean {
@@ -53,6 +59,8 @@ export default class Settings {
       const settings = JSON.parse(settingsString);
       Object.keys(settings).forEach(key => {
         switch (key) {
+          case 'hightlightsEnabled':
+            return (this.hightlightsEnabled = settings[key] === true);
           case 'notesEnabled':
             return (this.notesEnabled = settings[key] === true);
           case 'nightModeEnabled':
@@ -68,6 +76,11 @@ export default class Settings {
         }
       });
     }
+  }
+  public toggleHightlightsEnabled(): Settings {
+    this.hightlightsEnabled = !this.hightlightsEnabled;
+    this.saveSettingsToLocalStorage();
+    return new Settings();
   }
 
   public toggleNotesEnabled(): Settings {
@@ -113,12 +126,13 @@ export default class Settings {
     window.localStorage.setItem(
       SETTINGS_KEY,
       JSON.stringify({
+        hightlightsEnabled: this.hightlightsEnabled,
         notesEnabled: this.notesEnabled,
         nightModeEnabled: this.nightModeEnabled,
         progressEnabled: this.progressEnabled,
         markCompletedNumbersEnabled: this.markCompletedNumbersEnabled,
         inputMode: this.inputMode,
-        difficulty: this.difficulty
+        difficulty: this.difficulty,
       })
     );
   }

@@ -20,6 +20,7 @@ import {
   resetSudoku,
   fillCandidates,
   clearCandidates,
+  toggleHighlightsEnabled,
   toggleNotesEnabled,
   toggleMarkCompleted,
   toggleProgress,
@@ -54,6 +55,7 @@ interface IAppProps {
   fillCandidates: typeof fillCandidates;
   clearCandidates: typeof clearCandidates;
   settings: Settings;
+  toggleHighlightsEnabled: typeof toggleHighlightsEnabled;
   toggleNotesEnabled: typeof toggleNotesEnabled;
   toggleMarkCompleted: typeof toggleMarkCompleted;
   toggleProgress: typeof toggleProgress;
@@ -135,6 +137,7 @@ export default connect(mapStateToProps, {
   resetSudoku,
   fillCandidates,
   clearCandidates,
+  toggleHighlightsEnabled,
   toggleNotesEnabled,
   toggleMarkCompleted,
   toggleProgress,

@@ -1,18 +1,20 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
-export default (nightMode: boolean) => {
+const theme = (nightMode: boolean) => {
   return createMuiTheme({
     typography: {
-      useNextVariants: true
+      useNextVariants: true,
     },
     palette: {
       type: nightMode ? 'dark' : 'light',
       primary: {
-        main: '#424242'
+        main: '#424242',
       },
       secondary: {
-        main: '#616161'
-      }
-    }
+        main: '#616161',
+      },
+    },
   });
 };
+
+export default theme;

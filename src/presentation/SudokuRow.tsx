@@ -14,6 +14,7 @@ const styles = (theme: Theme) =>
   });
 
 export interface ISudokuRowProps extends WithStyles<typeof styles> {
+  activeValue: number | null;
   row: Row;
   rowSize: number;
   toggleCell: typeof toggleCell;
@@ -31,6 +32,7 @@ class SudokuRowComponent extends Component<ISudokuRowProps> {
       .getCells()
       .map((c, i) => (
         <SudokuCell
+          activeValue={this.props.activeValue}
           mode={this.props.mode}
           toggleCell={this.props.toggleCell}
           cell={c}

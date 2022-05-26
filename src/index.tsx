@@ -19,7 +19,6 @@ const Root = () => (
   </Provider>
 );
 
-debugger;
 
 ReactDOM.render(<Root />, document.getElementById('root'));
 serviceWorker.register();

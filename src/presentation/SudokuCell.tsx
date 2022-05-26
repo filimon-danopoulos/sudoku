@@ -119,13 +119,19 @@ const styles = (theme: Theme) => {
     },
     active: {
       backgroundColor:
-        theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.primary.light,
-      color: theme.palette.primary.contrastText,
+        theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.primary.light,
+      color: theme.palette.grey[50],
     },
+    passive: {
+      backgroundColor:
+        theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.grey[400],
+      color: theme.palette.type === 'dark' ? theme.palette.grey[600] : theme.palette.grey[900],
+    }
   });
 };
 
 export interface ISudokuCellComponentProps extends WithStyles<typeof styles> {
+  activeValue: number | null;
   cell: Cell;
   size: number;
   toggleCell: typeof toggleCell;
@@ -198,6 +204,7 @@ class SudokuCellComponent extends Component<ISudokuCellComponentProps> {
       [classes.given]: cell.isGiven(),
       [classes.invalid]: !cell.isValid(),
       [classes.active]: cell.isActive(),
+      [classes.passive]: !cell.isActive() && this.props.activeValue !== null && cell.getValue() === this.props.activeValue
     };
     return Object.keys(result)
       .filter(key => result[key])

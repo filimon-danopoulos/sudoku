@@ -16,12 +16,12 @@ export enum DIRECTION {
   Up,
   Down,
   Left,
-  Right
+  Right,
 }
 
 export enum MODE {
   Input,
-  Note
+  Note,
 }
 
 export const CHANGE_DIFFICULTY = 'CHANGE_DIFFICULTY';
@@ -38,6 +38,7 @@ export const TOGGLE_NIGHT_MODE = 'TOGGLE_NIGHT_MODE';
 export const RESET_SUDOKU = 'RESET_SUDOKU';
 export const FILL_CANDIDATES = 'FILL_CANDIDATES';
 export const CLEAR_CANDIDATES = 'CLEAR_CANDIDATES';
+export const TOGGLE_SETTING_HIGHLIGHTS_ENABLED = 'TOGGLE_SETTING_HIGHLIGHTS';
 export const TOGGLE_SETTING_USE_NOTES = 'TOGGLE_SETTING_USE_NOTES';
 export const TOGGLE_SETTING_MARK_COMPLETED = 'TOGGLE_SETTING_MARK_COMPLETED';
 export const TOGGLE_SETTING_PROGRESS = 'TOGGLE_SETTING_PROGRESS';
@@ -111,6 +112,10 @@ interface IClearCandidatesAction {
   type: typeof CLEAR_CANDIDATES;
 }
 
+interface IToggleHighlightsEnabledAction {
+  type: typeof TOGGLE_SETTING_HIGHLIGHTS_ENABLED;
+}
+
 interface IToggleNotesEnabledAction {
   type: typeof TOGGLE_SETTING_USE_NOTES;
 }
@@ -142,6 +147,7 @@ export type OptionActions =
   | IResetSudokuAction
   | IFillCandidatesAction
   | IClearCandidatesAction
+  | IToggleHighlightsEnabledAction
   | IToggleNotesEnabledAction
   | IToggleMarkCompletedAction
   | IToggleProgressAction

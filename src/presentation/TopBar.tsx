@@ -20,6 +20,7 @@ import {
   fillCandidates,
   clearCandidates,
   setMode,
+  toggleHighlightsEnabled,
   toggleNotesEnabled,
   toggleMarkCompleted,
   toggleProgress,
@@ -110,6 +111,7 @@ export interface ITopBarProps extends WithStyles<typeof styles> {
   clearCandidates: typeof clearCandidates;
   setMode: typeof setMode;
   settings: Settings;
+  toggleHighlightsEnabled: typeof toggleHighlightsEnabled;
   toggleNotesEnabled: typeof toggleNotesEnabled;
   toggleMarkCompleted: typeof toggleMarkCompleted;
   toggleProgress: typeof toggleProgress;
@@ -269,6 +271,13 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
                 <ListItem
                   button
                   className={classes.feature}
+                  onClick={() => this.props.toggleHighlightsEnabled()}>
+                  <ListItemText primary="Highlight selected" />
+                  <Switch checked={this.props.settings.HightlightsEnabled} />
+                </ListItem>
+                <ListItem
+                  button
+                  className={classes.feature}
                   onClick={() => this.props.toggleNotesEnabled()}>
                   <ListItemText primary="Use notes" />
                   <Switch checked={this.props.settings.NotesEnabled} />
@@ -370,7 +379,7 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
       await serviceWorker.unregister();
     }
     localStorage.clear();
-    window.location.reload(true);
+    window.location.reload();
   }
 
   private toggleDifficulty(): void {

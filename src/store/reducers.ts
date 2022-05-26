@@ -20,6 +20,7 @@ import {
   TOGGLE_SETTING_MARK_COMPLETED,
   TOGGLE_SETTING_PROGRESS,
   TOGGLE_EXIT_PROMPT,
+  TOGGLE_SETTING_HIGHLIGHTS_ENABLED,
 } from './types';
 import PuzzleStorage from '../PuzzleStorage';
 import Settings from '../models/Settings';
@@ -187,6 +188,12 @@ function gameReducerImplemenation(state = initialState, action: OptionActions): 
           current: state.sudoku.current.clearCandidates(),
           future: [],
         },
+      };
+
+    case TOGGLE_SETTING_HIGHLIGHTS_ENABLED:
+      return {
+        ...state,
+        settings: state.settings.toggleHightlightsEnabled(),
       };
     case TOGGLE_SETTING_USE_NOTES:
       return {
