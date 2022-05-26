@@ -119,13 +119,13 @@ const styles = (theme: Theme) => {
     },
     active: {
       backgroundColor:
-        theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.primary.light,
+        theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.primary.main,
       color: theme.palette.grey[50],
     },
     passive: {
       backgroundColor:
-        theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.grey[400],
-      color: theme.palette.type === 'dark' ? theme.palette.grey[600] : theme.palette.grey[700],
+        theme.palette.type === 'dark' ? theme.palette.primary.dark : theme.palette.secondary.light,
+      color: theme.palette.secondary.contrastText,
     }
   });
 };
