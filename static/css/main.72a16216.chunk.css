@@ -1,2 +1,0 @@
-body{overscroll-behavior:none}body ::-webkit-scrollbar{width:0}body ::-webkit-scrollbar-track{box-shadow:none}body ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.1);outline:none}.App{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-justify-content:center;justify-content:center;height:100%;min-height:100%}.App .App-content{-webkit-flex:1 1;flex:1 1;padding:10px;text-align:center;overflow:hidden}
-/*# sourceMappingURL=main.72a16216.chunk.css.map */
