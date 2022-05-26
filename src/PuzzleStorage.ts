@@ -1,7 +1,6 @@
 import Puzzles from './puzzles.json';
 import { DIFFICULTY } from './models/Difficulty';
 import Sudoku from './models/Sudoku';
-import GeneratePuzzleWorker from './workers/GeneratePuzzle.worker';
 import { v4 as uuid } from 'uuid';
 
 const EMPTY_DATA: [number, boolean][][] = [
@@ -14,7 +13,7 @@ const EMPTY_DATA: [number, boolean][][] = [
     [1, false],
     [1, false],
     [1, false],
-    [1, false]
+    [1, false],
   ],
   [
     [1, false],
@@ -25,7 +24,7 @@ const EMPTY_DATA: [number, boolean][][] = [
     [1, false],
     [1, false],
     [1, false],
-    [1, false]
+    [1, false],
   ],
   [
     [1, false],
@@ -36,7 +35,7 @@ const EMPTY_DATA: [number, boolean][][] = [
     [1, false],
     [1, false],
     [1, false],
-    [1, false]
+    [1, false],
   ],
   [
     [1, false],
@@ -47,7 +46,7 @@ const EMPTY_DATA: [number, boolean][][] = [
     [1, false],
     [1, false],
     [1, false],
-    [1, false]
+    [1, false],
   ],
   [
     [1, false],
@@ -58,7 +57,7 @@ const EMPTY_DATA: [number, boolean][][] = [
     [1, false],
     [1, false],
     [1, false],
-    [1, false]
+    [1, false],
   ],
   [
     [1, false],
@@ -69,7 +68,7 @@ const EMPTY_DATA: [number, boolean][][] = [
     [1, false],
     [1, false],
     [1, false],
-    [1, false]
+    [1, false],
   ],
   [
     [1, false],
@@ -80,7 +79,7 @@ const EMPTY_DATA: [number, boolean][][] = [
     [1, false],
     [1, false],
     [1, false],
-    [1, false]
+    [1, false],
   ],
   [
     [1, false],
@@ -91,7 +90,7 @@ const EMPTY_DATA: [number, boolean][][] = [
     [1, false],
     [1, false],
     [1, false],
-    [1, false]
+    [1, false],
   ],
   [
     [1, false],
@@ -102,8 +101,8 @@ const EMPTY_DATA: [number, boolean][][] = [
     [1, false],
     [1, false],
     [1, false],
-    [1, false]
-  ]
+    [1, false],
+  ],
 ];
 
 const PUZZLE_MAP_KEY = 'PUZZLE-MAP';
@@ -117,7 +116,7 @@ class PuzzleStorage {
 
   constructor() {
     this.inititializeStorage();
-    this.worker = new GeneratePuzzleWorker() as Worker;
+    this.worker = new Worker(new URL('./workers/GeneratePuzzle.worker', (import.meta as any).url));
     this.worker.addEventListener('message', e => this.addPuzzle(e));
   }
 
@@ -128,7 +127,7 @@ class PuzzleStorage {
         [DIFFICULTY.Easy]: this.saveJSONPuzzles(Puzzles.Easy),
         [DIFFICULTY.Normal]: this.saveJSONPuzzles(Puzzles.Normal),
         [DIFFICULTY.Hard]: this.saveJSONPuzzles(Puzzles.Hard),
-        [DIFFICULTY.VeryHard]: this.saveJSONPuzzles(Puzzles.VeryHard)
+        [DIFFICULTY.VeryHard]: this.saveJSONPuzzles(Puzzles.VeryHard),
       };
       this.save(PUZZLE_MAP_KEY, puzzles);
     }

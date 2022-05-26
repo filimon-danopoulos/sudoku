@@ -1,6 +1,7 @@
 import Generator from '../models/Generator';
 import { DIFFICULTY } from '../models/Difficulty';
 
+// eslint-disable-next-line no-restricted-globals
 const ctx: Worker = self as any;
 
 ctx.addEventListener('message', message => {
@@ -8,7 +9,7 @@ ctx.addEventListener('message', message => {
   const puzzleData = runGenerator(difficulty);
   ctx.postMessage({
     puzzleData,
-    difficulty
+    difficulty,
   });
 });
 

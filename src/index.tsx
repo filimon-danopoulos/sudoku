@@ -1,4 +1,4 @@
-import './layout/index.scss';
+import './layout/index.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

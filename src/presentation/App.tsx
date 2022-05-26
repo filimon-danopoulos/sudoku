@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import '../layout/App.scss';
+import '../layout/App.css';
 import SudokuComponent from './Sudoku';
 import Numbers from './Numbers';
 import { AppState } from '../store';
