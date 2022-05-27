@@ -149,11 +149,13 @@ class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
       return null;
     }
 
+    const activeValue = this.props.settings.HightlightsEnabled ? this.props.sudoku.getActiveValue() : null;
+
     return this.props.sudoku
       .getRows()
       .map((r, i) => (
         <SudokuRow
-          activeValue={this.props.settings.HightlightsEnabled ? this.props.sudoku.getActiveValue() : null}
+          activeValue={activeValue}
           mode={this.props.settings.InputMode}
           row={r}
           key={i}

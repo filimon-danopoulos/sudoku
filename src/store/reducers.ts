@@ -33,7 +33,7 @@ const initialState: IGameState = {
     past: [],
     current: savedCurrentSudoku
       ? Sudoku.deserialize(savedCurrentSudoku)
-      : PuzzleStorage.getPuzzle(initialSettings.Difficulty).activateCell(1, 1),
+      : PuzzleStorage.getPuzzle(initialSettings.Difficulty).activateCell(1, 1, false),
     future: [],
   },
   settings: initialSettings,
@@ -61,7 +61,7 @@ function gameReducerImplemenation(state = initialState, action: OptionActions): 
         settings: state.settings.setDifficulty(action.payload),
         sudoku: {
           past: [],
-          current: PuzzleStorage.getPuzzle(action.payload).activateCell(1, 1),
+          current: PuzzleStorage.getPuzzle(action.payload).activateCell(1, 1, false),
           future: [],
         },
       };
@@ -70,7 +70,7 @@ function gameReducerImplemenation(state = initialState, action: OptionActions): 
         ...state,
         sudoku: {
           past: [],
-          current: PuzzleStorage.getPuzzle(state.settings.Difficulty).activateCell(1, 1),
+          current: PuzzleStorage.getPuzzle(state.settings.Difficulty).activateCell(1, 1, false),
           future: [],
         },
       };
@@ -90,7 +90,11 @@ function gameReducerImplemenation(state = initialState, action: OptionActions): 
         ...state,
         sudoku: {
           ...state.sudoku,
-          current: state.sudoku.current.activateCell(action.payload.row, action.payload.column),
+          current: state.sudoku.current.activateCell(
+            action.payload.row,
+            action.payload.column,
+            action.payload.shouldHighlight
+          ),
         },
       };
     case SET_DIGIT:

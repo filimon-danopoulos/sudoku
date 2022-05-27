@@ -62,6 +62,7 @@ interface IToggleCellAction {
   payload: {
     row: number;
     column: number;
+    shouldHighlight: boolean;
   };
 }
 

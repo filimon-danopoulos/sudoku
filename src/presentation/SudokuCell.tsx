@@ -138,11 +138,31 @@ export interface ISudokuCellComponentProps extends WithStyles<typeof styles> {
   mode: MODE;
 }
 
-class SudokuCellComponent extends Component<ISudokuCellComponentProps> {
+export interface ISudokuCellComponentState {
+  longPressTimeout: number | null;
+  handledByLongPress: boolean;
+}
+
+class SudokuCellComponent extends Component<ISudokuCellComponentProps, ISudokuCellComponentState> {
+  
+  constructor(props: ISudokuCellComponentProps) {
+    super(props);
+    this.state = {
+      longPressTimeout: null,
+      handledByLongPress: false,
+    };
+  }
+
+  
   public render(): JSX.Element {
     const { classes } = this.props;
     return (
-      <div className={classes.container} onClick={() => this.handleClick()}>
+      <div className={classes.container} 
+      onMouseDown={() => this.mouseDownHandler()}
+      onTouchStart={() => this.mouseDownHandler()}
+      onMouseUp={() => this.mouseUpHandler()}
+      onTouchEnd={() => this.mouseUpHandler()} 
+      onClick={() => this.handleClick()}>
         <div className={this.calculateClasses()}>{this.renderContent()}</div>
       </div>
     );
@@ -183,8 +203,32 @@ class SudokuCellComponent extends Component<ISudokuCellComponentProps> {
     );
   }
 
+
+  private mouseDownHandler() {
+    const longPressTimeout = window.setTimeout(() => {
+      this.props.toggleCell(this.props.cell.getRow(), this.props.cell.getColumn(), true);
+      this.setState({
+        handledByLongPress: true,
+      });
+    }, 200);
+    this.setState({
+      longPressTimeout,
+    });
+  }
+
+  private mouseUpHandler() {
+    if (this.state.longPressTimeout) {
+      window.clearTimeout(this.state.longPressTimeout);
+    }
+  }
+
   private handleClick(): void {
-    this.props.toggleCell(this.props.cell.getRow(), this.props.cell.getColumn());
+    if (!this.state.handledByLongPress) {
+      this.props.toggleCell(this.props.cell.getRow(), this.props.cell.getColumn());
+    }
+    this.setState({
+      handledByLongPress: false,
+    });
   }
 
   private calculateClasses(): string {

@@ -272,14 +272,14 @@ class TopBar extends Component<ITopBarProps, ITopBarState> {
                   button
                   className={classes.feature}
                   onClick={() => this.props.toggleHighlightsEnabled()}>
-                  <ListItemText primary="Highlight selected" />
+                  <ListItemText primary="Allow highlights" />
                   <Switch checked={this.props.settings.HightlightsEnabled} />
                 </ListItem>
                 <ListItem
                   button
                   className={classes.feature}
                   onClick={() => this.props.toggleNotesEnabled()}>
-                  <ListItemText primary="Use notes" />
+                  <ListItemText primary="Allow notes" />
                   <Switch checked={this.props.settings.NotesEnabled} />
                 </ListItem>
                 <ListItem

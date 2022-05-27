@@ -45,19 +45,19 @@ export default class Sudoku {
     if (hasAtiveCell) {
       const activeRow = this.getRows()[this.activeCell.row - 1];
       const activeCell = activeRow && activeRow.getCells()[this.activeCell.column - 1];
-      return activeCell ? activeCell.getValue() : null;
+      return activeCell && activeCell.shouldHighlight() ? activeCell.getValue() : null;
     }
     return null;
   }
 
-  public activateCell(row: number, column: number): Sudoku {
+  public activateCell(row: number, column: number, shouldHighlight: boolean): Sudoku {
     const sudoku = new Sudoku(this);
     if (sudoku.activeCell.row === row && sudoku.activeCell.column === column) {
       sudoku.activeCell = { row: -1, column: -1 };
     } else {
       sudoku.activeCell = { row, column };
     }
-    sudoku.rows = this.rows.map(r => r.toggleCell(row, column));
+    sudoku.rows = this.rows.map(r => r.toggleCell(row, column, shouldHighlight));
     return sudoku;
   }
 
@@ -110,7 +110,7 @@ export default class Sudoku {
         activeCell.column = decrement(activeCell.column);
         break;
     }
-    return this.activateCell(activeCell.row, activeCell.column);
+    return this.activateCell(activeCell.row, activeCell.column, false);
   }
 
   public isSolved(): boolean {
@@ -142,11 +142,11 @@ export default class Sudoku {
     const candidates = analyzer.getCandidates();
     let sudoku = new Sudoku(this);
     if (sudoku.activeCell.row !== -1 && sudoku.activeCell.column !== -1) {
-      sudoku = sudoku.activateCell(sudoku.activeCell.row, sudoku.activeCell.column);
+      sudoku = sudoku.activateCell(sudoku.activeCell.row, sudoku.activeCell.column, false);
     }
     candidates.forEach((rowCandidates, row) => {
       rowCandidates.forEach((cellCandidates, cell) => {
-        sudoku = sudoku.activateCell(row + 1, cell + 1);
+        sudoku = sudoku.activateCell(row + 1, cell + 1, false);
         cellCandidates.forEach(candidate => {
           if (data[row][cell] === null && !notes[row][cell][candidate - 1]) {
             sudoku = sudoku.setDigit(candidate, MODE.Note);

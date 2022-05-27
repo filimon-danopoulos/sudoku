@@ -45,7 +45,7 @@ export default class Row {
     return this.index;
   }
 
-  public toggleCell(index: number, column: number): Row {
+  public toggleCell(index: number, column: number, shouldHighlight: boolean): Row {
     if (this.index !== index && !this.active) {
       return this;
     }
@@ -54,15 +54,17 @@ export default class Row {
     if (this.active) {
       if (this.index === index) {
         row.cells = this.cells.map(c => {
-          return c.setActive(c.isActive() ? false : c.getColumn() === column);
+          return c.setActive(c.isActive() ? false : c.getColumn() === column, shouldHighlight);
         });
       } else {
         row.active = false;
-        row.cells = this.cells.map(c => (c.isActive() ? c.setActive(false) : c));
+        row.cells = this.cells.map(c => (c.isActive() ? c.setActive(false, shouldHighlight) : c));
       }
     } else if (this.index === index) {
       row.active = true;
-      row.cells = this.cells.map(c => (c.getColumn() === column ? c.setActive(true) : c));
+      row.cells = this.cells.map(c =>
+        c.getColumn() === column ? c.setActive(true, shouldHighlight) : c
+      );
     }
     return row;
   }

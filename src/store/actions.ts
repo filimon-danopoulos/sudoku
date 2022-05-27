@@ -43,12 +43,17 @@ export function validateSolution(): OptionActions {
   };
 }
 
-export function toggleCell(row: number, column: number): OptionActions {
+export function toggleCell(
+  row: number,
+  column: number,
+  shouldHighlight: boolean = false
+): OptionActions {
   return {
     type: TOGGLE_CELL,
     payload: {
       row,
       column,
+      shouldHighlight,
     },
   };
 }

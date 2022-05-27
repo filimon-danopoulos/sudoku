@@ -22,8 +22,10 @@ export default class Cell {
   private given: boolean;
   private active: boolean;
   private notes: boolean[];
+  private highlight: boolean;
 
   private constructor(previous?: Cell) {
+    this.highlight = previous ? previous.active : false;
     this.value = previous ? previous.value : null;
     this.solution = previous ? previous.solution : -1;
     this.row = previous ? previous.row : -1;
@@ -79,6 +81,10 @@ export default class Cell {
     return this.active;
   }
 
+  public shouldHighlight(): boolean {
+    return this.highlight;
+  }
+
   public getBlock(): number {
     if (this.row <= 3) {
       return this.calculateBlock(0);
@@ -116,9 +122,10 @@ export default class Cell {
     return this.valid;
   }
 
-  public setActive(active: boolean): Cell {
+  public setActive(active: boolean, shouldHighlight: boolean): Cell {
     const cell = new Cell(this);
     cell.active = active;
+    cell.highlight = shouldHighlight;
     return cell;
   }
 
