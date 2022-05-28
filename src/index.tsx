@@ -11,6 +11,7 @@ import pregenerate from './utils/pregenerate';
 import { registerUpdate } from './utils/ServiceWorkerUpdated';
 import { toggleExitPrompt } from './store/actions';
 
+
 const store = configureStore();
 
 const Root = () => (
@@ -25,6 +26,7 @@ serviceWorker.register();
 
 if (process.env.NODE_ENV === 'development') {
   (window as any).pregenerate = pregenerate;
+  import('./solver/rating/test')
 }
 
 serviceWorker.register({
