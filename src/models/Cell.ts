@@ -25,7 +25,7 @@ export default class Cell {
   private highlight: boolean;
 
   private constructor(previous?: Cell) {
-    this.highlight = previous ? previous.active : false;
+    this.highlight = previous ? previous.highlight : false;
     this.value = previous ? previous.value : null;
     this.solution = previous ? previous.solution : -1;
     this.row = previous ? previous.row : -1;
