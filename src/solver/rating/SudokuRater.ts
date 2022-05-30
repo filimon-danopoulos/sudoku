@@ -5,7 +5,7 @@ import { Slotting } from './strategies/Slotting';
 import { NakedSingles } from './strategies/NakedSingles';
 import { HiddenSingles } from './strategies/HiddenSingles';
 import { LockedCandidates } from './strategies/LockedCandidates';
-import { NakedDoubles } from './strategies/NakedDoubles';
+import { NakedTuples } from './strategies/NakedTuples';
 
 type strategy = SimpleSingles;
 
@@ -20,9 +20,9 @@ export class SudokuRater {
         new HiddenSingles(),
         new LockedCandidates(),
         new NakedSingles(),
-        new NakedDoubles(),
-        // new NakedTripples(),
-        // new NakedQuads(),
+        new NakedTuples(2),
+        new NakedTuples(3),
+        new NakedTuples(4),
       ],
       solution
     );
