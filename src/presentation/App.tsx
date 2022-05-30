@@ -10,6 +10,7 @@ import {
   createNewGame,
   validateSolution,
   toggleCell,
+  toggleHighlight,
   setDigit,
   removeDigit,
   navigateCells,
@@ -41,6 +42,7 @@ interface IAppProps {
   createNewGame: typeof createNewGame;
   validateSolution: typeof validateSolution;
   toggleCell: typeof toggleCell;
+  toggleHighlight: typeof toggleHighlight;
   setDigit: typeof setDigit;
   removeDigit: typeof removeDigit;
   navigateCells: typeof navigateCells;
@@ -127,6 +129,7 @@ export default connect(mapStateToProps, {
   createNewGame,
   validateSolution,
   toggleCell,
+  toggleHighlight,
   setDigit,
   removeDigit,
   navigateCells,

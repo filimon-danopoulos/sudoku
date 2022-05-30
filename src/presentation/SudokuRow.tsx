@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Row from '../models/Row';
 import SudokuCell from './SudokuCell';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
-import { toggleCell } from '../store/actions';
+import { toggleCell, toggleHighlight } from '../store/actions';
 import { MODE } from '../store/types';
 
 const styles = (theme: Theme) =>
@@ -14,10 +14,11 @@ const styles = (theme: Theme) =>
   });
 
 export interface ISudokuRowProps extends WithStyles<typeof styles> {
-  activeValue: number | null;
+  highlightValue: number | null;
   row: Row;
   rowSize: number;
   toggleCell: typeof toggleCell;
+  toggleHighlight: typeof toggleHighlight;
   mode: MODE;
 }
 
@@ -32,9 +33,10 @@ class SudokuRowComponent extends Component<ISudokuRowProps> {
       .getCells()
       .map((c, i) => (
         <SudokuCell
-          activeValue={this.props.activeValue}
+          highlightValue={this.props.highlightValue}
           mode={this.props.mode}
           toggleCell={this.props.toggleCell}
+          toggleHighlight={this.props.toggleHighlight}
           cell={c}
           size={this.getCellSize()}
           key={i}

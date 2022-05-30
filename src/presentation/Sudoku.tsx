@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Sudoku from '../models/Sudoku';
 import SudokuRow from './SudokuRow';
-import { createNewGame, toggleCell, undo, redo, removeDigit } from '../store/actions';
+import { createNewGame, toggleCell, 
+  toggleHighlight,undo, redo, removeDigit } from '../store/actions';
 import {
   withStyles,
   WithStyles,
@@ -65,6 +66,7 @@ export interface ISudokuProps extends WithStyles<typeof styles> {
   settings: Settings;
   createNewGame: typeof createNewGame;
   toggleCell: typeof toggleCell;
+  toggleHighlight: typeof toggleHighlight;
   undo: typeof undo;
   redo: typeof redo;
   removeDigit: typeof removeDigit;
@@ -149,16 +151,17 @@ class SudokuComponent extends Component<ISudokuProps, ISudokuState> {
       return null;
     }
 
-    const activeValue = this.props.settings.HightlightsEnabled ? this.props.sudoku.getActiveValue() : null;
+    const hightlightValue = this.props.settings.HightlightsEnabled ? this.props.sudoku.getHighlightValue() : null;
 
     return this.props.sudoku
       .getRows()
       .map((r, i) => (
         <SudokuRow
-          activeValue={activeValue}
+          highlightValue={hightlightValue}
           mode={this.props.settings.InputMode}
           row={r}
           key={i}
+          toggleHighlight={this.props.toggleHighlight}
           rowSize={this.state.rowSize}
           toggleCell={this.props.toggleCell}
         />

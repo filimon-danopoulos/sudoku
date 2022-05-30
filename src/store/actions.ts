@@ -21,6 +21,7 @@ import {
   TOGGLE_SETTING_MARK_COMPLETED,
   TOGGLE_SETTING_PROGRESS,
   TOGGLE_EXIT_PROMPT,
+  TOGGLE_HIGHLIGHT,
 } from './types';
 import { DIFFICULTY } from '../models/Difficulty';
 
@@ -43,17 +44,21 @@ export function validateSolution(): OptionActions {
   };
 }
 
-export function toggleCell(
-  row: number,
-  column: number,
-  shouldHighlight: boolean = false
-): OptionActions {
+export function toggleCell(row: number, column: number): OptionActions {
   return {
     type: TOGGLE_CELL,
     payload: {
       row,
       column,
-      shouldHighlight,
+    },
+  };
+}
+
+export function toggleHighlight(value: number | null): OptionActions {
+  return {
+    type: TOGGLE_HIGHLIGHT,
+    payload: {
+      value,
     },
   };
 }

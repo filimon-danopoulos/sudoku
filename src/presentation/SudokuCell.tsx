@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Cell from '../models/Cell';
-import { toggleCell } from '../store/actions';
+import { toggleCell, toggleHighlight } from '../store/actions';
 import { createStyles, Theme, WithStyles, withStyles } from '@material-ui/core';
 import { MODE } from '../store/types';
 
@@ -131,10 +131,11 @@ const styles = (theme: Theme) => {
 };
 
 export interface ISudokuCellComponentProps extends WithStyles<typeof styles> {
-  activeValue: number | null;
+  highlightValue: number | null;
   cell: Cell;
   size: number;
   toggleCell: typeof toggleCell;
+  toggleHighlight: typeof toggleHighlight;
   mode: MODE;
 }
 
@@ -206,7 +207,8 @@ class SudokuCellComponent extends Component<ISudokuCellComponentProps, ISudokuCe
 
   private mouseDownHandler() {
     const longPressTimeout = window.setTimeout(() => {
-      this.props.toggleCell(this.props.cell.getRow(), this.props.cell.getColumn(), true);
+      this.props.toggleCell(this.props.cell.getRow(), this.props.cell.getColumn());
+      this.props.toggleHighlight(this.props.cell.getValue())
       this.setState({
         handledByLongPress: true,
       });
@@ -248,7 +250,7 @@ class SudokuCellComponent extends Component<ISudokuCellComponentProps, ISudokuCe
       [classes.given]: cell.isGiven(),
       [classes.invalid]: !cell.isValid(),
       [classes.active]: cell.isActive(),
-      [classes.passive]: !cell.isActive() && this.props.activeValue !== null && cell.getValue() === this.props.activeValue
+      [classes.passive]: !cell.isActive() && this.props.highlightValue !== null && cell.getValue() === this.props.highlightValue
     };
     return Object.keys(result)
       .filter(key => result[key])

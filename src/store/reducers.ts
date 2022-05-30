@@ -21,6 +21,7 @@ import {
   TOGGLE_SETTING_PROGRESS,
   TOGGLE_EXIT_PROMPT,
   TOGGLE_SETTING_HIGHLIGHTS_ENABLED,
+  TOGGLE_HIGHLIGHT,
 } from './types';
 import PuzzleStorage from '../PuzzleStorage';
 import Settings from '../models/Settings';
@@ -33,7 +34,7 @@ const initialState: IGameState = {
     past: [],
     current: savedCurrentSudoku
       ? Sudoku.deserialize(savedCurrentSudoku)
-      : PuzzleStorage.getPuzzle(initialSettings.Difficulty).activateCell(1, 1, false),
+      : PuzzleStorage.getPuzzle(initialSettings.Difficulty).activateCell(1, 1),
     future: [],
   },
   settings: initialSettings,
@@ -61,7 +62,7 @@ function gameReducerImplemenation(state = initialState, action: OptionActions): 
         settings: state.settings.setDifficulty(action.payload),
         sudoku: {
           past: [],
-          current: PuzzleStorage.getPuzzle(action.payload).activateCell(1, 1, false),
+          current: PuzzleStorage.getPuzzle(action.payload).activateCell(1, 1),
           future: [],
         },
       };
@@ -70,7 +71,7 @@ function gameReducerImplemenation(state = initialState, action: OptionActions): 
         ...state,
         sudoku: {
           past: [],
-          current: PuzzleStorage.getPuzzle(state.settings.Difficulty).activateCell(1, 1, false),
+          current: PuzzleStorage.getPuzzle(state.settings.Difficulty).activateCell(1, 1),
           future: [],
         },
       };
@@ -90,11 +91,15 @@ function gameReducerImplemenation(state = initialState, action: OptionActions): 
         ...state,
         sudoku: {
           ...state.sudoku,
-          current: state.sudoku.current.activateCell(
-            action.payload.row,
-            action.payload.column,
-            action.payload.shouldHighlight
-          ),
+          current: state.sudoku.current.activateCell(action.payload.row, action.payload.column),
+        },
+      };
+    case TOGGLE_HIGHLIGHT:
+      return {
+        ...state,
+        sudoku: {
+          ...state.sudoku,
+          current: state.sudoku.current.toggleHighlightValue(action.payload.value),
         },
       };
     case SET_DIGIT:

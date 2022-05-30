@@ -27,7 +27,8 @@ export enum MODE {
 export const CHANGE_DIFFICULTY = 'CHANGE_DIFFICULTY';
 export const NEW_GAME = 'NEW_GAME';
 export const VALIDATE_SOLUTION = 'VALIDATE_SOLUTION';
-export const TOGGLE_CELL = 'TOGGLE_CELLs';
+export const TOGGLE_CELL = 'TOGGLE_CELL';
+export const TOGGLE_HIGHLIGHT = 'TOGGLE_HIGHLIGHT';
 export const SET_DIGIT = 'SET_DIGIT';
 export const REMOVE_DIGIT = 'REMOVE_DIGIT';
 export const NAVIGATE_CELLS = 'NAVIGATE_CELLS';
@@ -62,7 +63,13 @@ interface IToggleCellAction {
   payload: {
     row: number;
     column: number;
-    shouldHighlight: boolean;
+  };
+}
+
+interface IToggleHighlightAction {
+  type: typeof TOGGLE_HIGHLIGHT;
+  payload: {
+    value: number | null;
   };
 }
 
@@ -138,6 +145,7 @@ export type OptionActions =
   | INewGameAction
   | IValidateSolutionAction
   | IToggleCellAction
+  | IToggleHighlightAction
   | ISetDigitAction
   | IRemoveDigitAction
   | INavigateCellsAction
