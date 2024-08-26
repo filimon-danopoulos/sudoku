@@ -1,0 +1,5 @@
+body {
+  all: unset;
+  display: flex;
+  background-color: #efefef;
+}

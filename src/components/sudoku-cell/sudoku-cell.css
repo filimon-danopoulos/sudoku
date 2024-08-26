@@ -1,0 +1,61 @@
+:host {
+  font-family: "Roboto", Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  aspect-ratio: 1/1;
+  font-size: min(6cqw, 2.5rem);
+}
+
+:host::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  content: "";
+}
+
+:host(:not([column="8"]))::after {
+  width: 1px;
+  right: -2px;
+  background-color: black;
+}
+
+:host(:is([column="2"], [column="5"]))::after {
+  width: 3px;
+  right: -3px;
+  background-color: black;
+}
+
+:host(:not([row="0"]))::after {
+  top: -3px;
+}
+
+
+:host::before {
+  position: absolute;
+  right: -1px;
+  left: -1px;
+  content: "";
+}
+
+:host(:not([row="8"]))::before {
+  height: 1px;
+  bottom: -2px;
+  background-color: black;
+}
+
+:host(:is([row="2"], [row="5"]))::before {
+  height: 3px;
+  bottom: -3px;
+  background-color: black;
+}
+
+
+:host(:is([row="2"], [row="5"]):not([row="0"]))::before {
+  left: -3px;
+}
+
+:host(:is([given])) {
+  font-weight: bold;
+}
