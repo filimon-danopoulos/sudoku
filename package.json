@@ -5,7 +5,8 @@
   "private": "true",
   "type": "module",
   "sideEffects": [
-    "./src/**/*.reg.ts",
+    "./src/**/*.element.ts",
+    "./src/index.ts",
     "*.css"
   ],
   "scripts": {
@@ -42,5 +43,8 @@
     "webpack-dev-server": "^5.0.4",
     "webpack-merge": "^6.0.1",
     "workbox-webpack-plugin": "^7.1.0"
+  },
+  "dependencies": {
+    "@fontsource/roboto": "^5.0.14"
   }
 }
