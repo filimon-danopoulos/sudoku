@@ -1,7 +1,7 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import WorkboxPlugin from 'workbox-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { fileURLToPath } from 'url';
 
 const devMode = process.env.NODE_ENV !== 'production';
 
@@ -9,16 +9,27 @@ export default {
   entry: './src/index.ts',
   output: {
     filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'dist'),
     clean: true,
   },
   module: {
     rules: [
       {
         test: /\.css$/i,
-        use: [
-          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
+        oneOf: [
+          {
+            with: { type: 'css' },
+            loader: 'css-loader',
+            options: {
+              exportType: 'css-style-sheet',
+            },
+          },
+          {
+            use: [
+              devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+              'css-loader',
+            ],
+          },
         ],
       },
       {
@@ -35,20 +46,7 @@ export default {
     new HtmlWebpackPlugin({
       title: 'Output Management',
     }),
-    new WorkboxPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-    }),
-  ].concat(
-    devMode
-      ? []
-      : [
-          new MiniCssExtractPlugin({
-            filename: '[name].[contenthash].css',
-            chunkFilename: '[id].[contenthash].css',
-          }),
-        ]
-  ),
+  ],
   optimization: {
     moduleIds: 'deterministic',
     runtimeChunk: 'single',
