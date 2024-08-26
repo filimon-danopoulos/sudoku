@@ -11,7 +11,6 @@ export default tslint.config(
   },
   eslint.configs.recommended,
   ...tslint.configs.strict,
-  ...tslint.configs.stylistic,
   prettier,
   {
     languageOptions: {
