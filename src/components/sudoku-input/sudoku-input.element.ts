@@ -31,8 +31,31 @@ export class SudokuInputElement extends HTMLElement {
     this.shadowRoot?.appendChild($content);
   }
 
-  static get observedAttributes() {
-    return [];
+  connectedCallback() {
+    this.shadowRoot
+      ?.querySelectorAll<HTMLButtonElement>('button')
+      .forEach(($button) => {
+        $button.addEventListener('mousedown', () => {
+          let isCandidate = false;
+          setTimeout(() => {
+            isCandidate = true;
+          }, 250);
+          $button.addEventListener(
+            'mouseup',
+            () => {
+              this.dispatchEvent(
+                new CustomEvent(
+                  isCandidate ? 'input-candidate' : 'input-value',
+                  {
+                    detail: +($button.textContent as string),
+                  }
+                )
+              );
+            },
+            { once: true }
+          );
+        });
+      });
   }
 }
 
