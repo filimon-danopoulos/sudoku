@@ -44,7 +44,7 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Output Management',
+      title: "Filimon's Sudoku",
     }),
   ],
   optimization: {
