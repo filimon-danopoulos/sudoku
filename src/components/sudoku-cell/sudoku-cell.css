@@ -4,7 +4,7 @@
   align-items: center;
   position: relative;
   aspect-ratio: 1/1;
-  font-size: min(6cqw, 2.5rem);
+  font-size: 7.5cqw;
   user-select: none;
 }
 
