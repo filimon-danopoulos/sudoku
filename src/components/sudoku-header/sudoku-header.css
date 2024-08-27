@@ -1,0 +1,48 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  width: 100vw;
+  box-sizing: border-box;
+  background-color: rgb(65, 65, 65);
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: rgb(255, 255, 255);
+  font-size: 24px;
+  padding-left: 16px;
+  padding-right: 8px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+
+}
+
+
+button {
+  all: unset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 32px;
+}
+
+button:hover {
+  background-color: rgba(0, 0, 0, 0.10);
+}
+
+button:active {
+  background-color: rgba(0, 0, 0, 0.20);
+}
+
+svg {
+  fill: rgb(255, 255, 255);
+  width: 24px;
+  height: 24px;
+}

@@ -1,7 +1,7 @@
-import '../components/sudoku-board/sudoku-board.element';
+import '../components/sudoku-shell/sudoku-shell.element';
 import '@fontsource/roboto';
 
 export const main = () => {
-  const $board = document.createElement('sudoku-board');
-  document.body.appendChild($board);
+  const $app = document.createElement('sudoku-shell');
+  document.body.appendChild($app);
 };
