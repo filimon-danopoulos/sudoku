@@ -42,6 +42,60 @@ $template.innerHTML = `
 `;
 
 export class SudokuShellElement extends HTMLElement {
+  #undoStack = [] as { candidates: string[]; value: string }[][];
+  #redoStack = [] as { candidates: string[]; value: string }[][];
+  #saveState() {
+    const state = this.#getState();
+    this.#undoStack.push(state);
+    if (this.#redoStack.length) {
+      this.#redoStack.length = 0;
+    }
+  }
+  #getState() {
+    const state = [] as { candidates: string[]; value: string }[];
+    const $cells = this.shadowRoot?.querySelectorAll(
+      'sudoku-cell'
+    ) as NodeListOf<SudokuCelllement>;
+    $cells.forEach(($cell) => {
+      state.push({
+        candidates: $cell.candidates,
+        value: $cell.value,
+      });
+    });
+    return state;
+  }
+
+  #applyState(state: { candidates: string[]; value: string }[]) {
+    const $cells = this.shadowRoot?.querySelectorAll(
+      'sudoku-cell'
+    ) as NodeListOf<SudokuCelllement>;
+    let index = 0;
+    $cells.forEach(($cell) => {
+      const { candidates, value } = state[index];
+      $cell.value = value;
+      $cell.candidates = candidates;
+      index++;
+    });
+  }
+
+  undo() {
+    const previousState = this.#undoStack.pop();
+    if (previousState) {
+      const currentState = this.#getState();
+      this.#redoStack.push(currentState);
+      this.#applyState(previousState);
+    }
+  }
+
+  redo() {
+    const nextState = this.#redoStack.pop();
+    if (nextState) {
+      const currentState = this.#getState();
+      this.#undoStack.push(currentState);
+      this.#applyState(nextState);
+    }
+  }
+
   constructor() {
     super();
 
@@ -81,6 +135,7 @@ export class SudokuShellElement extends HTMLElement {
         'sudoku-cell[active]'
       );
       if ($cell && !$cell.given) {
+        this.#saveState();
         $cell.value = (e as CustomEvent).detail;
       }
     });
@@ -89,6 +144,8 @@ export class SudokuShellElement extends HTMLElement {
         'sudoku-cell[active]'
       );
       if ($cell && !$cell.given) {
+        this.#saveState();
+
         const candidate = (e as CustomEvent).detail;
         if ($cell.candidates.includes(candidate)) {
           $cell.candidates = $cell.candidates.filter((c) => c !== candidate);
@@ -154,6 +211,7 @@ export class SudokuShellElement extends HTMLElement {
     this.shadowRoot
       ?.querySelector('sudoku-option.clear-notes')
       ?.addEventListener('click', () => {
+        this.#saveState();
         $cells.forEach(($cell) => {
           if (!$cell.given) {
             $cell.candidates = [];
