@@ -36,27 +36,28 @@ export class SudokuCelllement extends HTMLElement {
 
   attributeChangedCallback(name: string): void {
     if (name === 'value') {
-      const $value = this.shadowRoot?.querySelector<HTMLElement>('.cell-value');
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      $value!.textContent = this.value ? (+this.value % 9).toString() : '';
-
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.shadowRoot!.querySelector<HTMLElement>('.cell-candidates')!.hidden =
-        !!this.value;
+      const $value = this.shadowRoot?.querySelector(
+        '.cell-value'
+      ) as HTMLElement;
+      $value.textContent = this.value;
+      if (this.value && this.candidates.length) {
+        this.candidates = [];
+      }
     }
 
-    if (name === 'candidates' && !this.value) {
-      if (this.candidates.length) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this.shadowRoot!.querySelector<HTMLElement>(
-          '.cell-candidates'
-        )!.hidden = false;
+    if (name === 'candidates') {
+      const $candidates = this.shadowRoot?.querySelector(
+        '.cell-candidates'
+      ) as HTMLElement;
+      if (this.value && this.candidates.length) {
+        this.value = '';
       }
+      $candidates.hidden = !this.candidates.length;
       this.shadowRoot
         ?.querySelectorAll<HTMLElement>('.cell-candidate')
         .forEach(($candidate) => {
           $candidate.hidden = !this.candidates.includes(
-            +($candidate.getAttribute('candidate') ?? -1)
+            $candidate.textContent as string
           );
         });
     }
@@ -91,13 +92,10 @@ export class SudokuCelllement extends HTMLElement {
   }
 
   get candidates() {
-    return (
-      this.getAttribute('candidates')
-        ?.split(',')
-        .map((x) => +x) ?? []
-    );
+    const candidatesString = this.getAttribute('candidates');
+    return candidatesString ? candidatesString.split(',') : [];
   }
-  set candidates(candidates: number[]) {
+  set candidates(candidates: string[]) {
     this.setAttribute('candidates', candidates.join());
   }
 

@@ -33,13 +33,14 @@ export class SudokuShellElement extends HTMLElement {
     this.shadowRoot?.appendChild($content);
   }
 
-  connectedCallback() {
+  loadPuzzle(puzzle: { solution: string; value: string }[]) {
     const cells: SudokuCelllement[] = Array.from(
       this.shadowRoot?.querySelectorAll('sudoku-cell') ?? []
     );
     cells.forEach((cell, index) => {
-      cell.value = Math.round(Math.random()) ? index.toString() : '';
-      cell.solution = index.toString();
+      cell.active = index === 0;
+      cell.value = puzzle[index].value.toString();
+      cell.solution = puzzle[index].solution.toString();
       cell.given = cell.value === cell.solution;
       cell.addEventListener('cell-activated', (e: Event) => {
         const $target = e.target as SudokuCelllement;
@@ -66,7 +67,7 @@ export class SudokuShellElement extends HTMLElement {
         'sudoku-cell[active]'
       );
       if ($cell) {
-        const candidate = +(e as CustomEvent).detail;
+        const candidate = (e as CustomEvent).detail;
         if ($cell.candidates.includes(candidate)) {
           $cell.candidates = $cell.candidates.filter((c) => c !== candidate);
         } else {

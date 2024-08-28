@@ -18,17 +18,6 @@ export class SudokuBoardElement extends HTMLElement {
     const $content = document.importNode($template.content, true);
     this.shadowRoot?.appendChild($content);
   }
-
-  static get observedAttributes() {
-    return ['puzzle'];
-  }
-
-  get puzzle() {
-    return this.getAttribute('puzzle') ?? '';
-  }
-  set puzzle(puzzle: string) {
-    this.setAttribute('puzzle', puzzle);
-  }
 }
 
 if (!customElements.get('sudoku-board')) {

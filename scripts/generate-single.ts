@@ -8,8 +8,8 @@ if (success) {
   console.log(`completed after ${ellapsed}ms`);
   const puzzle = generator.getPuzzleData();
   const str = puzzle
-    .map((row) => row.map(([cell, given]) => (given ? cell : '.')).join(' '))
-    .join('\n');
+    .map((row) => row.map(([cell, given]) => (given ? cell : cell / 10)).join())
+    .join();
   console.log(str);
 } else {
   console.log(`failed after ${ellapsed}ms`);
