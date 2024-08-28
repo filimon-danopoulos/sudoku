@@ -4,6 +4,6 @@ declare module '*.css' {
 }
 
 declare module '*.svg' {
-  const url: string;
-  export default url;
+  const content: string;
+  export default content;
 }

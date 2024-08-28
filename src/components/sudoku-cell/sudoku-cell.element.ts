@@ -43,6 +43,9 @@ export class SudokuCelllement extends HTMLElement {
       if (this.value && this.candidates.length) {
         this.candidates = [];
       }
+      if (this.invalid) {
+        this.invalid = false;
+      }
     }
 
     if (name === 'candidates') {
@@ -60,6 +63,10 @@ export class SudokuCelllement extends HTMLElement {
             $candidate.textContent as string
           );
         });
+
+      if (this.invalid) {
+        this.invalid = false;
+      }
     }
   }
 
@@ -82,6 +89,13 @@ export class SudokuCelllement extends HTMLElement {
   }
   set given(given: boolean) {
     this.toggleAttribute('given', given);
+  }
+
+  get invalid() {
+    return this.hasAttribute('invalid');
+  }
+  set invalid(invalid: boolean) {
+    this.toggleAttribute('invalid', invalid);
   }
 
   get active() {

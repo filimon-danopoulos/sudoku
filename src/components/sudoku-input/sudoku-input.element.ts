@@ -35,25 +35,28 @@ export class SudokuInputElement extends HTMLElement {
     this.shadowRoot
       ?.querySelectorAll<HTMLButtonElement>('button')
       .forEach(($button) => {
-        $button.addEventListener('mousedown', () => {
+        $button.addEventListener('pointerdown', () => {
           let isCandidate = false;
-          setTimeout(() => {
+          // eslint-disable-next-line prefer-const
+          let timeout: ReturnType<typeof setTimeout>;
+          const emitInputEvent = () => {
+            this.dispatchEvent(
+              new CustomEvent(isCandidate ? 'input-candidate' : 'input-value', {
+                detail: +($button.textContent as string),
+              })
+            );
+            clearTimeout(timeout);
+          };
+
+          timeout = setTimeout(() => {
             isCandidate = true;
-          }, 250);
-          $button.addEventListener(
-            'mouseup',
-            () => {
-              this.dispatchEvent(
-                new CustomEvent(
-                  isCandidate ? 'input-candidate' : 'input-value',
-                  {
-                    detail: +($button.textContent as string),
-                  }
-                )
-              );
-            },
-            { once: true }
-          );
+            emitInputEvent();
+            $button.removeEventListener('pointerup', emitInputEvent);
+          }, 150);
+
+          $button.addEventListener('pointerup', emitInputEvent, {
+            once: true,
+          });
         });
       });
   }
