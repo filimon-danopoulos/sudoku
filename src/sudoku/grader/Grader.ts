@@ -27,20 +27,12 @@ export class SudokuRater {
     );
   }
 
-  private solve(
-    sudoku: Sudoku,
-    strategies: strategy[],
-    solution: (number | ' ')[][]
-  ) {
+  private solve(sudoku: Sudoku, strategies: strategy[], solution: (number | ' ')[][]) {
     let rating = RATING.Unrated;
 
     let changed = false;
     do {
-      for (
-        let strategyIndex = 0;
-        strategyIndex < strategies.length;
-        strategyIndex++
-      ) {
+      for (let strategyIndex = 0; strategyIndex < strategies.length; strategyIndex++) {
         const strategy = strategies[strategyIndex];
         const dirty = strategy.run(sudoku);
 

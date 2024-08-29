@@ -1,19 +1,12 @@
-import styles from './sudoku-option.css' with { type: 'css' };
+import style from './sudoku-option.css' with { type: 'css' };
 
-export class SudokuOptionElement extends HTMLElement {
-  constructor() {
-    super();
+import { html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
-    const $root = this.attachShadow({
-      mode: 'open',
-    });
-    $root.adoptedStyleSheets.push(styles);
-    $root.innerHTML = `
-      <slot></slot>
-    `;
+@customElement('sudoku-option')
+export class SudokuOptionElement extends LitElement {
+  static styles = [style];
+  render() {
+    return html` <slot></slot> `;
   }
-}
-
-if (!customElements.get('sudoku-option')) {
-  customElements.define('sudoku-option', SudokuOptionElement);
 }

@@ -1,63 +1,56 @@
-import styles from './sudoku-input.css' with { type: 'css' };
+import style from './sudoku-input.css' with { type: 'css' };
 
-export class SudokuInputElement extends HTMLElement {
-  constructor() {
-    super();
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
-    const $root = this.attachShadow({
-      mode: 'open',
-    });
-    $root.adoptedStyleSheets.push(styles);
-    $root.innerHTML = `
+@customElement('sudoku-input')
+export class SudokuInputElement extends LitElement {
+  static styles = [style];
+
+  render() {
+    return html`
       <div class="buttons">
-      
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-        <button>5</button>
-        <button>6</button>
-        <button>7</button>
-        <button>8</button>
-        <button>9</button>
+        ${Array.from({ length: 9 }, (_, i) => {
+          const number = (i + 1).toString();
+          return html`
+            <button @pointerdown=${() => this.#handleInputDown(number)} @pointerup=${() => this.#handleInputUp(number)}>
+              ${number}
+            </button>
+          `;
+        })}
       </div>
       <div class="progress">
-        <div class="indicator" style="width: 50%"></div>
+        <div class="indicator" style="width: ${this.progress * 100}%;}"></div>
       </div>
     `;
   }
 
-  connectedCallback() {
-    this.shadowRoot
-      ?.querySelectorAll<HTMLButtonElement>('button')
-      .forEach(($button) => {
-        $button.addEventListener('pointerdown', () => {
-          let isCandidate = false;
-          // eslint-disable-next-line prefer-const
-          let timeout: ReturnType<typeof setTimeout>;
-          const emitInputEvent = () => {
-            this.dispatchEvent(
-              new CustomEvent(isCandidate ? 'input-candidate' : 'input-value', {
-                detail: +($button.textContent as string),
-              })
-            );
-            clearTimeout(timeout);
-          };
+  @property({ attribute: 'progress', type: Number })
+  accessor progress = 0;
 
-          timeout = setTimeout(() => {
-            isCandidate = true;
-            emitInputEvent();
-            $button.removeEventListener('pointerup', emitInputEvent);
-          }, 200);
+  #candidateTimeout?: ReturnType<typeof setTimeout>;
+  #handleInputDown = (value: string) => {
+    this.#candidateTimeout = setTimeout(() => {
+      this.#candidateTimeout = undefined;
+      this.#dispatchInputEvent(value);
+    }, 200);
+  };
 
-          $button.addEventListener('pointerup', emitInputEvent, {
-            once: true,
-          });
-        });
-      });
+  #handleInputUp = (value: string) => {
+    if (this.#candidateTimeout) {
+      this.#dispatchInputEvent(value);
+    }
+    clearTimeout(this.#candidateTimeout);
+    this.#candidateTimeout = undefined;
+  };
+
+  #dispatchInputEvent(value: string) {
+    const isCandidate = !this.#candidateTimeout;
+    const eventType = isCandidate ? 'input-candidate' : 'input-value';
+    this.dispatchEvent(
+      new CustomEvent(eventType, {
+        detail: value,
+      })
+    );
   }
-}
-
-if (!customElements.get('sudoku-input')) {
-  customElements.define('sudoku-input', SudokuInputElement);
 }

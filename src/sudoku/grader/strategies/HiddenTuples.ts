@@ -26,19 +26,14 @@ export class HiddenTuples implements IStrategy {
           const candidateCells = set.cells.filter(
             (cell) =>
               cell.candidates.length > 0 &&
-              cell.candidates.some((candidate) =>
-                combination.includes(candidate)
-              )
+              cell.candidates.some((candidate) => combination.includes(candidate))
           );
           if (candidateCells.length === this.size) {
-            const cover = new Set(
-              candidateCells.flatMap((cell) => cell.candidates)
-            );
+            const cover = new Set(candidateCells.flatMap((cell) => cell.candidates));
             if (combination.every((value) => cover.has(value))) {
               combination.forEach((candidate) => {
                 const affectedCells = set.cells.filter(
-                  (cell) =>
-                    !candidateCells.includes(cell) && cell.candidates.length > 0
+                  (cell) => !candidateCells.includes(cell) && cell.candidates.length > 0
                 );
                 affectedCells.forEach((cell) => {
                   const removeIndex = cell.candidates.indexOf(candidate);
@@ -62,10 +57,7 @@ export class HiddenTuples implements IStrategy {
     }
 
     return alternatives.flatMap((alternative, index) =>
-      this.combine(alternatives.slice(index + 1), size - 1).map((z) => [
-        alternative,
-        ...z,
-      ])
+      this.combine(alternatives.slice(index + 1), size - 1).map((z) => [alternative, ...z])
     );
   }
 }

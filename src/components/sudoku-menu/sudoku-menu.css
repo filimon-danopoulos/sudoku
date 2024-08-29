@@ -1,11 +1,10 @@
 :host {
   position: relative;
   display: flex;
-
 }
 
-svg {
-  fill: rgb(255, 255, 255);
+sudoku-icon {
+  --icon-color: rgb(255, 255, 255);
 }
 
 .sudoku-menu {
@@ -21,10 +20,6 @@ svg {
   width: 60vw;
 
   box-shadow: 0px 1px 5px 4px rgba(0, 0, 0, 0.2);
-
-  &[hidden] {
-    display: none;
-  }
 }
 
 ::slotted(hr) {

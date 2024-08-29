@@ -16,7 +16,7 @@ slot {
   display: flex;
 }
 
-slot[name="middle"] {
+slot[name='middle'] {
   flex: 1;
   justify-content: center;
 }

@@ -1,21 +1,16 @@
-import styles from './sudoku-board.css' with { type: 'css' };
+import style from './sudoku-board.css' with { type: 'css' };
+import { html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
-export class SudokuBoardElement extends HTMLElement {
-  constructor() {
-    super();
+@customElement('sudoku-board')
+export class SudokuBoardElement extends LitElement {
+  static styles = [style];
 
-    const $root = this.attachShadow({
-      mode: 'open',
-    });
-    $root.adoptedStyleSheets.push(styles);
-    $root.innerHTML = `
+  render() {
+    return html`
       <div class="sudoku-board">
         <slot></slot>
       </div>
     `;
   }
-}
-
-if (!customElements.get('sudoku-board')) {
-  customElements.define('sudoku-board', SudokuBoardElement);
 }

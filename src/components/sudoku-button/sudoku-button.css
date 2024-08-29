@@ -18,15 +18,14 @@ button:disabled {
 }
 
 button:hover {
-  background-color: rgba(0, 0, 0, 0.10);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 button:is(:active, [toggled]) {
-  background-color: rgba(0, 0, 0, 0.20);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
-::slotted(svg) {
-  fill: rgb(90, 90, 90);
-  width: 24px;
-  height: 24px;
+::slotted(sudoku-icon) {
+  --icon-color: rgb(90, 90, 90);
+  --icon-size: 24px;
 }

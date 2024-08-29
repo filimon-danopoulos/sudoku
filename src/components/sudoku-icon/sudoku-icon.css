@@ -1,0 +1,9 @@
+:host {
+  display: contents;
+}
+
+svg {
+  width: var(--icon-size, 24px);
+  height: var(--icon-size, 24px);
+  fill: var(--icon-color, black);
+}

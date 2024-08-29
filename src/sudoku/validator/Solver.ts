@@ -27,11 +27,8 @@ export class Solver {
    * it is mapped to actual values.
    */
   public solve(sudoku: (number | null)[][]) {
-    const sudokuRuleMatrixWithGivenNumbers =
-      this.applyGivenNumbersToRules(sudoku);
-    const linkedmatrix = new LinkedSparseMatrix(
-      sudokuRuleMatrixWithGivenNumbers
-    );
+    const sudokuRuleMatrixWithGivenNumbers = this.applyGivenNumbersToRules(sudoku);
+    const linkedmatrix = new LinkedSparseMatrix(sudokuRuleMatrixWithGivenNumbers);
     const solutions = [] as number[][];
     const stack = [] as number[];
 
@@ -98,11 +95,7 @@ export class Solver {
    */
   private findBestColumnToStartAt(root: MatrixEntry): MatrixEntry {
     let bestColumn = root.Right;
-    for (
-      let column = bestColumn.Right;
-      column !== root;
-      column = column.Right
-    ) {
+    for (let column = bestColumn.Right; column !== root; column = column.Right) {
       if (column.Size < bestColumn.Size) {
         bestColumn = column;
       }
@@ -124,12 +117,7 @@ export class Solver {
       const rowContraints = this.getRowContraints(entry);
       const columnContraints = this.getColumnConstraints(entry);
       const blockConstraints = this.getBlockConstraints(entry);
-      return [
-        ...cellConstraints,
-        ...rowContraints,
-        ...columnContraints,
-        ...blockConstraints,
-      ];
+      return [...cellConstraints, ...rowContraints, ...columnContraints, ...blockConstraints];
     });
   }
   private getCellContraints(entry: metadata): boolean[] {

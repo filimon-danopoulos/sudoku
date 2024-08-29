@@ -58,9 +58,7 @@ export class Generator {
           value,
         });
         this.#puzzle[row][column] = null;
-        this.#given = this.#given.filter(
-          (given) => !(given[0] === row && given[1] === column)
-        );
+        this.#given = this.#given.filter((given) => !(given[0] === row && given[1] === column));
       }
       if (solver.solve(this.#puzzle).length > 1) {
         for (let i = 0; i < removed.length; i++) {
@@ -111,10 +109,7 @@ export class Generator {
     return this.#puzzle.map((r, i) =>
       r.map(
         (y, l) =>
-          [
-            this.#solution[i][l],
-            this.#solution[i][l] === this.#puzzle[i][l],
-          ] as [number, boolean]
+          [this.#solution[i][l], this.#solution[i][l] === this.#puzzle[i][l]] as [number, boolean]
       )
     );
   }

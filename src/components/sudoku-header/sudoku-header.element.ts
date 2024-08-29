@@ -1,20 +1,15 @@
-import styles from './sudoku-header.css' with { type: 'css' };
+import style from './sudoku-header.css' with { type: 'css' };
 
-export class SudokuHeaderElement extends HTMLElement {
-  constructor() {
-    super();
+import { html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
-    const $root = this.attachShadow({
-      mode: 'open',
-    });
-    $root.adoptedStyleSheets.push(styles);
-    $root.innerHTML = `
+@customElement('sudoku-header')
+export class SudokuHeaderElement extends LitElement {
+  static styles = [style];
+  render() {
+    return html`
       <slot name="difficulty"></slot>
       <slot name="action"></slot>
     `;
   }
-}
-
-if (!customElements.get('sudoku-header')) {
-  customElements.define('sudoku-header', SudokuHeaderElement);
 }

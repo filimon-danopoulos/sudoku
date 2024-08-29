@@ -9,14 +9,13 @@
   user-select: none;
 }
 
-::slotted(svg) {
-  fill: rgb(75, 75, 75);
-  width: 18px;
-  height: 18px;
+::slotted(sudoku-icon) {
+  --icon-color: rgb(75, 75, 75);
+  --icon-size: 18px;
 }
 
 :host(:is(:hover, :focus)) {
-  background-color: rgba(0, 0, 0, 0.10);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 :host(:active) {

@@ -22,14 +22,10 @@ export class NakedTuples implements IStrategy {
         const combinations = this.combine(cells, this.size);
         combinations.forEach((combination) => {
           if (combination.length === this.size) {
-            const candidates = Array.from(
-              new Set(combination.flatMap((cell) => cell.candidates))
-            );
+            const candidates = Array.from(new Set(combination.flatMap((cell) => cell.candidates)));
             if (candidates.length === this.size) {
               candidates.forEach((candidate) => {
-                const others = set.cells.filter(
-                  (cell) => !combination.includes(cell)
-                );
+                const others = set.cells.filter((cell) => !combination.includes(cell));
                 others.forEach((cell) => {
                   const removeIndex = cell.candidates.indexOf(candidate);
                   if (removeIndex !== -1) {
@@ -53,10 +49,7 @@ export class NakedTuples implements IStrategy {
     }
 
     return alternatives.flatMap((alternative, index) =>
-      this.combine(alternatives.slice(index + 1), size - 1).map((z) => [
-        alternative,
-        ...z,
-      ])
+      this.combine(alternatives.slice(index + 1), size - 1).map((z) => [alternative, ...z])
     );
   }
 }

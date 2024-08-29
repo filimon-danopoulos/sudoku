@@ -18,13 +18,11 @@ export class Sudoku {
       this.rows[rowIndex] = this.rows[rowIndex] || new SudokuSet(rowIndex);
 
       for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
-        this.columns[columnIndex] =
-          this.columns[columnIndex] || new SudokuSet(columnIndex);
+        this.columns[columnIndex] = this.columns[columnIndex] || new SudokuSet(columnIndex);
         // ~~ faster than Math.floor?
         const blockIndex = ~~(rowIndex / 3) * 3 + ~~(columnIndex / 3);
 
-        this.blocks[blockIndex] =
-          this.blocks[blockIndex] || new SudokuSet(blockIndex);
+        this.blocks[blockIndex] = this.blocks[blockIndex] || new SudokuSet(blockIndex);
 
         const ratedCell = new SudokuCell(
           this.blocks[blockIndex],

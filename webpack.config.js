@@ -25,10 +25,7 @@ export default {
             },
           },
           {
-            use: [
-              devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-              'css-loader',
-            ],
+            use: [devMode ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader'],
           },
         ],
       },

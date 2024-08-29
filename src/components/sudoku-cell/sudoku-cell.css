@@ -6,7 +6,6 @@
   aspect-ratio: 1/1;
   font-size: min(7.5cqw, 7.5cqh);
   user-select: none;
-
 }
 
 :host::after {
@@ -14,48 +13,46 @@
   z-index: 1;
   top: 0;
   bottom: 0;
-  content: "";
+  content: '';
 }
 
-:host(:not([column="8"]))::after {
+:host(:not([column='8']))::after {
   width: 1px;
   right: -1px;
   background-color: black;
 }
 
-:host(:is([column="2"], [column="5"]))::after {
+:host(:is([column='2'], [column='5']))::after {
   width: 3px;
   right: -2px;
   background-color: black;
 }
 
-:host(:not([row="0"]))::after {
+:host(:not([row='0']))::after {
   top: -3px;
 }
-
 
 :host::before {
   position: absolute;
   z-index: 1;
   right: -1px;
   left: -1px;
-  content: "";
+  content: '';
 }
 
-:host(:not([row="8"]))::before {
+:host(:not([row='8']))::before {
   height: 1px;
   bottom: -1px;
   background-color: black;
 }
 
-:host(:is([row="2"], [row="5"]))::before {
+:host(:is([row='2'], [row='5']))::before {
   height: 3px;
   bottom: -2px;
   background-color: black;
 }
 
-
-:host(:is([row="2"], [row="5"]):not([row="0"]))::before {
+:host(:is([row='2'], [row='5']):not([row='0']))::before {
   left: -3px;
 }
 
@@ -73,11 +70,9 @@
   color: rgb(255, 255, 255);
 }
 
-
 :host([invalid][active]) {
   background-color: rgb(160, 75, 75);
 }
-
 
 .cell {
   display: flex;
@@ -96,10 +91,6 @@
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   box-sizing: border-box;
-}
-
-.cell-candidates[hidden] {
-  display: none;
 }
 
 .cell-candidate {

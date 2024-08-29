@@ -1,31 +1,20 @@
-import styles from './sudoku-button.css' with { type: 'css' };
+import style from './sudoku-button.css' with { type: 'css' };
 
-export class SudokuButtonElement extends HTMLElement {
-  #buttonElement: HTMLButtonElement;
-  constructor() {
-    super();
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
-    const $root = this.attachShadow({
-      mode: 'open',
-    });
-    $root.adoptedStyleSheets.push(styles);
-    $root.innerHTML = `
-      <button>
+@customElement('sudoku-button')
+export class SudokuButtonElement extends LitElement {
+  static styles = [style];
+
+  @property({ attribute: 'disabled', type: Boolean })
+  accessor disabled = false;
+
+  render() {
+    return html`
+      <button ?disabled=${this.disabled}>
         <slot></slot>
       </button>
     `;
-    this.#buttonElement = $root.querySelector('button') as HTMLButtonElement;
   }
-
-  get disabled() {
-    return this.hasAttribute('disabled');
-  }
-  set disabled(disabled) {
-    this.#buttonElement.disabled = disabled;
-    this.toggleAttribute('disabled', disabled);
-  }
-}
-
-if (!customElements.get('sudoku-button')) {
-  customElements.define('sudoku-button', SudokuButtonElement);
 }

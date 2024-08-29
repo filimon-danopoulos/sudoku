@@ -10,8 +10,7 @@ export default class LinkedSparseMatrix {
   constructor(data: boolean[][]) {
     this.root = new MatrixEntry(-1, -1);
     this.columnHeaders = [];
-    const sparseRepresentation =
-      this.convertDenseMatrixToSparseRepresentation(data);
+    const sparseRepresentation = this.convertDenseMatrixToSparseRepresentation(data);
     this.generateRows(sparseRepresentation);
   }
 
@@ -29,9 +28,7 @@ export default class LinkedSparseMatrix {
    * correponds to the index of a one. This greatly reduces the ammount
    * of elements we are required to keep track of.
    */
-  private convertDenseMatrixToSparseRepresentation(
-    data: boolean[][]
-  ): number[][] {
+  private convertDenseMatrixToSparseRepresentation(data: boolean[][]): number[][] {
     return data.map(
       (row) =>
         row.reduce((sparse, value, index) => {

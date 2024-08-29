@@ -1,13 +1,12 @@
 html {
   overscroll-behavior: none;
-  ;
 }
 
 body {
   all: unset;
   display: flex;
   background-color: rgb(250, 250, 250);
-  font-family: "Roboto", Verdana, sans-serif;
+  font-family: 'Roboto', Verdana, sans-serif;
 }
 
 * {

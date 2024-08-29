@@ -30,21 +30,11 @@ export class PointingCandidates implements IStrategy {
         const block = blocks[blockIndex];
         const emptyCells = block.cells.filter((cell) => !cell.value);
         const missingNumbers = block.missingNumbers;
-        for (
-          let missingIndex = 0;
-          missingIndex < missingNumbers.length;
-          missingIndex++
-        ) {
+        for (let missingIndex = 0; missingIndex < missingNumbers.length; missingIndex++) {
           const missing = missingNumbers[missingIndex];
-          const availableCells = emptyCells.filter((cell) =>
-            cell.candidates.includes(missing)
-          );
-          const affectedRows = Array.from(
-            new Set(availableCells.map((cell) => cell.row))
-          );
-          const affectedColumns = Array.from(
-            new Set(availableCells.map((cell) => cell.column))
-          );
+          const availableCells = emptyCells.filter((cell) => cell.candidates.includes(missing));
+          const affectedRows = Array.from(new Set(availableCells.map((cell) => cell.row)));
+          const affectedColumns = Array.from(new Set(availableCells.map((cell) => cell.column)));
 
           const simplify = (affectedCells: SudokuSet[]) => {
             if (affectedCells.length === 1) {

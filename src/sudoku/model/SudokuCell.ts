@@ -8,9 +8,7 @@ export class SudokuCell {
   }
   public set value(val: number | null) {
     if (val !== null) {
-      Array.from(
-        new Set([...this.block.cells, ...this.row.cells, ...this.column.cells])
-      )
+      Array.from(new Set([...this.block.cells, ...this.row.cells, ...this.column.cells]))
         .filter((cell) => !cell.value && cell !== this)
         .forEach((cell) => {
           const candidateIndex = cell.candidates.indexOf(val);
@@ -26,12 +24,7 @@ export class SudokuCell {
   public row: SudokuSet;
   public column: SudokuSet;
 
-  constructor(
-    block: SudokuSet,
-    row: SudokuSet,
-    column: SudokuSet,
-    value: number | null = null
-  ) {
+  constructor(block: SudokuSet, row: SudokuSet, column: SudokuSet, value: number | null = null) {
     this.block = block;
     this.row = row;
     this.column = column;
