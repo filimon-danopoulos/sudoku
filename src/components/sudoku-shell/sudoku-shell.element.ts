@@ -19,6 +19,7 @@ import redoIcon from '../../icons/redo.svg';
 import type { SudokuInputElement } from '../sudoku-input/sudoku-input.element';
 import { SudokuCelllement } from '../sudoku-cell/sudoku-cell.element';
 import { getPuzzle } from '../../puzzles/puzzle-service';
+import { SudokuButtonElement } from '../sudoku-button/sudoku-button.element';
 
 export class SudokuShellElement extends HTMLElement {
   #undoStack = [] as { candidates: string[]; value: string }[][];
@@ -26,8 +27,16 @@ export class SudokuShellElement extends HTMLElement {
   #saveState() {
     const state = this.#getState();
     this.#undoStack.push(state);
+    const $undoButton = this.shadowRoot?.querySelector(
+      'sudoku-button.undo'
+    ) as SudokuButtonElement;
+    $undoButton.disabled = false;
     if (this.#redoStack.length) {
       this.#redoStack.length = 0;
+      const $redoButton = this.shadowRoot?.querySelector(
+        'sudoku-button.redo'
+      ) as SudokuButtonElement;
+      $redoButton.disabled = true;
     }
   }
   #getState() {
@@ -64,6 +73,16 @@ export class SudokuShellElement extends HTMLElement {
       this.#redoStack.push(currentState);
       this.#applyState(previousState);
     }
+
+    const $undoButton = this.shadowRoot?.querySelector(
+      'sudoku-button.undo'
+    ) as SudokuButtonElement;
+    $undoButton.disabled = this.#undoStack.length === 0;
+
+    const $redoButton = this.shadowRoot?.querySelector(
+      'sudoku-button.redo'
+    ) as SudokuButtonElement;
+    $redoButton.disabled = this.#redoStack.length === 0;
   }
 
   redo() {
@@ -73,6 +92,16 @@ export class SudokuShellElement extends HTMLElement {
       this.#undoStack.push(currentState);
       this.#applyState(nextState);
     }
+
+    const $undoButton = this.shadowRoot?.querySelector(
+      'sudoku-button.undo'
+    ) as SudokuButtonElement;
+    $undoButton.disabled = this.#undoStack.length === 0;
+
+    const $redoButton = this.shadowRoot?.querySelector(
+      'sudoku-button.redo'
+    ) as SudokuButtonElement;
+    $redoButton.disabled = this.#redoStack.length === 0;
   }
 
   constructor() {
@@ -157,30 +186,35 @@ export class SudokuShellElement extends HTMLElement {
       }
     });
 
-    this.shadowRoot
-      ?.querySelector('sudoku-button.clear')
-      ?.addEventListener('click', () => {
-        const $cell = this.shadowRoot?.querySelector<SudokuCelllement>(
-          'sudoku-cell[active]'
-        );
-        if ($cell) {
-          this.#saveState();
-          $cell.value = '';
-          $cell.candidates = [];
-        }
-      });
+    const $clearButton = this.shadowRoot?.querySelector(
+      'sudoku-button.clear'
+    ) as SudokuButtonElement;
+    $clearButton.addEventListener('click', () => {
+      const $cell = this.shadowRoot?.querySelector<SudokuCelllement>(
+        'sudoku-cell[active]'
+      );
+      if ($cell && !$cell.given && ($cell.value || $cell.candidates.length)) {
+        this.#saveState();
+        $cell.value = '';
+        $cell.candidates = [];
+      }
+    });
 
-    this.shadowRoot
-      ?.querySelector('sudoku-button.undo')
-      ?.addEventListener('click', () => {
-        this.undo();
-      });
+    const $undoButton = this.shadowRoot?.querySelector(
+      'sudoku-button.undo'
+    ) as SudokuButtonElement;
+    $undoButton.addEventListener('click', () => {
+      this.undo();
+    });
+    $undoButton.disabled = this.#undoStack.length === 0;
 
-    this.shadowRoot
-      ?.querySelector('sudoku-button.redo')
-      ?.addEventListener('click', () => {
-        this.redo();
-      });
+    const $redoButton = this.shadowRoot?.querySelector(
+      'sudoku-button.redo'
+    ) as SudokuButtonElement;
+    $redoButton.addEventListener('click', () => {
+      this.redo();
+    });
+    $redoButton.disabled = this.#redoStack.length === 0;
 
     this.shadowRoot
       ?.querySelector('sudoku-option.new')

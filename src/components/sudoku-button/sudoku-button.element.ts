@@ -1,6 +1,7 @@
 import styles from './sudoku-button.css' with { type: 'css' };
 
 export class SudokuButtonElement extends HTMLElement {
+  #buttonElement: HTMLButtonElement;
   constructor() {
     super();
 
@@ -13,6 +14,15 @@ export class SudokuButtonElement extends HTMLElement {
         <slot></slot>
       </button>
     `;
+    this.#buttonElement = $root.querySelector('button') as HTMLButtonElement;
+  }
+
+  get disabled() {
+    return this.hasAttribute('disabled');
+  }
+  set disabled(disabled) {
+    this.#buttonElement.disabled = disabled;
+    this.toggleAttribute('disabled', disabled);
   }
 }
 
