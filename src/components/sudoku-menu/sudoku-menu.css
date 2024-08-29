@@ -1,5 +1,4 @@
 :host {
-  position: relative;
   display: flex;
 }
 
@@ -7,13 +6,21 @@ sudoku-icon {
   --icon-color: rgb(255, 255, 255);
 }
 
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+}
+
 .sudoku-menu {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: calc(100% + 4px);
-  right: 4px;
-  z-index: 2;
+  top: 44px;
+  right: 8px;
   border-radius: 4px;
 
   background-color: rgb(240, 240, 240);

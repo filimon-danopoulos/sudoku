@@ -15,28 +15,26 @@ export class SudokuMenuElement extends LitElement {
 
   render() {
     return html`
-      <sudoku-button ?toggled=${this._open} @click=${this.#handleClick}>
+      <sudoku-button ?toggled=${this._open} @click=${this.#open}>
         <sudoku-icon icon="ellipsis"></sudoku-icon>
       </sudoku-button>
       ${this._open
-        ? html`<div class="sudoku-menu">
-            <slot></slot>
-          </div>`
+        ? html`<div class="backdrop" @pointerup=${this.#close}>
+            <div class="sudoku-menu">
+              <slot></slot>
+            </div>
+          </div> `
         : null}
     `;
   }
 
-  #handleClick = () => {
-    if (this._open) {
-      document.addEventListener(
-        'mouseup',
-        () => {
-          this._open = false;
-        },
-        { once: true }
-      );
-    } else {
+  #open = () => {
+    if (!this._open) {
       this._open = true;
     }
+  };
+
+  #close = () => {
+    this._open = false;
   };
 }
