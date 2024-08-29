@@ -4,28 +4,8 @@
 
 }
 
-button {
-  all: unset;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 32px;
-}
-
-button:hover {
-  background-color: rgba(0, 0, 0, 0.10);
-}
-
-button:is(:active, [open]) {
-  background-color: rgba(0, 0, 0, 0.20);
-}
-
 svg {
   fill: rgb(255, 255, 255);
-  width: 24px;
-  height: 24px;
 }
 
 .sudoku-menu {

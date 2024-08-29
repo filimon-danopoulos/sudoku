@@ -1,33 +1,29 @@
 import styles from './sudoku-cell.css' with { type: 'css' };
 
-const $template = document.createElement('template');
-$template.innerHTML = `
-  <div class="cell">
-    <div class="cell-value"></div>
-    <div class="cell-candidates" hidden>
-      <div class="cell-candidate" hidden candidate="1">1</div>
-      <div class="cell-candidate" hidden candidate="2">2</div>
-      <div class="cell-candidate" hidden candidate="3">3</div>
-      <div class="cell-candidate" hidden candidate="4">4</div>
-      <div class="cell-candidate" hidden candidate="5">5</div>
-      <div class="cell-candidate" hidden candidate="6">6</div>
-      <div class="cell-candidate" hidden candidate="7">7</div>
-      <div class="cell-candidate" hidden candidate="8">8</div>
-      <div class="cell-candidate" hidden candidate="9">9</div>
-    </div>
-  </div>
-`;
-
 export class SudokuCelllement extends HTMLElement {
   constructor() {
     super();
 
-    this.attachShadow({
+    const $root = this.attachShadow({
       mode: 'open',
     });
-    this.shadowRoot?.adoptedStyleSheets.push(styles);
-    const $content = document.importNode($template.content, true);
-    this.shadowRoot?.appendChild($content);
+    $root.adoptedStyleSheets.push(styles);
+    $root.innerHTML = `
+      <div class="cell">
+        <div class="cell-value"></div>
+        <div class="cell-candidates" hidden>
+          <div class="cell-candidate" hidden candidate="1">1</div>
+          <div class="cell-candidate" hidden candidate="2">2</div>
+          <div class="cell-candidate" hidden candidate="3">3</div>
+          <div class="cell-candidate" hidden candidate="4">4</div>
+          <div class="cell-candidate" hidden candidate="5">5</div>
+          <div class="cell-candidate" hidden candidate="6">6</div>
+          <div class="cell-candidate" hidden candidate="7">7</div>
+          <div class="cell-candidate" hidden candidate="8">8</div>
+          <div class="cell-candidate" hidden candidate="9">9</div>
+        </div>
+      </div>
+    `;
   }
 
   static get observedAttributes() {

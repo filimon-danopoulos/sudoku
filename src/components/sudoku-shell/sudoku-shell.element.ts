@@ -13,33 +13,12 @@ import clearIcon from '../../icons/clear.svg';
 import validIcon from '../../icons/valid.svg';
 import penIcon from '../../icons/pen.svg';
 import fileIcon from '../../icons/file.svg';
+import undoIcon from '../../icons/undo.svg';
+import redoIcon from '../../icons/redo.svg';
 
 import type { SudokuInputElement } from '../sudoku-input/sudoku-input.element';
 import { SudokuCelllement } from '../sudoku-cell/sudoku-cell.element';
 import { getPuzzle } from '../../puzzles/puzzle-service';
-
-const $template = document.createElement('template');
-$template.innerHTML = `
-  <sudoku-header>
-    <span slot="difficulty">Difficulty</span>
-    <sudoku-menu slot="action">
-      <sudoku-option class="new">${fileIcon} New Game</sudoku-option>
-      <sudoku-option class="reset">${resetIcon} Reset Game</sudoku-option>
-      <hr>
-      <sudoku-option class="validate">${validIcon} Validate</sudoku-option>
-      <sudoku-option class="clear-validation">${clearIcon} Clear Validation</sudoku-option>
-      <hr>
-      <sudoku-option class="clear-notes">${penIcon} Clear Notes</sudoku-option>
-    </sudoku-menu>
-  </sudoku-header>
-  <div class="content">
-    <sudoku-board>
-      ${Array.from({ length: 81 }, (_, i) => `<sudoku-cell column="${i % 9}" row="${Math.floor(i / 9)}" ></sudoku-cell>`).join('\n')}
-    </sudoku-board>
-    <sudoku-input></sudoku-input>
-  </div>
-  <sudoku-controls></sudoku-controls>
-`;
 
 export class SudokuShellElement extends HTMLElement {
   #undoStack = [] as { candidates: string[]; value: string }[][];
@@ -99,12 +78,35 @@ export class SudokuShellElement extends HTMLElement {
   constructor() {
     super();
 
-    this.attachShadow({
+    const $root = this.attachShadow({
       mode: 'open',
     });
-    this.shadowRoot?.adoptedStyleSheets.push(styles);
-    const $content = document.importNode($template.content, true);
-    this.shadowRoot?.appendChild($content);
+    $root.adoptedStyleSheets.push(styles);
+    $root.innerHTML = `
+      <sudoku-header>
+        <span slot="difficulty">Difficulty</span>
+        <sudoku-menu slot="action">
+          <sudoku-option class="new">${fileIcon} New Game</sudoku-option>
+          <sudoku-option class="reset">${resetIcon} Reset Game</sudoku-option>
+          <hr>
+          <sudoku-option class="validate">${validIcon} Validate</sudoku-option>
+          <sudoku-option class="clear-validation">${clearIcon} Clear Validation</sudoku-option>
+          <hr>
+          <sudoku-option class="clear-notes">${penIcon} Clear Notes</sudoku-option>
+        </sudoku-menu>
+      </sudoku-header>
+      <div class="content">
+        <sudoku-board>
+          ${Array.from({ length: 81 }, (_, i) => `<sudoku-cell column="${i % 9}" row="${Math.floor(i / 9)}" ></sudoku-cell>`).join('\n')}
+        </sudoku-board>
+        <sudoku-input></sudoku-input>
+      </div>
+      <sudoku-controls>
+        <sudoku-button class="undo" slot="start">${undoIcon}</sudoku-button>  
+        <sudoku-button class="clear" slot="middle">${clearIcon}</sudoku-button>  
+        <sudoku-button class="redo" slot="end">${redoIcon}</sudoku-button>  
+      </sudoku-controls>
+    `;
   }
 
   loadPuzzle(puzzle: { solution: string; value: string }[]) {
@@ -155,17 +157,30 @@ export class SudokuShellElement extends HTMLElement {
       }
     });
 
-    const $controls =
-      this.shadowRoot?.querySelector<SudokuInputElement>('sudoku-controls');
-    $controls?.addEventListener('clear', () => {
-      const $cell = this.shadowRoot?.querySelector<SudokuCelllement>(
-        'sudoku-cell[active]'
-      );
-      if ($cell) {
-        $cell.value = '';
-        $cell.candidates = [];
-      }
-    });
+    this.shadowRoot
+      ?.querySelector('sudoku-button.clear')
+      ?.addEventListener('click', () => {
+        const $cell = this.shadowRoot?.querySelector<SudokuCelllement>(
+          'sudoku-cell[active]'
+        );
+        if ($cell) {
+          this.#saveState();
+          $cell.value = '';
+          $cell.candidates = [];
+        }
+      });
+
+    this.shadowRoot
+      ?.querySelector('sudoku-button.undo')
+      ?.addEventListener('click', () => {
+        this.undo();
+      });
+
+    this.shadowRoot
+      ?.querySelector('sudoku-button.redo')
+      ?.addEventListener('click', () => {
+        this.redo();
+      });
 
     this.shadowRoot
       ?.querySelector('sudoku-option.new')

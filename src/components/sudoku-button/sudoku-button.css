@@ -1,0 +1,27 @@
+:host {
+  display: contents;
+}
+
+button {
+  all: unset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 32px;
+}
+
+button:hover {
+  background-color: rgba(0, 0, 0, 0.10);
+}
+
+button:is(:active, [toggled]) {
+  background-color: rgba(0, 0, 0, 0.20);
+}
+
+::slotted(svg) {
+  fill: rgb(90, 90, 90);
+  width: 24px;
+  height: 24px;
+}
