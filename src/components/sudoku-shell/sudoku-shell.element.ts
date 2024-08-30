@@ -71,7 +71,7 @@ export class SudokuShellElement extends LitElement {
             <sudoku-icon icon="valid"></sudoku-icon>
             Validate
           </sudoku-option>
-          <sudoku-option class="clear-validation">
+          <sudoku-option @click=${this.#clearValidation}>
             <sudoku-icon icon="clear"></sudoku-icon>
             Clear Validation
           </sudoku-option>
@@ -113,6 +113,10 @@ export class SudokuShellElement extends LitElement {
         </sudoku-button>
       </sudoku-controls>
     `;
+  }
+
+  protected firstUpdated(): void {
+    document.addEventListener('keydown', this.#handleKeyboard, { capture: true });
   }
 
   #resetPuzzle = () => {
@@ -213,5 +217,59 @@ export class SudokuShellElement extends LitElement {
       }
       return cell;
     });
+  };
+
+  #clearValidation = () => {
+    this.puzzle = this.puzzle.map((cell) => {
+      if (!cell.given && cell.value) {
+        const newCell = structuredClone(cell);
+        newCell.invalid = false;
+        return newCell;
+      }
+      return cell;
+    });
+  };
+
+  #handleKeyboard = (e: KeyboardEvent) => {
+    switch (e.code) {
+      case 'ArrowUp':
+        this._activeIndex = this._activeIndex < 9 ? this._activeIndex + 72 : this._activeIndex - 9;
+        break;
+      case 'ArrowDown':
+        this._activeIndex = this._activeIndex > 71 ? this._activeIndex % 9 : this._activeIndex + 9;
+        break;
+      case 'ArrowRight':
+        this._activeIndex = this._activeIndex === 80 ? 0 : this._activeIndex + 1;
+        break;
+      case 'ArrowLeft':
+        this._activeIndex = this._activeIndex === 0 ? 80 : this._activeIndex - 1;
+        break;
+      case 'Backspace':
+        this.#clearActiveCell();
+        break;
+      case 'Digit1':
+      case 'Digit2':
+      case 'Digit3':
+      case 'Digit4':
+      case 'Digit5':
+      case 'Digit6':
+      case 'Digit7':
+      case 'Digit8':
+      case 'Digit9': {
+        const number = e.code.replace('Digit', '');
+        if (e.shiftKey) {
+          this.#inputCandidate(new CustomEvent('temp', { detail: number }));
+        } else {
+          this.#inputValue(new CustomEvent('temp', { detail: number }));
+        }
+        break;
+      }
+      case 'KeyZ':
+        if (e.ctrlKey && !e.shiftKey) {
+          this.#undo();
+        } else if (e.ctrlKey && e.shiftKey) {
+          this.#redo();
+        }
+    }
   };
 }
