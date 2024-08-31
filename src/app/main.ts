@@ -1,10 +1,11 @@
-import '../components/sudoku-shell/sudoku-shell.element';
+import '../views/sudoku-game.element';
+
 import '@fontsource/roboto';
 import { getPuzzle } from '../puzzles/puzzle-service';
-import type { SudokuShellElement } from '../components/sudoku-shell/sudoku-shell.element';
+import type { SudokuGameViewElement } from '../views/sudoku-game.element';
 
 export const main = () => {
-  const $app = document.createElement('sudoku-shell') as SudokuShellElement;
+  const $app = document.createElement('sudoku-game-view') as SudokuGameViewElement;
   document.body.appendChild($app);
 
   const puzzle = getPuzzle();

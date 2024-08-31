@@ -1,10 +1,10 @@
-import style from './sudoku-controls.css' with { type: 'css' };
+import style from './sudoku-footer.css' with { type: 'css' };
 
 import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-@customElement('sudoku-controls')
-export class SudokuControlsElement extends LitElement {
+@customElement('sudoku-footer')
+export class SudokuFooterElement extends LitElement {
   static styles = [style];
   render() {
     return html`
