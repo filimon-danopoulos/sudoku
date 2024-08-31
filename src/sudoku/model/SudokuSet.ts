@@ -1,17 +1,19 @@
 import { SudokuCell } from './SudokuCell';
 
 export class SudokuSet {
-  public cells: SudokuCell[];
+  cells: SudokuCell[];
+  index: number;
 
-  constructor(public index: number) {
+  constructor(index: number) {
     this.cells = [];
+    this.index = index;
   }
 
-  public add(cell: SudokuCell) {
+  add(cell: SudokuCell) {
     this.cells.push(cell);
   }
 
-  public get missingNumbers(): number[] {
+  get missingNumbers(): number[] {
     const result = [] as number[];
     for (let value = 1; value <= 9; value++) {
       if (this.cells.every((cell) => cell.value !== value)) {

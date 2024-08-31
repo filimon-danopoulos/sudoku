@@ -1,12 +1,13 @@
 import { SudokuSet } from './SudokuSet';
 
 export class SudokuCell {
-  public candidates: number[] = [];
-  private _value: number | null = null;
-  public get value(): number | null {
-    return this._value;
+  candidates: number[] = [];
+  #value: number | null = null;
+
+  get value(): number | null {
+    return this.#value;
   }
-  public set value(val: number | null) {
+  set value(val: number | null) {
     if (val !== null) {
       Array.from(new Set([...this.block.cells, ...this.row.cells, ...this.column.cells]))
         .filter((cell) => !cell.value && cell !== this)
@@ -18,23 +19,23 @@ export class SudokuCell {
         });
       this.candidates = [];
     }
-    this._value = val;
+    this.#value = val;
   }
-  public block: SudokuSet;
-  public row: SudokuSet;
-  public column: SudokuSet;
+  block: SudokuSet;
+  row: SudokuSet;
+  column: SudokuSet;
 
-  constructor(block: SudokuSet, row: SudokuSet, column: SudokuSet, value: number | null = null) {
+  constructor(block: SudokuSet, row: SudokuSet, column: SudokuSet, value: number = 0) {
     this.block = block;
     this.row = row;
     this.column = column;
-    this.candidates = this.calculateCandidates(value);
-    this.value = value;
+    this.candidates = [];
+    this.#value = value === 0 ? null : value;
   }
 
-  private calculateCandidates(value: number | null) {
-    if (value !== null) {
-      return [];
+  calculateCandidates() {
+    if (this.value) {
+      return;
     }
     const result = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     const influencers = Array.from(
@@ -45,6 +46,6 @@ export class SudokuCell {
       )
     );
     influencers.forEach((cell) => result.delete(cell.value as number));
-    return Array.from(result);
+    this.candidates = Array.from(result);
   }
 }

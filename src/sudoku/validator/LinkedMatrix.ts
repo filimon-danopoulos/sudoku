@@ -4,22 +4,22 @@ import MatrixEntry from './MatrixEntry';
  * A sparse matrix where each element is douply linked in both the row and column direction.
  */
 export default class LinkedSparseMatrix {
-  private root: MatrixEntry;
-  private columnHeaders: MatrixEntry[];
+  #root: MatrixEntry;
+  #columnHeaders: MatrixEntry[];
 
   constructor(data: boolean[][]) {
-    this.root = new MatrixEntry(-1, -1);
-    this.columnHeaders = [];
-    const sparseRepresentation = this.convertDenseMatrixToSparseRepresentation(data);
-    this.generateRows(sparseRepresentation);
+    this.#root = new MatrixEntry(-1, -1);
+    this.#columnHeaders = [];
+    const sparseRepresentation = this.#convertDenseMatrixToSparseRepresentation(data);
+    this.#generateRows(sparseRepresentation);
   }
 
-  public getColumnIndexOf(columnHeader: MatrixEntry): number {
-    return this.columnHeaders.indexOf(columnHeader);
+  getColumnIndexOf(columnHeader: MatrixEntry): number {
+    return this.#columnHeaders.indexOf(columnHeader);
   }
 
-  public get Root(): MatrixEntry {
-    return this.root;
+  get Root(): MatrixEntry {
+    return this.#root;
   }
 
   /**
@@ -28,7 +28,7 @@ export default class LinkedSparseMatrix {
    * correponds to the index of a one. This greatly reduces the ammount
    * of elements we are required to keep track of.
    */
-  private convertDenseMatrixToSparseRepresentation(data: boolean[][]): number[][] {
+  #convertDenseMatrixToSparseRepresentation(data: boolean[][]): number[][] {
     return data.map(
       (row) =>
         row.reduce((sparse, value, index) => {
@@ -49,14 +49,14 @@ export default class LinkedSparseMatrix {
    * the Down link all rows can be found. All entries in the entrire row can then
    * be found and excluded through the Right link.
    */
-  public cover(index: number): void {
-    const columnHeader = this.columnHeaders[index];
+  cover(index: number): void {
+    const columnHeader = this.#columnHeaders[index];
 
     columnHeader.horizontalExclude();
     for (let row = columnHeader.Down; row !== columnHeader; row = row.Down) {
       for (let entry = row.Right; entry !== row; entry = entry.Right) {
         entry.verticalExclude();
-        this.columnHeaders[entry.X].decrementSize();
+        this.#columnHeaders[entry.X].decrementSize();
       }
     }
   }
@@ -66,14 +66,14 @@ export default class LinkedSparseMatrix {
    * The same approach is taken as in the cover method but the Up and Left are used instead.
    * That way the original order is maintained.
    */
-  public uncover(index: number): void {
-    const columnHeader = this.columnHeaders[index];
+  uncover(index: number): void {
+    const columnHeader = this.#columnHeaders[index];
 
     columnHeader.horizontalInclude();
     for (let row = columnHeader.Up; row !== columnHeader; row = row.Up) {
       for (let entry = row.Left; entry !== row; entry = entry.Left) {
         entry.verticalInclude();
-        this.columnHeaders[entry.X].incrementSize();
+        this.#columnHeaders[entry.X].incrementSize();
       }
     }
   }
@@ -84,16 +84,16 @@ export default class LinkedSparseMatrix {
    * all required column headers exist. By linking the entries in both the row and column
    * direction the time it takes to traverse the matrix to find ones is greatly reduced.
    */
-  private generateRows(sparseRepresentation: number[][]) {
+  #generateRows(sparseRepresentation: number[][]) {
     sparseRepresentation.forEach((dataRow, i) => {
       const temporaryRowRoot = new MatrixEntry(-1, i);
       dataRow.forEach((dataPoint) => {
         const entry = new MatrixEntry(dataPoint, i);
 
-        if (this.columnHeaders.length <= dataPoint) {
-          this.appendColumnHeaders(dataPoint - this.columnHeaders.length + 1);
+        if (this.#columnHeaders.length <= dataPoint) {
+          this.#appendColumnHeaders(dataPoint - this.#columnHeaders.length + 1);
         }
-        const currentColumnHeader = this.columnHeaders[dataPoint];
+        const currentColumnHeader = this.#columnHeaders[dataPoint];
         currentColumnHeader.verticalInsert(entry);
         currentColumnHeader.incrementSize();
         temporaryRowRoot.horizontalInsert(entry);
@@ -107,11 +107,11 @@ export default class LinkedSparseMatrix {
    * These linked to the root element, each element in a row is also part of a linked list that
    * is based of a column header.
    */
-  private appendColumnHeaders(count: number): void {
+  #appendColumnHeaders(count: number): void {
     while (count--) {
-      const columnHeader = new MatrixEntry(this.columnHeaders.length, -1);
-      this.root.horizontalInsert(columnHeader);
-      this.columnHeaders.push(columnHeader);
+      const columnHeader = new MatrixEntry(this.#columnHeaders.length, -1);
+      this.#root.horizontalInsert(columnHeader);
+      this.#columnHeaders.push(columnHeader);
     }
   }
 }

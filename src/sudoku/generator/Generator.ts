@@ -36,7 +36,7 @@ export class Generator {
     this.#given = [];
   }
 
-  public generate() {
+  generate() {
     const solver = new Solver();
 
     // Reset internal state to make sure the generator is stateless
@@ -60,13 +60,13 @@ export class Generator {
         this.#puzzle[row][column] = null;
         this.#given = this.#given.filter((given) => !(given[0] === row && given[1] === column));
       }
-      if (solver.solve(this.#puzzle).length > 1) {
+      if (solver.solve(this.#puzzle).length !== 1) {
         for (let i = 0; i < removed.length; i++) {
           const { row, column, value } = removed[i];
           this.#puzzle[row][column] = value;
           this.#given.push([row, column]);
         }
-        if (this.#given.length <= 32) {
+        if (this.#given.length <= 28) {
           break;
         }
       }
@@ -105,12 +105,9 @@ export class Generator {
     return data;
   }
 
-  public getPuzzleData(): [number, boolean][][] {
+  getPuzzleData(): [number, boolean][][] {
     return this.#puzzle.map((r, i) =>
-      r.map(
-        (y, l) =>
-          [this.#solution[i][l], this.#solution[i][l] === this.#puzzle[i][l]] as [number, boolean]
-      )
+      r.map((y, l) => [this.#solution[i][l], this.#solution[i][l] === this.#puzzle[i][l]] as [number, boolean])
     );
   }
 

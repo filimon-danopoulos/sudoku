@@ -12,48 +12,45 @@ import { IStrategy } from './IStrategy';
  * We could thus remove the missing number from then candidates of that box that are not in the same line.
  */
 export class BoxLineReduction implements IStrategy {
-  public get rating() {
+  get name() {
+    return 'box/line reduction';
+  }
+
+  description = '';
+
+  get rating() {
     return Rating.Hard;
   }
+
   run(sudoku: Sudoku): boolean {
-    let initial = true;
-    let changed = false;
-    let result = changed;
-    while (initial || changed) {
-      if (initial) {
-        initial = false;
-      }
-      changed = false;
+    const lines = [...sudoku.rows, ...sudoku.columns];
+    for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+      const line = lines[lineIndex];
+      const missingNumbers = line.missingNumbers;
+      for (let missingIndex = 0; missingIndex < missingNumbers.length; missingIndex++) {
+        const missingNumber = missingNumbers[missingIndex];
 
-      const lines = [...sudoku.rows, ...sudoku.columns];
-      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-        const line = lines[lineIndex];
-        const missingNumbers = line.missingNumbers;
-        for (let missingIndex = 0; missingIndex < missingNumbers.length; missingIndex++) {
-          const missingNumber = missingNumbers[missingIndex];
+        const blocks = line.cells.reduce((result, cell) => {
+          if (cell.candidates.includes(missingNumber) && !result.includes(cell.block)) {
+            result.push(cell.block);
+          }
+          return result;
+        }, [] as SudokuSet[]);
 
-          const blocks = line.cells.reduce((result, cell) => {
-            if (cell.candidates.includes(missingNumber) && !result.includes(cell.block)) {
-              result.push(cell.block);
-            }
-            return result;
-          }, [] as SudokuSet[]);
-
-          if (blocks.length === 1) {
-            const block = blocks[0];
-            const affectedCellsInBlock = block.cells.filter((cell) => cell.candidates.includes(missingNumber));
-            for (let cellIndex = 0; cellIndex < affectedCellsInBlock.length; cellIndex++) {
-              const cell = affectedCellsInBlock[cellIndex];
-              const candidateIndex = cell.candidates.indexOf(missingNumber);
-              if (candidateIndex !== -1) {
-                cell.candidates.splice(candidateIndex, 1);
-                result = changed = true;
-              }
+        if (blocks.length === 1) {
+          const block = blocks[0];
+          const affectedCellsInBlock = block.cells.filter((cell) => cell.candidates.includes(missingNumber));
+          for (let cellIndex = 0; cellIndex < affectedCellsInBlock.length; cellIndex++) {
+            const cell = affectedCellsInBlock[cellIndex];
+            const candidateIndex = cell.candidates.indexOf(missingNumber);
+            if (candidateIndex !== -1) {
+              cell.candidates.splice(candidateIndex, 1);
+              return true;
             }
           }
         }
       }
     }
-    return result;
+    return false;
   }
 }

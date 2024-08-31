@@ -1,62 +1,84 @@
 import { Sudoku } from '../model/Sudoku';
-import { SimpleSingles } from './strategies/SimpleSingles';
+import { LastCell } from './strategies/LastCell';
 import { Rating as RATING } from './Rating';
 import { Slotting } from './strategies/Slotting';
 import { NakedSingles } from './strategies/NakedSingles';
 import { HiddenSingles } from './strategies/HiddenSingles';
 import { PointingCandidates } from './strategies/PointingCandidates';
 import { NakedTuples } from './strategies/NakedTuples';
+// import { BoxLineReduction } from './strategies/BoxLineReduction';
+import { HiddenTuples } from './strategies/HiddenTuples';
 
-type strategy = SimpleSingles;
+type strategy = LastCell;
 
-export class SudokuRater {
-  public rate(sudoku: Sudoku, solution: (number | ' ')[][]): RATING {
-    return this.solve(
-      sudoku,
-      [
-        new SimpleSingles(),
-        new Slotting(),
-        new NakedSingles(),
-        new HiddenSingles(),
-        new PointingCandidates(),
-        new NakedTuples(2),
-        new NakedTuples(3),
-        new NakedTuples(4),
-      ],
-      solution
-    );
+export class Grader {
+  grade(sudoku: Sudoku) {
+    return this.#solve(sudoku, [
+      new LastCell(),
+      new Slotting(),
+      new NakedSingles(),
+      new HiddenSingles(),
+      new PointingCandidates(),
+      // new BoxLineReduction(),
+      new NakedTuples(2),
+      new NakedTuples(3),
+      new NakedTuples(4),
+
+      new HiddenTuples(2),
+      new HiddenTuples(3),
+      new HiddenTuples(4),
+    ]);
   }
 
-  private solve(sudoku: Sudoku, strategies: strategy[], solution: (number | ' ')[][]) {
-    let rating = RATING.Unrated;
-
-    let changed = false;
-    do {
-      for (let strategyIndex = 0; strategyIndex < strategies.length; strategyIndex++) {
-        const strategy = strategies[strategyIndex];
-        const dirty = strategy.run(sudoku);
-
-        changed = dirty;
-        if (dirty) {
-          if (rating < strategy.rating) {
-            // console.log('Changing rating', rating, strategy.rating);
-            rating = strategy.rating;
-          }
-          break;
-        }
-        // console.log('----------------------------');
-      }
-      if (sudoku.cells.every((cell) => !!cell.value)) {
+  #solve(sudoku: Sudoku, strategies: strategy[]) {
+    let highestRating = RATING.Unrated;
+    let strategyIndex = 0;
+    const steps = [] as Sudoku[];
+    while (true) {
+      const strategy = strategies[strategyIndex];
+      if (!strategy) {
         break;
       }
-    } while (changed);
-    console.log(sudoku);
-    sudoku.rows.forEach((row) =>
-      solution.push(row.cells.map((cell) => (cell.value ? cell.value : ' ')))
-    );
-    if (sudoku.cells.every((cell) => !!cell.value)) {
-      return rating;
+      const previousState = structuredClone(sudoku);
+      const changed = strategy.run(sudoku);
+      // const sets = [...sudoku.blocks, ...sudoku.rows, ...sudoku.columns];
+      // if (
+      //   sets.some((set) => {
+      //     const solved = set.cells.filter((cell) => cell.value);
+      //     if (solved.length === 9) {
+      //       const unique = new Set(solved.map((cell) => cell.value));
+      //       if (unique.size !== 9) {
+      //         return true;
+      //       }
+      //     }
+      //     return false;
+      //   })
+      // ) {
+      //   throw new Error('fucky');
+      // }
+      if (changed) {
+        steps.push(previousState);
+        highestRating = Math.max(highestRating, strategy.rating);
+        // Make sure we always try the easiest solution first.
+        strategyIndex = 0;
+      } else {
+        strategyIndex++;
+      }
+      if (sudoku.emptyCells.length === 0) {
+        break;
+      }
     }
-    return RATING.VeryHard;
+
+    const isSolved = sudoku.emptyCells.length === 0;
+    if (isSolved) {
+      return {
+        rating: highestRating,
+        steps,
+      };
+    }
+    return {
+      rating: RATING.VeryHard,
+      steps,
+    };
   }
 }

@@ -13,12 +13,12 @@ type metadata = {
  * However it is stateless so once it has been initialized it can be be used to solve many puzzles.
  */
 export class Solver {
-  private rowMetaData: metadata[];
-  private sudokuRuleMatrix: boolean[][];
+  #rowMetaData: metadata[];
+  #sudokuRuleMatrix: boolean[][];
 
   constructor() {
-    this.rowMetaData = this.generateMatrixRows();
-    this.sudokuRuleMatrix = this.generateSudokuRuleMatrix();
+    this.#rowMetaData = this.#generateMatrixRows();
+    this.#sudokuRuleMatrix = this.#generateSudokuRuleMatrix();
   }
 
   /**
@@ -26,13 +26,13 @@ export class Solver {
    * Returns an array containing the rows that solve the array. It is fairly useless unless
    * it is mapped to actual values.
    */
-  public solve(sudoku: (number | null)[][]) {
-    const sudokuRuleMatrixWithGivenNumbers = this.applyGivenNumbersToRules(sudoku);
+  solve(sudoku: (number | null)[][]) {
+    const sudokuRuleMatrixWithGivenNumbers = this.#applyGivenNumbersToRules(sudoku);
     const linkedmatrix = new LinkedSparseMatrix(sudokuRuleMatrixWithGivenNumbers);
     const solutions = [] as number[][];
     const stack = [] as number[];
 
-    this.recurse(linkedmatrix, solutions, stack);
+    this.#recurse(linkedmatrix, solutions, stack);
 
     return solutions;
   }
@@ -42,9 +42,9 @@ export class Solver {
    * Only the rows that represent empty cells and given cells
    * are included in the matrix that is represents the exact cover problem.
    */
-  private applyGivenNumbersToRules(sudoku: (number | null)[][]): boolean[][] {
-    return this.sudokuRuleMatrix.filter((r, i) => {
-      const metadata = this.rowMetaData[i];
+  #applyGivenNumbersToRules(sudoku: (number | null)[][]): boolean[][] {
+    return this.#sudokuRuleMatrix.filter((r, i) => {
+      const metadata = this.#rowMetaData[i];
       const cellValue = sudoku[metadata.row][metadata.column];
       return cellValue === null || cellValue === metadata.value;
     });
@@ -55,18 +55,15 @@ export class Solver {
    * In order to keep it stateless an array is passed around that includes all the found solutions.
    * The current attempt is also passed around.
    */
-  private recurse(
-    linkedmatrix: LinkedSparseMatrix,
-    solutions: number[][],
-    currentAttempt: number[]
-  ): void {
+  #recurse(linkedmatrix: LinkedSparseMatrix, solutions: number[][], currentAttempt: number[]): void {
     const succeeded = linkedmatrix.Root.Right === linkedmatrix.Root;
     if (succeeded) {
+      // TODO: Why sort?
       solutions.push([...currentAttempt].sort());
       return;
     }
 
-    const bestColumn = this.findBestColumnToStartAt(linkedmatrix.Root);
+    const bestColumn = this.#findBestColumnToStartAt(linkedmatrix.Root);
     const failed = bestColumn.Size < 1;
     if (failed) {
       return;
@@ -79,7 +76,7 @@ export class Solver {
       for (let entry = row.Right; entry !== row; entry = entry.Right) {
         linkedmatrix.cover(entry.X);
       }
-      this.recurse(linkedmatrix, solutions, currentAttempt);
+      this.#recurse(linkedmatrix, solutions, currentAttempt);
       for (let entry = row.Left; entry !== row; entry = entry.Left) {
         linkedmatrix.uncover(entry.X);
       }
@@ -93,7 +90,7 @@ export class Solver {
    * that I see fit. Knuth suggest selecting the column with the fewest entried so
    * that is what I do here.
    */
-  private findBestColumnToStartAt(root: MatrixEntry): MatrixEntry {
+  #findBestColumnToStartAt(root: MatrixEntry): MatrixEntry {
     let bestColumn = root.Right;
     for (let column = bestColumn.Right; column !== root; column = column.Right) {
       if (column.Size < bestColumn.Size) {
@@ -111,16 +108,17 @@ export class Solver {
    * 3) A column can only contain a specific value, represented by columnConstraints
    * 4) A block can only contain a specific value, represented by blockConstraints
    */
-  private generateSudokuRuleMatrix(): boolean[][] {
-    return this.rowMetaData.map((entry) => {
-      const cellConstraints = this.getCellContraints(entry);
-      const rowContraints = this.getRowContraints(entry);
-      const columnContraints = this.getColumnConstraints(entry);
-      const blockConstraints = this.getBlockConstraints(entry);
+  #generateSudokuRuleMatrix(): boolean[][] {
+    return this.#rowMetaData.map((entry) => {
+      const cellConstraints = this.#getCellContraints(entry);
+      const rowContraints = this.#getRowContraints(entry);
+      const columnContraints = this.#getColumnConstraints(entry);
+      const blockConstraints = this.#getBlockConstraints(entry);
       return [...cellConstraints, ...rowContraints, ...columnContraints, ...blockConstraints];
     });
   }
-  private getCellContraints(entry: metadata): boolean[] {
+
+  #getCellContraints(entry: metadata): boolean[] {
     const result = [] as boolean[];
     const cell = entry.row * 9 + entry.column;
     for (let i = 0; i < 81; i++) {
@@ -129,7 +127,7 @@ export class Solver {
     return result;
   }
 
-  private getRowContraints(entry: metadata): boolean[] {
+  #getRowContraints(entry: metadata): boolean[] {
     const result = [] as boolean[];
     for (let row = 0; row < 9; row++) {
       for (let value = 1; value <= 9; value++) {
@@ -139,7 +137,7 @@ export class Solver {
     return result;
   }
 
-  private getColumnConstraints(entry: metadata): boolean[] {
+  #getColumnConstraints(entry: metadata): boolean[] {
     const result = [] as boolean[];
     for (let column = 0; column < 9; column++) {
       for (let value = 1; value <= 9; value++) {
@@ -149,7 +147,7 @@ export class Solver {
     return result;
   }
 
-  private getBlockConstraints(entry: metadata): boolean[] {
+  #getBlockConstraints(entry: metadata): boolean[] {
     const result = [] as boolean[];
     for (let block = 0; block < 9; block++) {
       for (let value = 1; value <= 9; value++) {
@@ -165,7 +163,7 @@ export class Solver {
    * of the cell in the sudoku. An entry represent the sudoku row column and
    * value in all permutaions.
    */
-  private generateMatrixRows(): metadata[] {
+  #generateMatrixRows(): metadata[] {
     const result = [] as metadata[];
     for (let row = 0; row < 9; row++) {
       for (let column = 0; column < 9; column++) {

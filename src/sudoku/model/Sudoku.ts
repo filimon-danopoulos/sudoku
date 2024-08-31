@@ -2,19 +2,30 @@ import { SudokuCell } from './SudokuCell';
 import { SudokuSet } from './SudokuSet';
 
 export class Sudoku {
-  public blocks: SudokuSet[];
-  public rows: SudokuSet[];
-  public columns: SudokuSet[];
-  public cells: SudokuCell[];
+  blocks: SudokuSet[];
+  rows: SudokuSet[];
+  columns: SudokuSet[];
+  cells: SudokuCell[];
 
-  constructor(rows: number[][]) {
+  constructor(cells: string) {
+    const rawRows = cells.split('').reduce(
+      (result, next) => {
+        if (result.at(-1)?.length === 9) {
+          result.push([]);
+        }
+        result.at(-1)?.push(+next);
+        return result;
+      },
+      [[]] as number[][]
+    );
+
     this.blocks = [];
     this.rows = [];
     this.columns = [];
     this.cells = [];
 
     for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
-      const cells = rows[rowIndex];
+      const cells = rawRows[rowIndex];
       this.rows[rowIndex] = this.rows[rowIndex] || new SudokuSet(rowIndex);
 
       for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
@@ -36,9 +47,11 @@ export class Sudoku {
         this.columns[columnIndex].add(ratedCell);
       }
     }
+
+    this.cells.forEach((cell) => cell.calculateCandidates());
   }
 
-  public get emptyCells(): SudokuCell[] {
+  get emptyCells(): SudokuCell[] {
     return this.cells.filter((cell) => !cell.value);
   }
 }
