@@ -2,19 +2,14 @@ import { Rating } from '../Rating';
 import { Sudoku } from '../../model/Sudoku';
 import { IStrategy } from './IStrategy';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const types = {
+  2: 'doubles',
+  3: 'tripplets',
+  4: 'quadrouples',
+};
+
 export class HiddenTuples implements IStrategy {
-  get name() {
-    const types = {
-      2: 'doubles',
-      3: 'tripplets',
-      4: 'quadrouples',
-    };
-
-    return `hidden ${types[this.#size]}`;
-  }
-
-  description = '';
-
   get rating() {
     return Rating.Hard;
   }
@@ -25,7 +20,7 @@ export class HiddenTuples implements IStrategy {
     this.#size = size;
   }
 
-  run(sudoku: Sudoku): boolean {
+  run(sudoku: Sudoku) {
     const sets = [...sudoku.blocks, ...sudoku.rows, ...sudoku.columns];
     sets.forEach((set) => {
       const missingNumbers = set.missingNumbers;
@@ -45,7 +40,7 @@ export class HiddenTuples implements IStrategy {
                 const removeIndex = cell.candidates.indexOf(candidate);
                 if (removeIndex !== -1) {
                   cell.candidates.splice(removeIndex, 1);
-                  return true;
+                  return { changed: true, descprition: 'hidden tupples' };
                 }
               });
             });
@@ -53,7 +48,7 @@ export class HiddenTuples implements IStrategy {
         }
       });
     });
-    return false;
+    return { changed: false };
   }
 
   #combine<T>(alternatives: T[], size: number): T[][] {

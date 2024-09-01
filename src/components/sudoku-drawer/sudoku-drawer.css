@@ -1,0 +1,91 @@
+:host {
+  height: 100dvh;
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
+  user-select: none;
+}
+
+.backdrop {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+}
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  width: min(70vw, 480px);
+  background-color: rgb(245, 245, 245);
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
+
+  & .header {
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 4px 4px 16px;
+
+    & .title {
+      font-weight: bold;
+      font-size: 16px;
+      color: rgb(105, 105, 105);
+    }
+  }
+
+  & .content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  & .sub-title {
+    background-color: rgb(215, 215, 215);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: rgb(95, 95, 95);
+    padding: 8px;
+  }
+
+  & .option {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    height: 48px;
+    align-items: center;
+    justify-content: start;
+    padding: 0 16px;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(85, 85, 85);
+
+    gap: 8px;
+
+    & sudoku-icon {
+      --icon-color: rgba(35, 35, 35, 0.7);
+    }
+
+    &:is(:hover, [active]) {
+      color: rgb(55, 55, 55);
+
+      & sudoku-icon {
+        --icon-color: rgba(35, 35, 35, 0.8);
+      }
+    }
+
+    &[active] {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+  }
+}

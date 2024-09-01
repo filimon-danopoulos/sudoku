@@ -12,17 +12,11 @@ import { IStrategy } from './IStrategy';
  * We could thus remove the missing number from then candidates of that line that are not in the same block.
  */
 export class PointingCandidates implements IStrategy {
-  get name() {
-    return 'pointing candidates';
-  }
-
-  description = '';
-
   get rating() {
     return Rating.Hard;
   }
 
-  run(sudoku: Sudoku): boolean {
+  run(sudoku: Sudoku) {
     const blocks = sudoku.blocks;
     for (let blockIndex = 0; blockIndex < blocks.length; blockIndex++) {
       const block = blocks[blockIndex];
@@ -35,29 +29,32 @@ export class PointingCandidates implements IStrategy {
         const affectedColumns = Array.from(new Set(availableCells.map((cell) => cell.column)));
 
         const simplify = (affectedCells: SudokuSet[]) => {
+          let dirty = false;
           if (affectedCells.length === 1) {
-            affectedCells[0].cells.forEach((cell) => {
+            const cells = affectedCells[0].cells;
+            for (let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+              const cell = cells[cellIndex];
               if (cell.block !== block) {
                 const removeIndex = cell.candidates.indexOf(missing);
                 if (removeIndex !== -1) {
                   cell.candidates.splice(removeIndex, 1);
-                  return true;
+                  dirty = true;
                 }
               }
-            });
+            }
           }
-          return false;
+          return dirty;
         };
 
         if (simplify(affectedRows)) {
-          return true;
+          return { changed: true, description: 'pointing candidates' };
         }
         // Only check columns if rows did not alter candidates
         if (simplify(affectedColumns)) {
-          return true;
+          return { changed: true, description: 'pointing candidates' };
         }
       }
     }
-    return false;
+    return { changed: false };
   }
 }

@@ -26,14 +26,14 @@ export class Sudoku {
 
     for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
       const cells = rawRows[rowIndex];
-      this.rows[rowIndex] = this.rows[rowIndex] || new SudokuSet(rowIndex);
+      this.rows[rowIndex] = this.rows[rowIndex] || new SudokuSet(rowIndex, 'row');
 
       for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
-        this.columns[columnIndex] = this.columns[columnIndex] || new SudokuSet(columnIndex);
+        this.columns[columnIndex] = this.columns[columnIndex] || new SudokuSet(columnIndex, 'column');
         // ~~ faster than Math.floor?
         const blockIndex = ~~(rowIndex / 3) * 3 + ~~(columnIndex / 3);
 
-        this.blocks[blockIndex] = this.blocks[blockIndex] || new SudokuSet(blockIndex);
+        this.blocks[blockIndex] = this.blocks[blockIndex] || new SudokuSet(blockIndex, 'block');
 
         const ratedCell = new SudokuCell(
           this.blocks[blockIndex],

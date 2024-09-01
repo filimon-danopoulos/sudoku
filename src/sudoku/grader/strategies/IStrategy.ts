@@ -3,7 +3,5 @@ import { Sudoku } from '../../model/Sudoku';
 
 export interface IStrategy {
   rating: Rating;
-  name: string;
-  description: string;
-  run(sudoku: Sudoku): boolean;
+  run(sudoku: Sudoku): { changed: boolean; description?: string };
 }

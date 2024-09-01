@@ -10,17 +10,11 @@ import { IStrategy } from './IStrategy';
  * in the block can take the value since one of the affecting lines contains that value.
  */
 export class Slotting implements IStrategy {
-  get name() {
-    return 'slotting';
-  }
-
-  description = '';
-
   get rating() {
     return Rating.Easy;
   }
 
-  run(sudoku: Sudoku): boolean {
+  run(sudoku: Sudoku) {
     for (let blockIndex = 0; blockIndex < sudoku.blocks.length; blockIndex++) {
       const block = sudoku.blocks[blockIndex];
       if (block.cells.every((cell) => !!cell.value)) {
@@ -48,11 +42,14 @@ export class Slotting implements IStrategy {
 
           if (isMissingNumberSlotted) {
             emptyCell.value = missingNumber;
-            return true;
+            return {
+              changed: true,
+              description: `All other cells in the block apart from target cell have number ${missingNumber} in either a row or column so the target cell is the only alternative for ${missingNumber}. `,
+            };
           }
         }
       }
     }
-    return false;
+    return { changed: false };
   }
 }

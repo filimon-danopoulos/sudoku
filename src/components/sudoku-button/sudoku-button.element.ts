@@ -10,6 +10,9 @@ export class SudokuButtonElement extends LitElement {
   @property({ attribute: 'disabled', type: Boolean })
   accessor disabled = false;
 
+  @property({ attribute: 'toggled', type: Boolean, reflect: true })
+  accessor toggled = false;
+
   render() {
     return html`
       <button ?disabled=${this.disabled}>

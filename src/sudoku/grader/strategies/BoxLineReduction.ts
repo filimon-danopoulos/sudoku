@@ -12,17 +12,11 @@ import { IStrategy } from './IStrategy';
  * We could thus remove the missing number from then candidates of that box that are not in the same line.
  */
 export class BoxLineReduction implements IStrategy {
-  get name() {
-    return 'box/line reduction';
-  }
-
-  description = '';
-
   get rating() {
     return Rating.Hard;
   }
 
-  run(sudoku: Sudoku): boolean {
+  run(sudoku: Sudoku) {
     const lines = [...sudoku.rows, ...sudoku.columns];
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
       const line = lines[lineIndex];
@@ -40,17 +34,21 @@ export class BoxLineReduction implements IStrategy {
         if (blocks.length === 1) {
           const block = blocks[0];
           const affectedCellsInBlock = block.cells.filter((cell) => cell.candidates.includes(missingNumber));
+          let dirty = false;
           for (let cellIndex = 0; cellIndex < affectedCellsInBlock.length; cellIndex++) {
             const cell = affectedCellsInBlock[cellIndex];
             const candidateIndex = cell.candidates.indexOf(missingNumber);
             if (candidateIndex !== -1) {
               cell.candidates.splice(candidateIndex, 1);
-              return true;
+              dirty = true;
             }
+          }
+          if (dirty) {
+            return { changed: true, description: 'box/line reduction' };
           }
         }
       }
     }
-    return false;
+    return { changed: false };
   }
 }

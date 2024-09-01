@@ -8,6 +8,7 @@ export class SudokuHeaderElement extends LitElement {
   static styles = [style];
   render() {
     return html`
+      <slot name="navigation"></slot>
       <slot name="title"></slot>
       <slot name="actions"></slot>
     `;

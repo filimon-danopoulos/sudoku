@@ -1,12 +1,16 @@
 import { SudokuCell } from './SudokuCell';
 
+type typeOptions = 'row' | 'column' | 'block';
+
 export class SudokuSet {
   cells: SudokuCell[];
   index: number;
+  type: typeOptions;
 
-  constructor(index: number) {
+  constructor(index: number, type: typeOptions) {
     this.cells = [];
     this.index = index;
+    this.type = type;
   }
 
   add(cell: SudokuCell) {

@@ -3,17 +3,11 @@ import { Sudoku } from '../../model/Sudoku';
 import { IStrategy } from './IStrategy';
 
 export class HiddenSingles implements IStrategy {
-  get name() {
-    return 'hidden singles';
-  }
-
-  description = '';
-
   get rating() {
     return Rating.Normal;
   }
 
-  run(sudoku: Sudoku): boolean {
+  run(sudoku: Sudoku) {
     const sets = [...sudoku.blocks, ...sudoku.rows, ...sudoku.columns];
     for (let setIndex = 0; setIndex < sets.length; setIndex++) {
       const set = sets[setIndex];
@@ -23,10 +17,10 @@ export class HiddenSingles implements IStrategy {
         const possibleCells = set.cells.filter((cell) => cell.candidates.includes(missingNumber));
         if (possibleCells.length === 1) {
           possibleCells[0].value = missingNumber;
-          return true;
+          return { changed: true, description: 'hidden singles' };
         }
       }
     }
-    return false;
+    return { changed: false };
   }
 }

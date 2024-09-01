@@ -6,7 +6,7 @@ import { NakedSingles } from './strategies/NakedSingles';
 import { HiddenSingles } from './strategies/HiddenSingles';
 import { PointingCandidates } from './strategies/PointingCandidates';
 import { NakedTuples } from './strategies/NakedTuples';
-// import { BoxLineReduction } from './strategies/BoxLineReduction';
+import { BoxLineReduction } from './strategies/BoxLineReduction';
 import { HiddenTuples } from './strategies/HiddenTuples';
 
 type strategy = LastCell;
@@ -18,29 +18,36 @@ export class Grader {
       new Slotting(),
       new NakedSingles(),
       new HiddenSingles(),
-      new PointingCandidates(),
-      // new BoxLineReduction(),
       new NakedTuples(2),
       new NakedTuples(3),
-      new NakedTuples(4),
-
+      new PointingCandidates(),
       new HiddenTuples(2),
       new HiddenTuples(3),
+      new BoxLineReduction(),
+      new NakedTuples(4),
       new HiddenTuples(4),
     ]);
+  }
+
+  #getSnapshot(sudoku: Sudoku) {
+    return sudoku.cells.map((cell) => ({
+      value: cell.value ? cell.value.toString() : '',
+      candidates: cell.candidates.map((x) => x.toString()),
+    }));
   }
 
   #solve(sudoku: Sudoku, strategies: strategy[]) {
     let highestRating = RATING.Unrated;
     let strategyIndex = 0;
-    const steps = [] as Sudoku[];
+    const steps = [
+      {
+        description: 'Initial',
+        snapshot: this.#getSnapshot(sudoku),
+      },
+    ] as { description: string; snapshot: { value: string; candidates: string[] }[] }[];
     while (true) {
       const strategy = strategies[strategyIndex];
-      if (!strategy) {
-        break;
-      }
-      const previousState = structuredClone(sudoku);
-      const changed = strategy.run(sudoku);
+      const { changed, description } = strategy.run(sudoku);
       // const sets = [...sudoku.blocks, ...sudoku.rows, ...sudoku.columns];
       // if (
       //   sets.some((set) => {
@@ -57,14 +64,24 @@ export class Grader {
       //   throw new Error('fucky');
       // }
       if (changed) {
-        steps.push(previousState);
+        steps.push({
+          description: description ?? '',
+          snapshot: this.#getSnapshot(sudoku),
+        });
         highestRating = Math.max(highestRating, strategy.rating);
         // Make sure we always try the easiest solution first.
         strategyIndex = 0;
       } else {
         strategyIndex++;
+        if (strategyIndex >= strategies.length) {
+          break;
+        }
       }
       if (sudoku.emptyCells.length === 0) {
+        steps.push({
+          description: description ?? '',
+          snapshot: this.#getSnapshot(sudoku),
+        });
         break;
       }
     }

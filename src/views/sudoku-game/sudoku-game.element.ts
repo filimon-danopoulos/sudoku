@@ -1,24 +1,30 @@
-import '../components/sudoku-shell/sudoku-shell.element';
-import '../components/sudoku-menu/sudoku-menu.element';
-import '../components/sudoku-option/sudoku-option.element';
-import '../components/sudoku-board/sudoku-board.element';
-import '../components/sudoku-cell/sudoku-cell.element';
-import '../components/sudoku-input/sudoku-input.element';
-import '../components/sudoku-icon/sudoku-icon.element';
+import '../../components/sudoku-shell/sudoku-shell.element';
+import '../../components/sudoku-menu/sudoku-menu.element';
+import '../../components/sudoku-option/sudoku-option.element';
+import '../../components/sudoku-board/sudoku-board.element';
+import '../../components/sudoku-cell/sudoku-cell.element';
+import '../../components/sudoku-input/sudoku-input.element';
+import '../../components/sudoku-icon/sudoku-icon.element';
 
 import style from './sudoku-game.css' with { type: 'css' };
 
-import type { puzzleCell } from '../puzzles/puzzle-service';
+import type { puzzleCell } from '../../puzzles/puzzle-service';
 
-import { html, LitElement } from 'lit';
+import { html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 @customElement('sudoku-game-view')
 export class SudokuGameViewElement extends LitElement {
   static styles = [style];
 
-  @property({ attribute: 'puzzle', type: Array })
-  accessor puzzle = [] as puzzleCell[];
+  @property({ attribute: 'puzzle', type: String })
+  accessor sudoku = '' as string;
+
+  @property({ attribute: 'solution', type: String })
+  accessor solution = '' as string;
+
+  @state()
+  private accessor _cells = [] as puzzleCell[];
 
   @state()
   private accessor _activeIndex = 0;
@@ -38,23 +44,37 @@ export class SudokuGameViewElement extends LitElement {
   }
 
   #getState() {
-    return this.puzzle.map((cell) => ({
+    return this._cells.map((cell) => ({
       candidates: [...cell.candidates],
       value: cell.value,
     }));
   }
 
   #applyState(state: { candidates: string[]; value: string }[]) {
-    this.puzzle = this.puzzle.map((cell, i) => ({
+    this._cells = this._cells.map((cell, i) => ({
       ...cell,
       candidates: cell.given ? cell.candidates : state[i].candidates,
       value: cell.given ? cell.value : state[i].value,
     }));
   }
 
+  protected willUpdate(changed: PropertyValues): void {
+    if (changed.has('sudoku') || changed.has('solution')) {
+      if (this.sudoku.length && this.solution.length) {
+        this._cells = this.sudoku.split('').map((cell, i) => ({
+          solution: this.solution[i],
+          given: true,
+          value: +cell ? cell : '',
+          candidates: [],
+          invalid: false,
+        }));
+      }
+    }
+  }
+
   render() {
     return html`
-      <sudoku-shell>
+      <sudoku-shell view="game">
         <span slot="header-title">Difficulty</span>
         <sudoku-menu slot="header-actions">
           <sudoku-option class="new">
@@ -82,7 +102,7 @@ export class SudokuGameViewElement extends LitElement {
         </sudoku-menu>
         <div class="content" slot="content">
           <sudoku-board>
-            ${this.puzzle.map(
+            ${this._cells.map(
               (cell, i) =>
                 html`<sudoku-cell
                   ?active=${i === this._activeIndex}
@@ -118,7 +138,7 @@ export class SudokuGameViewElement extends LitElement {
   }
 
   #resetPuzzle = () => {
-    this.puzzle = this.puzzle.map((cell) => ({
+    this._cells = this._cells.map((cell) => ({
       ...cell,
       candidates: cell.given ? cell.candidates : [],
       value: cell.given ? cell.value : '',
@@ -126,7 +146,7 @@ export class SudokuGameViewElement extends LitElement {
   };
 
   #inputValue = (e: CustomEvent & { detail: string }) => {
-    this.puzzle = this.puzzle.map((cell, i) => {
+    this._cells = this._cells.map((cell, i) => {
       if (i === this._activeIndex && !cell.given) {
         const newCell = structuredClone(cell);
         this.#saveState();
@@ -141,7 +161,7 @@ export class SudokuGameViewElement extends LitElement {
   };
 
   #inputCandidate = (e: CustomEvent & { detail: string }) => {
-    this.puzzle = this.puzzle.map((cell, i) => {
+    this._cells = this._cells.map((cell, i) => {
       if (i === this._activeIndex && !cell.given) {
         const newCell = structuredClone(cell);
         this.#saveState();
@@ -165,7 +185,7 @@ export class SudokuGameViewElement extends LitElement {
 
   #clearCandidates = () => {
     this.#saveState();
-    this.puzzle = this.puzzle.map((cell) => {
+    this._cells = this._cells.map((cell) => {
       if (!cell.given) {
         const newCell = structuredClone(cell);
         newCell.candidates = [];
@@ -194,7 +214,7 @@ export class SudokuGameViewElement extends LitElement {
   };
 
   #clearActiveCell = () => {
-    this.puzzle = this.puzzle.map((cell, i) => {
+    this._cells = this._cells.map((cell, i) => {
       if (i === this._activeIndex && !cell.given) {
         this.#saveState();
         const newCell = structuredClone(cell);
@@ -207,7 +227,7 @@ export class SudokuGameViewElement extends LitElement {
   };
 
   #validate = () => {
-    this.puzzle = this.puzzle.map((cell) => {
+    this._cells = this._cells.map((cell) => {
       if (!cell.given && cell.value) {
         const newCell = structuredClone(cell);
         newCell.invalid = cell.solution !== cell.value;
@@ -218,7 +238,7 @@ export class SudokuGameViewElement extends LitElement {
   };
 
   #clearValidation = () => {
-    this.puzzle = this.puzzle.map((cell) => {
+    this._cells = this._cells.map((cell) => {
       if (!cell.given && cell.value) {
         const newCell = structuredClone(cell);
         newCell.invalid = false;
