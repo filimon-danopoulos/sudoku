@@ -63,8 +63,8 @@ export class SudokuGameViewElement extends LitElement {
       if (this.sudoku.length && this.solution.length) {
         this._cells = this.sudoku.split('').map((cell, i) => ({
           solution: this.solution[i],
-          given: true,
-          value: +cell ? cell : '',
+          given: cell !== '0',
+          value: cell.replace('0', ''),
           candidates: [],
           invalid: false,
         }));
@@ -133,8 +133,14 @@ export class SudokuGameViewElement extends LitElement {
     `;
   }
 
-  protected firstUpdated(): void {
+  connectedCallback(): void {
+    super.connectedCallback();
     document.addEventListener('keydown', this.#handleKeyboard, { capture: true });
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('keydown', this.#handleKeyboard, { capture: true });
   }
 
   #resetPuzzle = () => {
@@ -146,6 +152,8 @@ export class SudokuGameViewElement extends LitElement {
   };
 
   #inputValue = (e: CustomEvent & { detail: string }) => {
+    console.log('test');
+
     this._cells = this._cells.map((cell, i) => {
       if (i === this._activeIndex && !cell.given) {
         const newCell = structuredClone(cell);
@@ -278,6 +286,7 @@ export class SudokuGameViewElement extends LitElement {
         if (e.shiftKey) {
           this.#inputCandidate(new CustomEvent('temp', { detail: number }));
         } else {
+          console.log(e);
           this.#inputValue(new CustomEvent('temp', { detail: number }));
         }
         break;

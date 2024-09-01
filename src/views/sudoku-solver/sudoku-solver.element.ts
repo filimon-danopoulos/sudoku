@@ -33,7 +33,6 @@ export class SudokuSolverViewElement extends LitElement {
       const { steps } = grader.grade(sudoku);
       this._steps = steps;
     }
-    console.log(this._currentStep, this._steps.length);
   }
 
   render() {
@@ -71,8 +70,14 @@ export class SudokuSolverViewElement extends LitElement {
     `;
   }
 
-  protected firstUpdated(): void {
+  connectedCallback(): void {
+    super.connectedCallback();
     document.addEventListener('keydown', this.#handleKeyboard, { capture: true });
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener('keydown', this.#handleKeyboard, { capture: true });
   }
 
   #getCurrentStep = () => {
