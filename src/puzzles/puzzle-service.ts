@@ -6,7 +6,6 @@ const puzzles = [
 ];
 
 export type puzzleCell = {
-  solution: string;
   given: boolean;
   value: string;
   candidates: string[];
@@ -18,7 +17,6 @@ export function getPuzzle(): puzzleCell[] {
     const valueNumber = +valueString;
     if (valueNumber < 1) {
       return {
-        solution: (valueNumber * 10).toString(),
         given: false,
         value: '',
         candidates: [],
@@ -26,7 +24,6 @@ export function getPuzzle(): puzzleCell[] {
       };
     } else {
       return {
-        solution: valueString,
         given: true,
         value: valueString,
         candidates: [],

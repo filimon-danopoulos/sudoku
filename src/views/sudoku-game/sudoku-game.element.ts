@@ -17,11 +17,8 @@ import { customElement, property, state } from 'lit/decorators.js';
 export class SudokuGameViewElement extends LitElement {
   static styles = [style];
 
-  @property({ attribute: 'puzzle', type: String })
+  @property({ attribute: 'sudoku', type: String })
   accessor sudoku = '' as string;
-
-  @property({ attribute: 'solution', type: String })
-  accessor solution = '' as string;
 
   @state()
   private accessor _cells = [] as puzzleCell[];
@@ -59,10 +56,9 @@ export class SudokuGameViewElement extends LitElement {
   }
 
   protected willUpdate(changed: PropertyValues): void {
-    if (changed.has('sudoku') || changed.has('solution')) {
-      if (this.sudoku.length && this.solution.length) {
-        this._cells = this.sudoku.split('').map((cell, i) => ({
-          solution: this.solution[i],
+    if (changed.has('sudoku')) {
+      if (this.sudoku.length) {
+        this._cells = this.sudoku.split('').map((cell) => ({
           given: cell !== '0',
           value: cell.replace('0', ''),
           candidates: [],
@@ -90,10 +86,6 @@ export class SudokuGameViewElement extends LitElement {
             <sudoku-icon icon="valid"></sudoku-icon>
             Validate
           </sudoku-option>
-          <sudoku-option @click=${this.#clearValidation}>
-            <sudoku-icon icon="clear"></sudoku-icon>
-            Clear Validation
-          </sudoku-option>
           <hr />
           <sudoku-option @click=${this.#clearCandidates}>
             <sudoku-icon icon="pen"></sudoku-icon>
@@ -110,14 +102,17 @@ export class SudokuGameViewElement extends LitElement {
                   ?invalid=${cell.invalid}
                   .candidates=${cell.candidates}
                   value=${cell.value ?? ''}
-                  solution=${cell.solution ?? ''}
                   column=${i % 9}
                   row=${Math.floor(i / 9)}
                   @click=${() => (this._activeIndex = i)}
                 ></sudoku-cell>`
             )}
           </sudoku-board>
-          <sudoku-input @input-value=${this.#inputValue} @input-candidate=${this.#inputCandidate}></sudoku-input>
+          <sudoku-input
+            @input-value=${(e: CustomEvent) => this.#inputValue(e.detail as string)}
+            @input-candidate=${(e: CustomEvent) => this.#inputCandidate(e.detail as string)}
+            progress=${this.#getProgress()}
+          ></sudoku-input>
         </div>
 
         <sudoku-button slot="footer-start" @click=${this.#undo} ?disabled=${!this._undoStack.length}>
@@ -151,15 +146,13 @@ export class SudokuGameViewElement extends LitElement {
     }));
   };
 
-  #inputValue = (e: CustomEvent & { detail: string }) => {
-    console.log('test');
-
+  #inputValue = (value: string) => {
     this._cells = this._cells.map((cell, i) => {
       if (i === this._activeIndex && !cell.given) {
         const newCell = structuredClone(cell);
         this.#saveState();
-        newCell.value = e.detail;
-        if (e.detail && newCell.candidates.length) {
+        newCell.value = value;
+        if (value && newCell.candidates.length) {
           newCell.candidates = [];
         }
         return newCell;
@@ -168,20 +161,19 @@ export class SudokuGameViewElement extends LitElement {
     });
   };
 
-  #inputCandidate = (e: CustomEvent & { detail: string }) => {
+  #inputCandidate = (candidate: string) => {
     this._cells = this._cells.map((cell, i) => {
       if (i === this._activeIndex && !cell.given) {
         const newCell = structuredClone(cell);
         this.#saveState();
 
-        const candidate = (e as CustomEvent).detail;
         if (newCell.candidates.includes(candidate)) {
           newCell.candidates = cell.candidates.filter((c) => c !== candidate);
         } else {
           newCell.candidates = [...cell.candidates, candidate];
         }
 
-        if (e.detail && cell.value) {
+        if (candidate && cell.value) {
           newCell.value = '';
         }
 
@@ -235,26 +227,21 @@ export class SudokuGameViewElement extends LitElement {
   };
 
   #validate = () => {
-    this._cells = this._cells.map((cell) => {
-      if (!cell.given && cell.value) {
-        const newCell = structuredClone(cell);
-        newCell.invalid = cell.solution !== cell.value;
-        return newCell;
-      }
-      return cell;
-    });
+    // this._cells = this._cells.map((cell) => {
+    //   if (!cell.given && cell.value) {
+    //     const newCell = structuredClone(cell);
+    //     newCell.invalid = cell.solution !== cell.value;
+    //     return newCell;
+    //   }
+    //   return cell;
+    // });
   };
 
-  #clearValidation = () => {
-    this._cells = this._cells.map((cell) => {
-      if (!cell.given && cell.value) {
-        const newCell = structuredClone(cell);
-        newCell.invalid = false;
-        return newCell;
-      }
-      return cell;
-    });
-  };
+  #getProgress() {
+    return (
+      this._cells.filter((c) => !c.given && c.value).length / this.sudoku.split('').filter((c) => c === '0').length
+    );
+  }
 
   #handleKeyboard = (e: KeyboardEvent) => {
     switch (e.code) {
@@ -284,10 +271,9 @@ export class SudokuGameViewElement extends LitElement {
       case 'Digit9': {
         const number = e.code.replace('Digit', '');
         if (e.shiftKey) {
-          this.#inputCandidate(new CustomEvent('temp', { detail: number }));
+          this.#inputCandidate(number);
         } else {
-          console.log(e);
-          this.#inputValue(new CustomEvent('temp', { detail: number }));
+          this.#inputValue(number);
         }
         break;
       }

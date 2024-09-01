@@ -3,24 +3,34 @@ import '../views/sudoku-solver/sudoku-solver.element';
 
 import '@fontsource/roboto';
 import { html, render } from 'lit';
+import { registerRoutes } from './router';
 
+const routes = {
+  '': '/sudoku/new/normal',
+  '/': '/sudoku/new/normal',
+  '/sudoku': '/sudoku/new/normal',
+  '/sudoku/new': '/sudoku/new/normal',
+  '/sudoku/new/:difficulty': (difficulty: string) => {
+    window.location.hash = '#/sudoku/720096003000205000080004020000000060106503807040000000030800090000702000200430018';
+    return 'redirect';
+  },
+  '/sudoku/:puzle': (puzzle: string) => {
+    return html`<sudoku-game-view sudoku=${puzzle}></sudoku-game-view>`;
+  },
+  '/solver': () => {
+    return html`<sudoku-solver-view></sudoku-solver-view>`;
+  },
+  '/solver/:puzle': (puzzle: string) => {
+    return html`<sudoku-solver-view sudoku=${puzzle}></sudoku-solver-view>`;
+  },
+} as Record<string, string | ((...params: unknown[]) => unknown)>;
+
+let running = false;
 export const main = () => {
-  let view = 'solver';
-  const puzzle = '720096003000205000080004020000000060106503807040000000030800090000702000200430018';
-  const solution = '725196483463285971981374526372948165196523847548617239634851792819762354257439618';
-
-  const update = () =>
-    render(
-      view === 'game'
-        ? html`<sudoku-game-view puzzle=${puzzle} solution=${solution}></sudoku-game-view>`
-        : html`<sudoku-solver-view></sudoku-solver-view>`,
-      document.body
-    );
-
-  document.addEventListener('navigate', (e: Event) => {
-    view = (e as CustomEvent<string>).detail;
-    update();
-  });
-
-  update();
+  if (running) {
+    return;
+  }
+  running = true;
+  const update = (view: unknown) => render(view, document.body);
+  registerRoutes(routes, update);
 };

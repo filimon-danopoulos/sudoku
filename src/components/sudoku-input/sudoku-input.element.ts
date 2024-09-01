@@ -20,7 +20,7 @@ export class SudokuInputElement extends LitElement {
         })}
       </div>
       <div class="progress">
-        <div class="indicator" style="width: ${this.progress * 100}%;}"></div>
+        <div class="indicator ${this.progress === 1 ? 'complete' : ''}" style="width: ${this.progress * 100}%;}"></div>
       </div>
     `;
   }

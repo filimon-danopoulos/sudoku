@@ -4,14 +4,11 @@ import '../sudoku-button/sudoku-button.element';
 import { html, LitElement } from 'lit';
 import style from './sudoku-drawer.css' with { type: 'css' };
 
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 
 @customElement('sudoku-drawer')
 export class SudokuDrawerElement extends LitElement {
   static styles = [style];
-
-  @property({ attribute: 'view', type: String })
-  accessor view = '';
 
   render() {
     return html`<div class="backdrop" @click=${this.#close}>
@@ -25,14 +22,14 @@ export class SudokuDrawerElement extends LitElement {
 
         <div class="content">
           <div class="sub-title">Navigation</div>
-          <div class="option" ?active=${this.view === 'game'} @click=${() => this.#navigate('game')}>
+          <a class="option" ?active=${this.#isActivePath('#/sudoku')} href="#/sudoku/new/">
             <sudoku-icon icon="dice"></sudoku-icon>
             Game
-          </div>
-          <div class="option" ?active=${this.view === 'solver'} @click=${() => this.#navigate('solver')}>
+          </a>
+          <a class="option" ?active=${this.#isActivePath('#/solver')} href="#/solver">
             <sudoku-icon icon="question"></sudoku-icon>
             Solver
-          </div>
+          </a>
         </div>
       </div>
     </div>`;
@@ -42,15 +39,7 @@ export class SudokuDrawerElement extends LitElement {
     this.dispatchEvent(new Event('close'));
   }
 
-  #navigate(view: string) {
-    if (this.view !== view) {
-      this.dispatchEvent(
-        new CustomEvent('navigate', {
-          composed: true,
-          bubbles: true,
-          detail: view,
-        })
-      );
-    }
+  #isActivePath(path: string) {
+    return window.location.hash?.startsWith(path);
   }
 }

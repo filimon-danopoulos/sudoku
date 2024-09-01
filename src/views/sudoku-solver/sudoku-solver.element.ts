@@ -9,7 +9,7 @@ import '../../components/sudoku-icon/sudoku-icon.element';
 import style from './sudoku-solver.css' with { type: 'css' };
 
 import { html, LitElement, PropertyValues } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, state, property } from 'lit/decorators.js';
 import { Grader } from '../../sudoku/grader/Grader';
 import { Sudoku } from '../../sudoku/model/Sudoku';
 
@@ -17,8 +17,8 @@ import { Sudoku } from '../../sudoku/model/Sudoku';
 export class SudokuSolverViewElement extends LitElement {
   static styles = [style];
 
-  @state()
-  private accessor _puzzle = '';
+  @property({ attribute: 'sudoku', type: String })
+  sudoku = '';
 
   @state()
   private accessor _currentStep = 0;
@@ -27,8 +27,8 @@ export class SudokuSolverViewElement extends LitElement {
   private accessor _steps = [] as { description: string; snapshot: { value: string; candidates: string[] }[] }[];
 
   protected willUpdate(changed: PropertyValues): void {
-    if (changed.has('_puzzle') && this._puzzle.length === 81) {
-      const sudoku = new Sudoku(this._puzzle);
+    if (changed.has('sudoku') && this.sudoku.length === 81) {
+      const sudoku = new Sudoku(this.sudoku);
       const grader = new Grader();
       const { steps } = grader.grade(sudoku);
       this._steps = steps;
@@ -40,12 +40,7 @@ export class SudokuSolverViewElement extends LitElement {
       <sudoku-shell view="solver">
         <span slot="header-title">Solver</span>
         <div class="content" slot="content">
-          <input
-            .value=${this._puzzle}
-            maxlength="81"
-            @input=${(e: InputEvent) => (this._puzzle = (e.target as HTMLInputElement).value ?? '')}
-          />
-          ${this._puzzle.length === 81
+          ${this.sudoku.length === 81
             ? html`<sudoku-board>
                   ${this.#getCurrentStep()?.map(
                     (cell, i) =>
@@ -88,7 +83,7 @@ export class SudokuSolverViewElement extends LitElement {
   }
 
   #getCurrentStep = () => {
-    if (this._puzzle.length !== 81) {
+    if (this.sudoku.length !== 81) {
       return;
     }
     const cells = this._steps[this._currentStep].snapshot;
