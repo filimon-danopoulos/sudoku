@@ -9,7 +9,7 @@ import '../../components/sudoku-icon/sudoku-icon.element';
 import style from './sudoku-solver.css' with { type: 'css' };
 
 import { html, LitElement, PropertyValues } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import { Grader } from '../../sudoku/grader/Grader';
 import { Sudoku } from '../../sudoku/model/Sudoku';
 
@@ -17,8 +17,8 @@ import { Sudoku } from '../../sudoku/model/Sudoku';
 export class SudokuSolverViewElement extends LitElement {
   static styles = [style];
 
-  @property({ attribute: 'puzzle', type: String })
-  accessor puzzle = '';
+  @state()
+  private accessor _puzzle = '';
 
   @state()
   private accessor _currentStep = 0;
@@ -27,8 +27,8 @@ export class SudokuSolverViewElement extends LitElement {
   private accessor _steps = [] as { description: string; snapshot: { value: string; candidates: string[] }[] }[];
 
   protected willUpdate(changed: PropertyValues): void {
-    if (changed.has('puzzle')) {
-      const sudoku = new Sudoku(this.puzzle);
+    if (changed.has('_puzzle') && this._puzzle.length === 81) {
+      const sudoku = new Sudoku(this._puzzle);
       const grader = new Grader();
       const { steps } = grader.grade(sudoku);
       this._steps = steps;
@@ -40,20 +40,27 @@ export class SudokuSolverViewElement extends LitElement {
       <sudoku-shell view="solver">
         <span slot="header-title">Solver</span>
         <div class="content" slot="content">
-          <sudoku-board>
-            ${this.#getCurrentStep().map(
-              (cell, i) =>
-                html`<sudoku-cell
-                  ?given=${cell.given}
-                  ?active=${cell.active}
-                  .candidates=${cell.candidates}
-                  value=${cell.value ?? ''}
-                  column=${i % 9}
-                  row=${Math.floor(i / 9)}
-                ></sudoku-cell>`
-            )}
-          </sudoku-board>
-          <div class="description">${this._steps[this._currentStep].description}</div>
+          <input
+            .value=${this._puzzle}
+            maxlength="81"
+            @input=${(e: InputEvent) => (this._puzzle = (e.target as HTMLInputElement).value ?? '')}
+          />
+          ${this._puzzle.length === 81
+            ? html`<sudoku-board>
+                  ${this.#getCurrentStep()?.map(
+                    (cell, i) =>
+                      html`<sudoku-cell
+                        ?given=${cell.given}
+                        ?active=${cell.active}
+                        .candidates=${cell.candidates}
+                        value=${cell.value ?? ''}
+                        column=${i % 9}
+                        row=${Math.floor(i / 9)}
+                      ></sudoku-cell>`
+                  )}
+                </sudoku-board>
+                <div class="description">${this._steps[this._currentStep]?.description}</div>`
+            : null}
         </div>
 
         <sudoku-button slot="footer-start" @click=${() => this.#step('backward')} ?disabled=${this._currentStep <= 0}>
@@ -81,6 +88,9 @@ export class SudokuSolverViewElement extends LitElement {
   }
 
   #getCurrentStep = () => {
+    if (this._puzzle.length !== 81) {
+      return;
+    }
     const cells = this._steps[this._currentStep].snapshot;
     return cells.map((cell, i) => {
       return {

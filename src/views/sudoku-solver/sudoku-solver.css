@@ -17,3 +17,7 @@ sudoku-board {
   /* 46 is the height of the input element */
   width: min(100cqw, 66cqh);
 }
+
+input {
+  width: min(100cqw, 66cqh);
+}
