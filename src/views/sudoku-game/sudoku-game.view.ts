@@ -8,13 +8,13 @@ import '../../components/sudoku-icon/sudoku-icon.element';
 
 import style from './sudoku-game.css' with { type: 'css' };
 
-import type { puzzleCell } from '../../puzzles/puzzle-service';
+import type { puzzleCell } from '../../storage/puzzle-service';
 
 import { html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 @customElement('sudoku-game-view')
-export class SudokuGameViewElement extends LitElement {
+export class SudokuGameView extends LitElement {
   static styles = [style];
 
   @property({ attribute: 'sudoku', type: String })

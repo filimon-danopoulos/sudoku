@@ -14,7 +14,7 @@ import { Grader } from '../../sudoku/grader/Grader';
 import { Sudoku } from '../../sudoku/model/Sudoku';
 
 @customElement('sudoku-solver-view')
-export class SudokuSolverViewElement extends LitElement {
+export class SudokuSolverView extends LitElement {
   static styles = [style];
 
   @property({ attribute: 'sudoku', type: String })

@@ -1,4 +1,4 @@
-import { Solver } from '../validator/Solver.js';
+import { Solver } from '../validator/Solver';
 
 const BASE = [
   [3, 6, 1, 7, 2, 5, 9, 4, 8],
@@ -105,10 +105,17 @@ export class Generator {
     return data;
   }
 
-  getPuzzleData(): [number, boolean][][] {
-    return this.#puzzle.map((r, i) =>
-      r.map((y, l) => [this.#solution[i][l], this.#solution[i][l] === this.#puzzle[i][l]] as [number, boolean])
-    );
+  getPuzzleData(): { puzzle: string; solution: string } {
+    return {
+      puzzle: this.#puzzle
+        .flat()
+        .map((x) => x || 0)
+        .join(''),
+      solution: this.#solution
+        .flat()
+        .map((x) => x || 0)
+        .join(''),
+    };
   }
 
   #moveRowOrColumn(data: number[][]) {

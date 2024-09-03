@@ -6,6 +6,8 @@
   "type": "module",
   "sideEffects": [
     "./src/**/*.element.ts",
+    "./src/**/*.view.ts",
+    "./src/**/*.worker.ts",
     "./src/index.ts",
     "*.css"
   ],
