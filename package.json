@@ -32,7 +32,6 @@
     "globals": "^15.9.0",
     "html-webpack-plugin": "^5.6.0",
     "http-server": "^14.1.1",
-    "lit": "^3.2.0",
     "mini-css-extract-plugin": "^2.9.1",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1",
@@ -46,6 +45,7 @@
     "workbox-webpack-plugin": "^7.1.0"
   },
   "dependencies": {
-    "@fontsource/roboto": "^5.0.14"
+    "@fontsource/roboto": "^5.0.14",
+    "lit": "^3.2.0"
   }
 }

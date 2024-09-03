@@ -9,6 +9,11 @@
   user-select: none;
 }
 
+:host([disabled]) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 ::slotted(sudoku-icon) {
   --icon-color: rgb(75, 75, 75);
   --icon-size: 18px;

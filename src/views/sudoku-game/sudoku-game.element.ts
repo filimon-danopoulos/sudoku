@@ -32,6 +32,9 @@ export class SudokuGameViewElement extends LitElement {
   @state()
   private accessor _redoStack = [] as { candidates: string[]; value: string }[][];
 
+  @state()
+  private accessor _progress = 0;
+
   #saveState() {
     const state = this.#getState();
     this._undoStack = [...this._undoStack, state];
@@ -58,13 +61,33 @@ export class SudokuGameViewElement extends LitElement {
   protected willUpdate(changed: PropertyValues): void {
     if (changed.has('sudoku')) {
       if (this.sudoku.length) {
-        this._cells = this.sudoku.split('').map((cell) => ({
-          given: cell !== '0',
-          value: cell.replace('0', ''),
-          candidates: [],
-          invalid: false,
-        }));
+        const ongoing = JSON.parse(localStorage.getItem('ongoing') ?? '{}');
+        this._cells =
+          ongoing[this.sudoku] ??
+          this.sudoku.split('').map((cell) => ({
+            given: cell !== '0',
+            value: cell.replace('0', ''),
+            candidates: [],
+            invalid: false,
+          }));
       }
+    }
+
+    if (changed.has('_cells') || changed.has('sudoku')) {
+      const suppliedValues = this._cells.filter((c) => !c.given && c.value).length;
+      const valuesToSupply = this.sudoku.split('').filter((c) => c === '0').length;
+      this._progress = suppliedValues / valuesToSupply;
+    }
+
+    if (changed.has('_cells')) {
+      localStorage.setItem(
+        'ongoing',
+        JSON.stringify(
+          Object.assign(JSON.parse(localStorage.getItem('ongoing') ?? '{}'), {
+            [this.sudoku]: this._cells,
+          })
+        )
+      );
     }
   }
 
@@ -82,9 +105,14 @@ export class SudokuGameViewElement extends LitElement {
             Reset Game
           </sudoku-option>
           <hr />
-          <sudoku-option @click=${this.#validate}>
+          <sudoku-option @click=${this.#validate} ?disabled=${this._progress !== 1}>
             <sudoku-icon icon="valid"></sudoku-icon>
             Validate
+          </sudoku-option>
+
+          <sudoku-option @click=${this.#openSolver}>
+            <sudoku-icon icon="question"></sudoku-icon>
+            Open In Solver
           </sudoku-option>
           <hr />
           <sudoku-option @click=${this.#clearCandidates}>
@@ -111,14 +139,14 @@ export class SudokuGameViewElement extends LitElement {
           <sudoku-input
             @input-value=${(e: CustomEvent) => this.#inputValue(e.detail as string)}
             @input-candidate=${(e: CustomEvent) => this.#inputCandidate(e.detail as string)}
-            progress=${this.#getProgress()}
+            progress=${this._progress}
           ></sudoku-input>
         </div>
 
         <sudoku-button slot="footer-start" @click=${this.#undo} ?disabled=${!this._undoStack.length}>
           <sudoku-icon icon="undo"></sudoku-icon>
         </sudoku-button>
-        <sudoku-button slot="footer-middle" @click=${this.#clearActiveCell}>
+        <sudoku-button slot="footer-middle" @click=${this.#clearActiveCell} ?disabled=${this.#clearButtonDisabled}>
           <sudoku-icon icon="clear"></sudoku-icon>
         </sudoku-button>
         <sudoku-button slot="footer-end" @click=${this.#redo} ?disabled=${!this._redoStack.length}>
@@ -138,12 +166,25 @@ export class SudokuGameViewElement extends LitElement {
     document.removeEventListener('keydown', this.#handleKeyboard, { capture: true });
   }
 
+  #openSolver() {
+    window.location.hash = `#solver/${this._cells.reduce((result, cell) => (result += cell.value || '0'), '')}`;
+  }
+
+  get #clearButtonDisabled() {
+    const active = this._cells[this._activeIndex];
+    return active.given || (!active.value && !active.candidates.length);
+  }
+
   #resetPuzzle = () => {
     this._cells = this._cells.map((cell) => ({
       ...cell,
       candidates: cell.given ? cell.candidates : [],
       value: cell.given ? cell.value : '',
     }));
+    const previous = JSON.parse(localStorage.getItem('ongoing') ?? '{}');
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete previous[this.sudoku];
+    localStorage.setItem('ongoing', JSON.stringify(previous));
   };
 
   #inputValue = (value: string) => {
@@ -236,12 +277,6 @@ export class SudokuGameViewElement extends LitElement {
     //   return cell;
     // });
   };
-
-  #getProgress() {
-    return (
-      this._cells.filter((c) => !c.given && c.value).length / this.sudoku.split('').filter((c) => c === '0').length
-    );
-  }
 
   #handleKeyboard = (e: KeyboardEvent) => {
     switch (e.code) {

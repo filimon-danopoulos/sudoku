@@ -55,7 +55,14 @@ export class SudokuSolverViewElement extends LitElement {
                   )}
                 </sudoku-board>
                 <div class="description">${this._steps[this._currentStep]?.description}</div>`
-            : null}
+            : html`<div class="input">
+                Enter a puzzle:
+                <textarea
+                  rows="4"
+                  maxlength="81"
+                  @input=${(e: Event) => (this.sudoku = (e.target as HTMLTextAreaElement).value)}
+                ></textarea>
+              </div>`}
         </div>
 
         <sudoku-button slot="footer-start" @click=${() => this.#step('backward')} ?disabled=${this._currentStep <= 0}>
