@@ -4,7 +4,7 @@ import { IStrategy } from './IStrategy';
 
 export class NakedSingles implements IStrategy {
   get rating() {
-    return Rating.Easy;
+    return Rating.Moderate;
   }
 
   run(sudoku: Sudoku) {

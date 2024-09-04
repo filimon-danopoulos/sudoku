@@ -4,7 +4,7 @@ import { IStrategy } from './IStrategy';
 
 export class NakedTuples implements IStrategy {
   get rating() {
-    return Rating.Normal;
+    return Rating.Hard;
   }
 
   #size: 2 | 3 | 4;

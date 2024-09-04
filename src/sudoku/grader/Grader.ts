@@ -23,7 +23,7 @@ export class Grader {
       new PointingCandidates(),
       new HiddenTuples(2),
       new HiddenTuples(3),
-      new BoxLineReduction(),
+      new BoxLineReduction(), // Breaks on 024001007600000490805000000000000380006029000000060050000700200030108004000900010
       new NakedTuples(4),
       new HiddenTuples(4),
     ]);
@@ -89,12 +89,12 @@ export class Grader {
     const isSolved = sudoku.emptyCells.length === 0;
     if (isSolved) {
       return {
-        rating: highestRating,
+        grade: highestRating,
         steps,
       };
     }
     return {
-      rating: RATING.VeryHard,
+      grade: RATING.Extreme,
       steps,
     };
   }

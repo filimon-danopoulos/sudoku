@@ -11,7 +11,7 @@ import { SudokuCell } from '../../model/SudokuCell';
  */
 export class LastCell implements IStrategy {
   get rating() {
-    return Rating.VeryEasy;
+    return Rating.Easy;
   }
 
   run(sudoku: Sudoku) {

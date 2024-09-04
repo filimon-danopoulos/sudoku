@@ -4,7 +4,8 @@ import '../views/sudoku-solver/sudoku-solver.view';
 import '@fontsource/roboto';
 import { html, render } from 'lit';
 import { registerRoutes } from './router';
-import { countUnsolvedPuzzles, saveUnsolvedPuzzle } from '../storage/puzzle-storage';
+import { countUnsolvedPuzzles, loadUngradedPuzzle, saveUngradedPuzzle } from '../storage/puzzle-storage';
+import { Rating } from '../sudoku/grader/Rating';
 
 const routes = {
   '': '/sudoku/new/normal',
@@ -27,6 +28,7 @@ const routes = {
 } as Record<string, string | ((...params: unknown[]) => unknown)>;
 
 const generatorWorker = new Worker(new URL('../workers/puzzle-generator.worker', import.meta.url));
+const graderWorker = new Worker(new URL('../workers/puzzle-grader.worker', import.meta.url));
 
 let running = false;
 export const main = () => {
@@ -37,11 +39,26 @@ export const main = () => {
   const update = (view: unknown) => render(view, document.body);
   registerRoutes(routes, update);
 
-  generatorWorker.onmessage = ({ data }: MessageEvent<{ puzzle: string; solution: string }>) => {
-    saveUnsolvedPuzzle(data.puzzle, data.solution);
-    if (countUnsolvedPuzzles() > 100) {
-      generatorWorker.postMessage('stop');
+  generatorWorker.onmessage = ({ data }: MessageEvent<{ puzzle: string }>) => {
+    saveUngradedPuzzle(data.puzzle);
+    if (countUnsolvedPuzzles() < 100) {
+      generatorWorker.postMessage('generate');
     }
   };
-  generatorWorker.postMessage('start');
+  generatorWorker.postMessage('generate');
+
+  const grade = () => {
+    const data = loadUngradedPuzzle();
+    if (data) {
+      const { puzzle } = data;
+      graderWorker.postMessage(puzzle);
+    } else {
+      setTimeout(grade, 250);
+    }
+  };
+  graderWorker.onmessage = ({ data }: MessageEvent<{ grade: Rating; puzzle: string }>) => {
+    console.log(data.grade, data.puzzle);
+    grade();
+  };
+  // grade();
 };

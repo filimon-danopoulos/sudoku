@@ -25,18 +25,20 @@ export class BoxLineReduction implements IStrategy {
         const missingNumber = missingNumbers[missingIndex];
 
         const blocks = line.cells.reduce((result, cell) => {
-          if (cell.candidates.includes(missingNumber) && !result.includes(cell.block)) {
-            result.push(cell.block);
+          if (cell.candidates.includes(missingNumber)) {
+            result.add(cell.block);
           }
           return result;
-        }, [] as SudokuSet[]);
+        }, new Set<SudokuSet>());
 
-        if (blocks.length === 1) {
-          const block = blocks[0];
-          const affectedCellsInBlock = block.cells.filter((cell) => cell.candidates.includes(missingNumber));
+        if (blocks.size === 1) {
+          const block = Array.from(blocks)[0];
+          const cellsToUpdateInBlock = block.cells.filter(
+            (cell) => cell.candidates.includes(missingNumber) && !line.cells.includes(cell)
+          );
           let dirty = false;
-          for (let cellIndex = 0; cellIndex < affectedCellsInBlock.length; cellIndex++) {
-            const cell = affectedCellsInBlock[cellIndex];
+          for (let cellIndex = 0; cellIndex < cellsToUpdateInBlock.length; cellIndex++) {
+            const cell = cellsToUpdateInBlock[cellIndex];
             const candidateIndex = cell.candidates.indexOf(missingNumber);
             if (candidateIndex !== -1) {
               cell.candidates.splice(candidateIndex, 1);
