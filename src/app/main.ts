@@ -4,7 +4,12 @@ import '../views/sudoku-solver/sudoku-solver.view';
 import '@fontsource/roboto';
 import { html, render } from 'lit';
 import { registerRoutes } from './router';
-import { countUnsolvedPuzzles, loadUngradedPuzzle, saveUngradedPuzzle } from '../storage/puzzle-storage';
+import {
+  countUnsolvedPuzzles,
+  loadUngradedPuzzle,
+  saveGradedPuzzle,
+  saveUngradedPuzzle,
+} from '../storage/puzzle-storage';
 import { Rating } from '../sudoku/grader/Rating';
 
 const routes = {
@@ -58,6 +63,15 @@ export const main = () => {
   };
   graderWorker.onmessage = ({ data }: MessageEvent<{ grade: Rating; puzzle: string }>) => {
     console.log(data.grade, data.puzzle);
+    const ratingMap = {
+      [Rating.Easy]: 'easy',
+      [Rating.Moderate]: 'moderate',
+      [Rating.Hard]: 'hard',
+      [Rating.Extreme]: 'extreme',
+    } as Record<Rating, 'easy' | 'moderate' | 'hard' | 'extreme'>;
+    if (data.grade in ratingMap) {
+      saveGradedPuzzle(ratingMap[data.grade], data.puzzle);
+    }
     grade();
   };
   // grade();

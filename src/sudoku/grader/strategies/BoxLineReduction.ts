@@ -13,7 +13,7 @@ import { IStrategy } from './IStrategy';
  */
 export class BoxLineReduction implements IStrategy {
   get rating() {
-    return Rating.Hard;
+    return Rating.Moderate;
   }
 
   run(sudoku: Sudoku) {

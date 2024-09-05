@@ -8,9 +8,10 @@ import { PointingCandidates } from './strategies/PointingCandidates';
 import { NakedTuples } from './strategies/NakedTuples';
 import { BoxLineReduction } from './strategies/BoxLineReduction';
 import { HiddenTuples } from './strategies/HiddenTuples';
+import { XWing } from './strategies/XWing';
 
 type strategy = LastCell;
-
+// x-wing  007010000000800500180009064600000003071080640400000005840600031005002000000030700
 export class Grader {
   grade(sudoku: Sudoku) {
     return this.#solve(sudoku, [
@@ -23,9 +24,10 @@ export class Grader {
       new PointingCandidates(),
       new HiddenTuples(2),
       new HiddenTuples(3),
-      new BoxLineReduction(), // Breaks on 024001007600000490805000000000000380006029000000060050000700200030108004000900010
+      new BoxLineReduction(),
       new NakedTuples(4),
       new HiddenTuples(4),
+      new XWing(),
     ]);
   }
 

@@ -11,7 +11,7 @@ import { IStrategy } from './IStrategy';
  */
 export class Slotting implements IStrategy {
   get rating() {
-    return Rating.Moderate;
+    return Rating.Easy;
   }
 
   run(sudoku: Sudoku) {
