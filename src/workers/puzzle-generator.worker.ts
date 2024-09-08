@@ -13,5 +13,7 @@ const run = () => {
     self.postMessage({
       puzzle,
     });
+  } else {
+    self.postMessage('failed');
   }
 };

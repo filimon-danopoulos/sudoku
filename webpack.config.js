@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 const devMode = process.env.NODE_ENV !== 'production';
 
 export default {
-  entry: './src/index.ts',
+  entry: './src/app/index.ts',
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'dist'),
@@ -45,7 +45,7 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Filimon's Sudoku",
+      template: './src/app/index.html',
     }),
   ],
   optimization: {

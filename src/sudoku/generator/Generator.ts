@@ -44,8 +44,8 @@ export class Generator {
     this.#given = Array.from(ALL_GIVEN);
     this.#puzzle = this.#solution.map((r) => [...r]);
 
-    // TODO: Optimize allowed attempts, 10 000 is arbitrary.
-    let allowedAttempts = 10_000;
+    // Allow only a few extra attempts as to prioritize failing early.
+    let allowedAttempts = 64 * 2;
     while (allowedAttempts--) {
       const candidates = this.#getCandicates();
       const removed = [] as { value: number; row: number; column: number }[];

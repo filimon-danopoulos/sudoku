@@ -47,7 +47,6 @@
     "workbox-webpack-plugin": "^7.1.0"
   },
   "dependencies": {
-    "@fontsource/roboto": "^5.0.14",
     "lit": "^3.2.0"
   }
 }
