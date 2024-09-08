@@ -90,3 +90,7 @@
     }
   }
 }
+
+.difficulty {
+  text-transform: capitalize;
+}

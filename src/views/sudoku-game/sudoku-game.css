@@ -13,6 +13,10 @@
   gap: var(--gap);
 }
 
+.difficulty {
+  text-transform: capitalize;
+}
+
 sudoku-board,
 sudoku-input {
   /* 46 is the height of the input element */

@@ -12,10 +12,16 @@ import type { puzzleCell } from '../../storage/puzzle-service';
 
 import { html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { difficultyContext } from '../../components/sudoku-context/difficulty-context';
+import { difficulty } from '../../storage/puzzle-storage';
+import { consume } from '@lit/context';
 
 @customElement('sudoku-game-view')
 export class SudokuGameView extends LitElement {
   static styles = [style];
+
+  @consume({ context: difficultyContext, subscribe: true })
+  private _difficulty: difficulty = 'moderate';
 
   @property({ attribute: 'sudoku', type: String })
   accessor sudoku = '' as string;
@@ -94,9 +100,9 @@ export class SudokuGameView extends LitElement {
   render() {
     return html`
       <sudoku-shell view="game">
-        <span slot="header-title">Difficulty</span>
+        <span slot="header-title" class="difficulty">${this._difficulty}</span>
         <sudoku-menu slot="header-actions">
-          <sudoku-option class="new">
+          <sudoku-option class="new" href="#/sudoku/new">
             <sudoku-icon icon="file"></sudoku-icon>
             New Game
           </sudoku-option>

@@ -12,7 +12,7 @@ const run = (puzzle: string) => {
   const sudoku = new Sudoku(puzzle);
   const { grade } = grader.grade(sudoku);
   self.postMessage({
-    puzzle: sudoku.cells.map((x) => x.value || '0').join(''),
+    puzzle,
     grade,
   });
 };

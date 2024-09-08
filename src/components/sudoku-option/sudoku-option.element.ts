@@ -10,7 +10,13 @@ export class SudokuOptionElement extends LitElement {
   @property({ attribute: 'disabled', type: Boolean })
   accessor disabled = false;
 
+  @property({ attribute: 'href', type: String, reflect: true })
+  accessor href!: string;
+
   render() {
-    return html` <slot></slot> `;
+    if (this.href) {
+      return html`<a href=${this.href}><slot></slot></a>`;
+    }
+    return html`<slot></slot> `;
   }
 }
