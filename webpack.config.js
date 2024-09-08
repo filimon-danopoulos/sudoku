@@ -3,8 +3,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { fileURLToPath } from 'url';
 
-const devMode = process.env.NODE_ENV !== 'production';
-
 export default {
   entry: './src/app/index.ts',
   output: {
@@ -25,7 +23,7 @@ export default {
             },
           },
           {
-            use: [devMode ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader'],
+            use: [MiniCssExtractPlugin.loader, 'css-loader'],
           },
         ],
       },
@@ -46,6 +44,11 @@ export default {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/app/index.html',
+    }),
+
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css',
+      chunkFilename: '[id].[contenthash].css',
     }),
   ],
   optimization: {
