@@ -19,7 +19,7 @@ export class SudokuMenuElement extends LitElement {
         <sudoku-icon icon="ellipsis"></sudoku-icon>
       </sudoku-button>
       ${this._open
-        ? html`<div class="backdrop" @pointerup=${this.#close}>
+        ? html`<div class="backdrop" @click=${this.#close}>
             <div class="sudoku-menu">
               <slot></slot>
             </div>

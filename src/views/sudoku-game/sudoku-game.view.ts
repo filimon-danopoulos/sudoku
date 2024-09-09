@@ -1,10 +1,10 @@
-import '../../components/sudoku-shell/sudoku-shell.element';
-import '../../components/sudoku-menu/sudoku-menu.element';
-import '../../components/sudoku-option/sudoku-option.element';
-import '../../components/sudoku-board/sudoku-board.element';
-import '../../components/sudoku-cell/sudoku-cell.element';
-import '../../components/sudoku-input/sudoku-input.element';
-import '../../components/sudoku-icon/sudoku-icon.element';
+import '../../elements/sudoku-shell/sudoku-shell.element';
+import '../../elements/sudoku-menu/sudoku-menu.element';
+import '../../elements/sudoku-option/sudoku-option.element';
+import '../../elements/sudoku-board/sudoku-board.element';
+import '../../elements/sudoku-cell/sudoku-cell.element';
+import '../../elements/sudoku-input/sudoku-input.element';
+import '../../elements/sudoku-icon/sudoku-icon.element';
 
 import style from './sudoku-game.css' with { type: 'css' };
 
@@ -12,8 +12,8 @@ import type { puzzleCell } from '../../storage/puzzle-service';
 
 import { html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { difficultyContext } from '../../components/sudoku-context/difficulty-context';
-import { difficulty } from '../../storage/puzzle-storage';
+import { difficultyContext } from '../../elements/sudoku-context/difficulty-context';
+import { difficulty, loadCurrentPuzzle, saveCurrentPuzzle } from '../../storage/puzzle-storage';
 import { consume } from '@lit/context';
 
 @customElement('sudoku-game-view')
@@ -67,9 +67,9 @@ export class SudokuGameView extends LitElement {
   protected willUpdate(changed: PropertyValues): void {
     if (changed.has('sudoku')) {
       if (this.sudoku.length) {
-        const ongoing = JSON.parse(localStorage.getItem('ongoing') ?? '{}');
+        const ongoing = loadCurrentPuzzle();
         this._cells =
-          ongoing[this.sudoku] ??
+          ongoing.cells ??
           this.sudoku.split('').map((cell) => ({
             given: cell !== '0',
             value: cell.replace('0', ''),
@@ -86,14 +86,7 @@ export class SudokuGameView extends LitElement {
     }
 
     if (changed.has('_cells')) {
-      localStorage.setItem(
-        'ongoing',
-        JSON.stringify(
-          Object.assign(JSON.parse(localStorage.getItem('ongoing') ?? '{}'), {
-            [this.sudoku]: this._cells,
-          })
-        )
-      );
+      saveCurrentPuzzle(this.sudoku, this._cells, this._difficulty);
     }
   }
 
@@ -102,7 +95,7 @@ export class SudokuGameView extends LitElement {
       <sudoku-shell view="game">
         <span slot="header-title" class="difficulty">${this._difficulty}</span>
         <sudoku-menu slot="header-actions">
-          <sudoku-option class="new" href="#/sudoku/new">
+          <sudoku-option class="new" href="#/new">
             <sudoku-icon icon="file"></sudoku-icon>
             New Game
           </sudoku-option>
@@ -116,7 +109,12 @@ export class SudokuGameView extends LitElement {
             Validate
           </sudoku-option>
 
-          <sudoku-option @click=${this.#openSolver}>
+          <sudoku-option
+            href="#/solver/${this._cells.reduce(
+              (result, cell) => (result += cell.value || '0'),
+              ''
+            )}"
+          >
             <sudoku-icon icon="question"></sudoku-icon>
             Open In Solver
           </sudoku-option>
@@ -149,10 +147,18 @@ export class SudokuGameView extends LitElement {
           ></sudoku-input>
         </div>
 
-        <sudoku-button slot="footer-start" @click=${this.#undo} ?disabled=${!this._undoStack.length}>
+        <sudoku-button
+          slot="footer-start"
+          @click=${this.#undo}
+          ?disabled=${!this._undoStack.length}
+        >
           <sudoku-icon icon="undo"></sudoku-icon>
         </sudoku-button>
-        <sudoku-button slot="footer-middle" @click=${this.#clearActiveCell} ?disabled=${this.#clearButtonDisabled}>
+        <sudoku-button
+          slot="footer-middle"
+          @click=${this.#clearActiveCell}
+          ?disabled=${this.#clearButtonDisabled}
+        >
           <sudoku-icon icon="clear"></sudoku-icon>
         </sudoku-button>
         <sudoku-button slot="footer-end" @click=${this.#redo} ?disabled=${!this._redoStack.length}>
@@ -172,10 +178,6 @@ export class SudokuGameView extends LitElement {
     document.removeEventListener('keydown', this.#handleKeyboard, { capture: true });
   }
 
-  #openSolver() {
-    window.location.hash = `#solver/${this._cells.reduce((result, cell) => (result += cell.value || '0'), '')}`;
-  }
-
   get #clearButtonDisabled() {
     const active = this._cells[this._activeIndex];
     return active.given || (!active.value && !active.candidates.length);
@@ -187,10 +189,6 @@ export class SudokuGameView extends LitElement {
       candidates: cell.given ? cell.candidates : [],
       value: cell.given ? cell.value : '',
     }));
-    const previous = JSON.parse(localStorage.getItem('ongoing') ?? '{}');
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete previous[this.sudoku];
-    localStorage.setItem('ongoing', JSON.stringify(previous));
   };
 
   #inputValue = (value: string) => {

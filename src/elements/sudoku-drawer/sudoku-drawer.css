@@ -73,16 +73,12 @@
       --icon-color: rgba(35, 35, 35, 0.7);
     }
 
-    &:is(:hover, [active]) {
+    &:hover {
       color: rgb(55, 55, 55);
 
       & sudoku-icon {
         --icon-color: rgba(35, 35, 35, 0.8);
       }
-    }
-
-    &[active] {
-      background-color: rgba(0, 0, 0, 0.03);
     }
 
     &:hover {

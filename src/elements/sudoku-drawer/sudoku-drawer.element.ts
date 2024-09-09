@@ -28,11 +28,11 @@ export class SudokuDrawerElement extends LitElement {
 
         <div class="content">
           <div class="sub-title">Navigation</div>
-          <a class="option" ?active=${this.#isActivePath('#/sudoku')} href="#/sudoku/new/">
+          <a class="option" href="#/sudoku">
             <sudoku-icon icon="dice"></sudoku-icon>
             Game
           </a>
-          <a class="option" ?active=${this.#isActivePath('#/solver')} href="#/solver">
+          <a class="option" href="#/solver">
             <sudoku-icon icon="question"></sudoku-icon>
             Solver
           </a>
@@ -41,7 +41,7 @@ export class SudokuDrawerElement extends LitElement {
                 <div class="sub-title">Difficulty</div>
                 ${(['easy', 'moderate', 'hard', 'extreme'] as const).map(
                   (difficulty) => html`
-                    <a class="option" href="#/sudoku/new/${difficulty}">
+                    <a class="option" href="#/new/${difficulty}">
                       <sudoku-icon
                         icon=${this._difficulty === difficulty ? 'radio-checked' : 'radio-empty'}
                       ></sudoku-icon>

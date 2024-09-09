@@ -1,10 +1,10 @@
-import '../../components/sudoku-shell/sudoku-shell.element';
-import '../../components/sudoku-menu/sudoku-menu.element';
-import '../../components/sudoku-option/sudoku-option.element';
-import '../../components/sudoku-board/sudoku-board.element';
-import '../../components/sudoku-cell/sudoku-cell.element';
-import '../../components/sudoku-input/sudoku-input.element';
-import '../../components/sudoku-icon/sudoku-icon.element';
+import '../../elements/sudoku-shell/sudoku-shell.element';
+import '../../elements/sudoku-menu/sudoku-menu.element';
+import '../../elements/sudoku-option/sudoku-option.element';
+import '../../elements/sudoku-board/sudoku-board.element';
+import '../../elements/sudoku-cell/sudoku-cell.element';
+import '../../elements/sudoku-input/sudoku-input.element';
+import '../../elements/sudoku-icon/sudoku-icon.element';
 
 import style from './sudoku-solver.css' with { type: 'css' };
 
@@ -21,10 +21,16 @@ export class SudokuSolverView extends LitElement {
   sudoku = '';
 
   @state()
+  private accessor _input = '';
+
+  @state()
   private accessor _currentStep = 0;
 
   @state()
-  private accessor _steps = [] as { description: string; snapshot: { value: string; candidates: string[] }[] }[];
+  private accessor _steps = [] as {
+    description: string;
+    snapshot: { value: string; candidates: string[] }[];
+  }[];
 
   protected willUpdate(changed: PropertyValues): void {
     if (changed.has('sudoku') && this.sudoku.length === 81) {
@@ -32,6 +38,10 @@ export class SudokuSolverView extends LitElement {
       const grader = new Grader();
       const { steps } = grader.grade(sudoku);
       this._steps = steps;
+    }
+
+    if (changed.has('_input') && this._input.length === 81) {
+      window.location.hash = `#/solver/${this._input}`;
     }
   }
 
@@ -60,12 +70,16 @@ export class SudokuSolverView extends LitElement {
                 <textarea
                   rows="4"
                   maxlength="81"
-                  @input=${(e: Event) => (this.sudoku = (e.target as HTMLTextAreaElement).value)}
+                  @input=${(e: Event) => (this._input = (e.target as HTMLTextAreaElement).value)}
                 ></textarea>
               </div>`}
         </div>
 
-        <sudoku-button slot="footer-start" @click=${() => this.#step('backward')} ?disabled=${this._currentStep <= 0}>
+        <sudoku-button
+          slot="footer-start"
+          @click=${() => this.#step('backward')}
+          ?disabled=${this._currentStep <= 0}
+        >
           <sudoku-icon icon="undo"></sudoku-icon>
         </sudoku-button>
         <sudoku-button
@@ -99,7 +113,9 @@ export class SudokuSolverView extends LitElement {
         given: this._steps[0].snapshot[i].value === cell.value,
         value: cell.value,
         candidates: cell.candidates.map((c) => c.toString()),
-        active: this._currentStep > 0 && this._steps[this._currentStep - 1].snapshot[i].value !== cell.value,
+        active:
+          this._currentStep > 0 &&
+          this._steps[this._currentStep - 1].snapshot[i].value !== cell.value,
       };
     });
   };
