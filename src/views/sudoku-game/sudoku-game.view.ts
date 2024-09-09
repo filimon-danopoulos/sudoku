@@ -109,12 +109,7 @@ export class SudokuGameView extends LitElement {
             Validate
           </sudoku-option>
 
-          <sudoku-option
-            href="#/solver/${this._cells.reduce(
-              (result, cell) => (result += cell.value || '0'),
-              ''
-            )}"
-          >
+          <sudoku-option href="#/solver">
             <sudoku-icon icon="question"></sudoku-icon>
             Open In Solver
           </sudoku-option>
