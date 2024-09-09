@@ -1,4 +1,6 @@
 :host {
+  --width: min(70vw, 480px);
+
   height: 100dvh;
   position: fixed;
   z-index: 3;
@@ -9,6 +11,7 @@
 }
 
 .backdrop {
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
@@ -16,13 +19,22 @@
 }
 
 .drawer {
+  pointer-events: all;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   height: 100%;
-  width: min(70vw, 480px);
+  width: var(--width);
   background-color: rgb(245, 245, 245);
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
+
+  transition-property: left;
+  transition-duration: 0.25s;
+  transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 
   & .header {
     box-sizing: border-box;
@@ -87,6 +99,15 @@
   }
 }
 
+
 .difficulty {
   text-transform: capitalize;
+
+}
+
+@starting-style {
+  .drawer {
+    left: calc(-1 * var(--width));
+    pointer-events: none;
+  }
 }
