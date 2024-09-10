@@ -43,7 +43,7 @@ export class SudokuInputElement extends LitElement {
     this.#candidateTimeout = setTimeout(() => {
       this.#candidateTimeout = undefined;
       this.#dispatchInputEvent(value);
-    }, 200);
+    }, 150);
   };
 
   #handleInputUp = (value: string) => {

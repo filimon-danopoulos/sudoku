@@ -46,6 +46,9 @@ export class SudokuGameView extends LitElement {
   @state()
   private accessor _completed = [] as string[];
 
+  @state()
+  private accessor _highlight = '';
+
   #saveState() {
     const state = this.#getState();
     this._undoStack = [...this._undoStack, state];
@@ -104,6 +107,8 @@ export class SudokuGameView extends LitElement {
     }
   }
 
+  #highlightTimeout?: ReturnType<typeof setTimeout>;
+
   render() {
     return html`
       <sudoku-shell view="game">
@@ -145,11 +150,24 @@ export class SudokuGameView extends LitElement {
                   ?active=${i === this._activeIndex}
                   ?given=${cell.given}
                   ?invalid=${cell.invalid}
+                  ?highlight=${!!this._highlight && this._highlight === cell.value}
                   .candidates=${cell.candidates}
                   value=${cell.value ?? ''}
                   column=${i % 9}
                   row=${Math.floor(i / 9)}
-                  @click=${() => (this._activeIndex = i)}
+                  @pointerdown=${() => {
+                    this.#highlightTimeout = setTimeout(() => {
+                      this._highlight = this._highlight === cell.value ? '' : cell.value;
+                      this._activeIndex = -1;
+                      this.#highlightTimeout = undefined;
+                    }, 250);
+                  }}
+                  @pointerup=${() => {
+                    if (this.#highlightTimeout) {
+                      clearTimeout(this.#highlightTimeout);
+                      this._activeIndex = i;
+                    }
+                  }}
                 ></sudoku-cell>`
             )}
           </sudoku-board>
@@ -194,7 +212,8 @@ export class SudokuGameView extends LitElement {
 
   get #clearButtonDisabled() {
     const active = this._cells[this._activeIndex];
-    return active.given || (!active.value && !active.candidates.length);
+
+    return !!active && (active.given || (!active.value && !active.candidates.length));
   }
 
   #resetPuzzle = () => {

@@ -16,6 +16,9 @@ export class SudokuCelllement extends LitElement {
   @property({ attribute: 'given', type: Boolean })
   accessor given = false;
 
+  @property({ attribute: 'highlight', type: Boolean })
+  accessor highlight = false;
+
   @property({ attribute: 'invalid', type: Boolean })
   accessor invalid = false;
 
