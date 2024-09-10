@@ -43,6 +43,9 @@ export class SudokuGameView extends LitElement {
   @state()
   private accessor _progress = 0;
 
+  @state()
+  private accessor _completed = [] as string[];
+
   #saveState() {
     const state = this.#getState();
     this._undoStack = [...this._undoStack, state];
@@ -86,6 +89,14 @@ export class SudokuGameView extends LitElement {
       const suppliedValues = this._cells.filter((c) => !c.given && c.value).length;
       const valuesToSupply = this.sudoku.split('').filter((c) => c === '0').length;
       this._progress = suppliedValues / valuesToSupply;
+      this._completed = Array.from({ length: 9 }, (_, x) => {
+        const value = (x + 1).toString();
+        const count = this._cells.filter((c) => c.value === value).length;
+        if (count === 9) {
+          return value;
+        }
+        return '';
+      }).filter((x) => !!x);
     }
 
     if (changed.has('_cells')) {
@@ -146,6 +157,7 @@ export class SudokuGameView extends LitElement {
             @input-value=${(e: CustomEvent) => this.#inputValue(e.detail as string)}
             @input-candidate=${(e: CustomEvent) => this.#inputCandidate(e.detail as string)}
             progress=${this._progress}
+            .completed=${this._completed}
           ></sudoku-input>
         </div>
 

@@ -7,26 +7,36 @@ import { customElement, property } from 'lit/decorators.js';
 export class SudokuInputElement extends LitElement {
   static styles = [style];
 
+  @property({ attribute: 'progress', type: Number })
+  accessor progress = 0;
+
+  @property({ attribute: false })
+  accessor completed = [] as string[];
+
   render() {
     return html`
       <div class="buttons">
         ${Array.from({ length: 9 }, (_, i) => {
           const number = (i + 1).toString();
           return html`
-            <button @pointerdown=${() => this.#handleInputDown(number)} @pointerup=${() => this.#handleInputUp(number)}>
+            <button
+              ?completed=${this.completed.includes(number)}
+              @pointerdown=${() => this.#handleInputDown(number)}
+              @pointerup=${() => this.#handleInputUp(number)}
+            >
               ${number}
             </button>
           `;
         })}
       </div>
       <div class="progress">
-        <div class="indicator ${this.progress === 1 ? 'complete' : ''}" style="width: ${this.progress * 100}%;}"></div>
+        <div
+          class="indicator ${this.progress === 1 ? 'complete' : ''}"
+          style="width: ${this.progress * 100}%;}"
+        ></div>
       </div>
     `;
   }
-
-  @property({ attribute: 'progress', type: Number })
-  accessor progress = 0;
 
   #candidateTimeout?: ReturnType<typeof setTimeout>;
   #handleInputDown = (value: string) => {
