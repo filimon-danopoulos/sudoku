@@ -16,8 +16,8 @@ export class SudokuCelllement extends LitElement {
   @property({ attribute: 'given', type: Boolean })
   accessor given = false;
 
-  @property({ attribute: 'highlight', type: Boolean })
-  accessor highlight = false;
+  @property({ attribute: 'highlights', type: Array })
+  accessor highlights = [] as string[];
 
   @property({ attribute: 'invalid', type: Boolean })
   accessor invalid = false;
@@ -36,19 +36,20 @@ export class SudokuCelllement extends LitElement {
 
   render() {
     return html`
-      <div class="cell">
+      <div class="cell" ?highlight=${!!this.value && this.highlights.includes(this.value)}>
         ${this.value
           ? html`<div class="cell-value">${this.value}</div>`
           : html`<div class="cell-candidates">
-              <div class="cell-candidate" ?hidden=${!this.candidates.includes('1')}>1</div>
-              <div class="cell-candidate" ?hidden=${!this.candidates.includes('2')}>2</div>
-              <div class="cell-candidate" ?hidden=${!this.candidates.includes('3')}>3</div>
-              <div class="cell-candidate" ?hidden=${!this.candidates.includes('4')}>4</div>
-              <div class="cell-candidate" ?hidden=${!this.candidates.includes('5')}>5</div>
-              <div class="cell-candidate" ?hidden=${!this.candidates.includes('6')}>6</div>
-              <div class="cell-candidate" ?hidden=${!this.candidates.includes('7')}>7</div>
-              <div class="cell-candidate" ?hidden=${!this.candidates.includes('8')}>8</div>
-              <div class="cell-candidate" ?hidden=${!this.candidates.includes('9')}>9</div>
+              ${Array.from({ length: 9 }, (_, i) => {
+                const value = (i + 1).toString();
+                return html`<div
+                  class="cell-candidate"
+                  ?hidden=${!this.candidates.includes(value)}
+                  ?highlight=${this.highlights.includes(value)}
+                >
+                  ${value}
+                </div>`;
+              })}
             </div>`}
       </div>
     `;

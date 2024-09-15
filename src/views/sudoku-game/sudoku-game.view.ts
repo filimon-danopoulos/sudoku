@@ -150,7 +150,7 @@ export class SudokuGameView extends LitElement {
                   ?active=${i === this._activeIndex}
                   ?given=${cell.given}
                   ?invalid=${cell.invalid}
-                  ?highlight=${!!this._highlight && this._highlight === cell.value}
+                  .highlights=${[this._highlight]}
                   .candidates=${cell.candidates}
                   value=${cell.value ?? ''}
                   column=${i % 9}

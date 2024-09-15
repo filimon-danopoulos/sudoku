@@ -60,11 +60,6 @@
   font-weight: bold;
 }
 
-:host([highlight]) {
-  background-color: rgb(195, 195, 195);
-  color: rgb(255, 255, 255);
-}
-
 :host([active]) {
   background-color: rgb(95, 95, 95);
   color: rgb(255, 255, 255);
@@ -105,8 +100,15 @@
   width: calc(100cqw / 3);
   height: calc(100cqh / 3);
   font-size: 30cqh;
+  border-radius: calc(100cqw / 6);
 }
 
 .cell-candidate[hidden] {
   visibility: hidden;
+}
+
+
+:is(.cell, .cell-candidate)[highlight] {
+  background-color: rgb(195, 195, 195);
+  color: rgb(255, 255, 255);
 }
