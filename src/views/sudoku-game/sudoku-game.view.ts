@@ -47,7 +47,7 @@ export class SudokuGameView extends LitElement {
   private accessor _completed = [] as string[];
 
   @state()
-  private accessor _highlight = '';
+  private accessor _highlights = [] as string[];
 
   #saveState() {
     const state = this.#getState();
@@ -150,14 +150,16 @@ export class SudokuGameView extends LitElement {
                   ?active=${i === this._activeIndex}
                   ?given=${cell.given}
                   ?invalid=${cell.invalid}
-                  .highlights=${[this._highlight]}
+                  .highlights=${this._highlights}
                   .candidates=${cell.candidates}
                   value=${cell.value ?? ''}
                   column=${i % 9}
                   row=${Math.floor(i / 9)}
                   @pointerdown=${() => {
                     this.#highlightTimeout = setTimeout(() => {
-                      this._highlight = this._highlight === cell.value ? '' : cell.value;
+                      this._highlights = this._highlights.includes(cell.value)
+                        ? this._highlights.filter((h) => h !== cell.value)
+                        : [...this._highlights, cell.value];
                       this._activeIndex = -1;
                       this.#highlightTimeout = undefined;
                     }, 250);
