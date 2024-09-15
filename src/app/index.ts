@@ -7,7 +7,6 @@ import { html, render } from 'lit';
 import { registerRoutes } from './router';
 import { difficulty, loadCurrentPuzzle, loadPuzzles, savePuzzles } from '../storage/puzzle-storage';
 import { Rating } from '../sudoku/grader/Rating';
-import { ChangeDifficultyEvent } from '../elements/sudoku-context/ChangeDifficultyEvent';
 import { loadDifficulty, saveDifficulty } from '../storage/difficulty-storage';
 
 const puzzles = loadPuzzles();
@@ -63,14 +62,7 @@ const graderWorker = new Worker(new URL('../workers/puzzle-grader.worker', impor
 
 const update = (view: unknown) =>
   render(
-    html`
-      <sudoku-context
-        .difficulty=${loadDifficulty()}
-        @change-difficulty=${((e: ChangeDifficultyEvent) =>
-          saveDifficulty(e.difficulty)) as EventListener}
-        >${view}</sudoku-context
-      >
-    `,
+    html` <sudoku-context .difficulty=${loadDifficulty()}>${view}</sudoku-context> `,
     document.body
   );
 

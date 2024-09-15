@@ -108,7 +108,18 @@
 }
 
 
-:is(.cell, .cell-candidate)[highlight] {
+:host([active]) .cell-candidate[highlight] {
+  background-color: rgb(215, 215, 215);
+  color: rgb(55, 55, 55);
+  font-weight: bold;
+}
+
+:host(:not([active])) .cell-candidate[highlight] {
+  background-color: rgb(95, 95, 95);
+  color: rgb(255, 255, 255);
+}
+
+:host(:not([active])) .cell[highlight] {
   background-color: rgb(195, 195, 195);
   color: rgb(255, 255, 255);
 }
