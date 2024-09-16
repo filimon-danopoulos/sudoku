@@ -49,29 +49,6 @@ export class SudokuGameView extends LitElement {
   @state()
   private accessor _highlights = [] as string[];
 
-  #saveState() {
-    const state = this.#getState();
-    this._undoStack = [...this._undoStack, state];
-    if (this._redoStack.length) {
-      this._redoStack = [];
-    }
-  }
-
-  #getState() {
-    return this._cells.map((cell) => ({
-      candidates: [...cell.candidates],
-      value: cell.value,
-    }));
-  }
-
-  #applyState(state: { candidates: string[]; value: string }[]) {
-    this._cells = this._cells.map((cell, i) => ({
-      ...cell,
-      candidates: cell.given ? cell.candidates : state[i].candidates,
-      value: cell.given ? cell.value : state[i].value,
-    }));
-  }
-
   protected willUpdate(changed: PropertyValues): void {
     if (changed.has('sudoku')) {
       if (this.sudoku.length) {
@@ -106,8 +83,6 @@ export class SudokuGameView extends LitElement {
       saveCurrentPuzzle(this.sudoku, this._cells, this._difficulty);
     }
   }
-
-  #highlightTimeout?: ReturnType<typeof setTimeout>;
 
   render() {
     return html`
@@ -155,20 +130,9 @@ export class SudokuGameView extends LitElement {
                   value=${cell.value ?? ''}
                   column=${i % 9}
                   row=${Math.floor(i / 9)}
-                  @pointerdown=${() => {
-                    this.#highlightTimeout = setTimeout(() => {
-                      this._highlights = this._highlights.includes(cell.value)
-                        ? this._highlights.filter((h) => h !== cell.value)
-                        : [...this._highlights, cell.value];
-                      this._activeIndex = -1;
-                      this.#highlightTimeout = undefined;
-                    }, 250);
-                  }}
+                  @pointerdown=${() => this.#handleCellClickStart(cell, i)}
                   @pointerup=${() => {
-                    if (this.#highlightTimeout) {
-                      clearTimeout(this.#highlightTimeout);
-                      this._activeIndex = i;
-                    }
+                    this.#handleCellClickEnd(i);
                   }}
                 ></sudoku-cell>`
             )}
@@ -202,6 +166,35 @@ export class SudokuGameView extends LitElement {
     `;
   }
 
+  #addHighlightTimeout?: ReturnType<typeof setTimeout>;
+  #isolateHighlightTimeout?: ReturnType<typeof setTimeout>;
+
+  #handleCellClickStart(cell: puzzleCell, index: number) {
+    this.#addHighlightTimeout = setTimeout(() => {
+      if (cell.value && !this._highlights.includes(cell.value)) {
+        this._highlights = [...this._highlights, cell.value];
+      } else if (!cell.value) {
+        this._highlights = [];
+        this._activeIndex = index;
+      }
+      this.#addHighlightTimeout = undefined;
+      this.#isolateHighlightTimeout = setTimeout(() => {
+        this._highlights = [cell.value];
+        this.#isolateHighlightTimeout = undefined;
+      }, 500);
+    }, 250);
+  }
+
+  #handleCellClickEnd(index: number) {
+    if (this.#addHighlightTimeout) {
+      clearTimeout(this.#addHighlightTimeout);
+      this._activeIndex = index;
+    }
+    if (this.#isolateHighlightTimeout) {
+      clearTimeout(this.#isolateHighlightTimeout);
+    }
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
     document.addEventListener('keydown', this.#handleKeyboard, { capture: true });
@@ -212,21 +205,44 @@ export class SudokuGameView extends LitElement {
     document.removeEventListener('keydown', this.#handleKeyboard, { capture: true });
   }
 
+  #saveState() {
+    const state = this.#getState();
+    this._undoStack = [...this._undoStack, state];
+    if (this._redoStack.length) {
+      this._redoStack = [];
+    }
+  }
+
+  #getState() {
+    return this._cells.map((cell) => ({
+      candidates: [...cell.candidates],
+      value: cell.value,
+    }));
+  }
+
+  #applyState(state: { candidates: string[]; value: string }[]) {
+    this._cells = this._cells.map((cell, i) => ({
+      ...cell,
+      candidates: cell.given ? cell.candidates : state[i].candidates,
+      value: cell.given ? cell.value : state[i].value,
+    }));
+  }
+
   get #clearButtonDisabled() {
     const active = this._cells[this._activeIndex];
 
     return !!active && (active.given || (!active.value && !active.candidates.length));
   }
 
-  #resetPuzzle = () => {
+  #resetPuzzle() {
     this._cells = this._cells.map((cell) => ({
       ...cell,
       candidates: cell.given ? cell.candidates : [],
       value: cell.given ? cell.value : '',
     }));
-  };
+  }
 
-  #inputValue = (value: string) => {
+  #inputValue(value: string) {
     this._cells = this._cells.map((cell, i) => {
       if (i === this._activeIndex && !cell.given) {
         const newCell = structuredClone(cell);
@@ -239,9 +255,9 @@ export class SudokuGameView extends LitElement {
       }
       return cell;
     });
-  };
+  }
 
-  #inputCandidate = (candidate: string) => {
+  #inputCandidate(candidate: string) {
     this._cells = this._cells.map((cell, i) => {
       if (i === this._activeIndex && !cell.given) {
         const newCell = structuredClone(cell);
@@ -261,9 +277,9 @@ export class SudokuGameView extends LitElement {
       }
       return cell;
     });
-  };
+  }
 
-  #addCandidates = () => {
+  #addCandidates() {
     this.#saveState();
     const sudoku = new Sudoku(this._cells.map((c) => c.value || 0).join(''));
     this._cells = this._cells.map((cell, i) => {
@@ -274,9 +290,9 @@ export class SudokuGameView extends LitElement {
       }
       return cell;
     });
-  };
+  }
 
-  #clearCandidates = () => {
+  #clearCandidates() {
     this.#saveState();
     this._cells = this._cells.map((cell) => {
       if (!cell.given) {
@@ -286,27 +302,27 @@ export class SudokuGameView extends LitElement {
       }
       return cell;
     });
-  };
+  }
 
-  #undo = () => {
+  #undo() {
     const previousState = this._undoStack.pop();
     if (previousState) {
       const currentState = this.#getState();
       this._redoStack.push(currentState);
       this.#applyState(previousState);
     }
-  };
+  }
 
-  #redo = () => {
+  #redo() {
     const nextState = this._redoStack.pop();
     if (nextState) {
       const currentState = this.#getState();
       this._undoStack.push(currentState);
       this.#applyState(nextState);
     }
-  };
+  }
 
-  #clearActiveCell = () => {
+  #clearActiveCell() {
     this._cells = this._cells.map((cell, i) => {
       if (i === this._activeIndex && !cell.given) {
         this.#saveState();
@@ -317,9 +333,9 @@ export class SudokuGameView extends LitElement {
       }
       return cell;
     });
-  };
+  }
 
-  #validate = () => {
+  #validate() {
     const sudoku = new Sudoku(this._cells.map((c) => c.value ?? '0').join(''));
     const invalidCells = new Set<SudokuCell>();
     for (const set of [...sudoku.blocks, ...sudoku.columns, ...sudoku.rows]) {
@@ -340,7 +356,7 @@ export class SudokuGameView extends LitElement {
       newCell.invalid = invalidIndeces.includes(index);
       return newCell;
     });
-  };
+  }
 
   #handleKeyboard = (e: KeyboardEvent) => {
     switch (e.code) {
