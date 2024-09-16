@@ -19,6 +19,6 @@
 
 sudoku-board,
 sudoku-input {
-  /* 46 is the height of the input element */
-  width: min(100cqw, calc(100cqh - var(--gap) - 46px));
+  /* 54 is the height of the input element */
+  width: min(100cqw, calc(100cqh - var(--gap) - 54px));
 }

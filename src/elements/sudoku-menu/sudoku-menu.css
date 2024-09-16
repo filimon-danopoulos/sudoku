@@ -24,7 +24,7 @@ sudoku-icon {
   border-radius: 4px;
 
   background-color: rgb(240, 240, 240);
-  width: 60vw;
+  width: min(60vw, 260px);
 
   box-shadow: 0px 1px 5px 4px rgba(0, 0, 0, 0.2);
 }
