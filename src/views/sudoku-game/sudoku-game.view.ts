@@ -245,6 +245,13 @@ export class SudokuGameView extends LitElement {
       candidates: cell.given ? cell.candidates : [],
       value: cell.given ? cell.value : '',
     }));
+    this._activeIndex = 0;
+    this._undoStack = [];
+    this._redoStack = [];
+    this._progress = 0;
+    this._completed = [];
+    this._solved = false;
+    this._highlights = [];
   }
 
   #inputValue(value: string) {
@@ -364,6 +371,7 @@ export class SudokuGameView extends LitElement {
       });
     } else {
       this._solved = true;
+      this._activeIndex = -1;
     }
   }
 
