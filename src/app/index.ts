@@ -4,6 +4,8 @@ import '../views/sudoku-solver/sudoku-solver.view';
 import './index.css';
 
 import { html, render } from 'lit';
+import { keyed } from 'lit/directives/keyed.js';
+
 import { registerRoutes } from './router';
 import { difficulty, loadCurrentPuzzle, loadPuzzles, savePuzzles } from '../storage/puzzle-storage';
 import { Rating } from '../sudoku/grader/Rating';
@@ -26,7 +28,7 @@ const routes = {
     return 'redirect';
   },
   '/sudoku/:puzle': (puzzle: string) => {
-    return html`<sudoku-game-view sudoku=${puzzle}></sudoku-game-view>`;
+    return keyed(puzzle, html`<sudoku-game-view sudoku=${puzzle}></sudoku-game-view>`);
   },
   '/sudoku': () => {
     const { puzzle, difficulty } = loadCurrentPuzzle();

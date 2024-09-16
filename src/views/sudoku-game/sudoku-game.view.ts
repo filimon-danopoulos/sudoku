@@ -47,6 +47,9 @@ export class SudokuGameView extends LitElement {
   private accessor _completed = [] as string[];
 
   @state()
+  private accessor _solved = false;
+
+  @state()
   private accessor _highlights = [] as string[];
 
   protected willUpdate(changed: PropertyValues): void {
@@ -80,6 +83,7 @@ export class SudokuGameView extends LitElement {
     }
 
     if (changed.has('_cells')) {
+      this._solved = false;
       saveCurrentPuzzle(this.sudoku, this._cells, this._difficulty);
     }
   }
@@ -134,6 +138,7 @@ export class SudokuGameView extends LitElement {
                   @pointerup=${() => {
                     this.#handleCellClickEnd(i);
                   }}
+                  style=${this._solved ? 'background-color: rgba(120, 190, 120, 0.5)' : ''}
                 ></sudoku-cell>`
             )}
           </sudoku-board>
@@ -351,11 +356,15 @@ export class SudokuGameView extends LitElement {
     const invalidIndeces = sudoku.cells
       .map((cell, index) => (invalidCells.has(cell) ? index : -1))
       .filter((i) => i !== -1);
-    this._cells = this._cells.map((cell, index) => {
-      const newCell = structuredClone(cell);
-      newCell.invalid = invalidIndeces.includes(index);
-      return newCell;
-    });
+    if (invalidIndeces.length) {
+      this._cells = this._cells.map((cell, index) => {
+        const newCell = structuredClone(cell);
+        newCell.invalid = invalidIndeces.includes(index);
+        return newCell;
+      });
+    } else {
+      this._solved = true;
+    }
   }
 
   #handleKeyboard = (e: KeyboardEvent) => {
