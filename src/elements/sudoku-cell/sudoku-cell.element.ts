@@ -2,10 +2,15 @@ import style from './sudoku-cell.css' with { type: 'css' };
 
 import { html, LitElement, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { defaultSettings, settingsContext } from '../sudoku-context/settings-context';
+import { consume } from '@lit/context';
 
 @customElement('sudoku-cell')
 export class SudokuCelllement extends LitElement {
   static styles = [style];
+
+  @consume({ context: settingsContext, subscribe: true })
+  private _settings = defaultSettings;
 
   @property({ attribute: 'value', type: String })
   accessor value = '';
@@ -36,7 +41,12 @@ export class SudokuCelllement extends LitElement {
 
   render() {
     return html`
-      <div class="cell" ?highlight=${!!this.value && this.highlights.includes(this.value)}>
+      <div
+        class="cell"
+        ?highlight=${!!this.value &&
+        this._settings.highlights.cell &&
+        this.highlights.includes(this.value)}
+      >
         ${this.value
           ? html`<div class="cell-value">${this.value}</div>`
           : html`<div class="cell-candidates">
@@ -45,7 +55,8 @@ export class SudokuCelllement extends LitElement {
                 return html`<div
                   class="cell-candidate"
                   ?hidden=${!this.candidates.includes(value)}
-                  ?highlight=${this.highlights.includes(value)}
+                  ?highlight=${this._settings.highlights.candidate &&
+                  this.highlights.includes(value)}
                 >
                   ${value}
                 </div>`;

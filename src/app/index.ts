@@ -1,6 +1,7 @@
 import '../elements/sudoku-context/sudoku-context.element';
 import '../views/sudoku-game/sudoku-game.view';
 import '../views/sudoku-solver/sudoku-solver.view';
+import '../views/sudoku-settings/sudoku-settings.view';
 import './index.css';
 
 import { html, render } from 'lit';
@@ -50,6 +51,9 @@ const routes = {
       return 'redirect';
     }
     return html`<sudoku-solver-view></sudoku-solver-view>`;
+  },
+  '/settings': () => {
+    return html`<sudoku-settings-view></sudoku-settings-view>`;
   },
   '/': '/sudoku',
   '': '/sudoku',

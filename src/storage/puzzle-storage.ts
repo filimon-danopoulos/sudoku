@@ -1,4 +1,4 @@
-import { puzzleCell } from './puzzle-service';
+import { puzzleCell } from '../app/types';
 
 export type difficulty = 'easy' | 'moderate' | 'hard' | 'extreme';
 export const loadPuzzles = (): Record<difficulty, string[]> => {

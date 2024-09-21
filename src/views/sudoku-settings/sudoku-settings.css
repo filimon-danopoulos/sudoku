@@ -1,0 +1,52 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: auto;
+}
+
+.title {
+  background-color: rgb(215, 215, 215);
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: rgb(95, 95, 95);
+  padding: 8px;
+}
+
+.option {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 48px;
+  align-items: center;
+  justify-content: start;
+  padding: 0 16px;
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(85, 85, 85);
+
+  gap: 8px;
+
+  sudoku-icon {
+    --icon-color: rgba(35, 35, 35, 0.7);
+  }
+
+  &:hover {
+    color: rgb(245, 124, 124);
+
+    sudoku-icon {
+      --icon-color: rgba(35, 35, 35, 0.8);
+    }
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+}
+
+.difficulty {
+  text-transform: capitalize;
+
+}

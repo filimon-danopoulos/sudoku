@@ -20,14 +20,13 @@ export class SudokuDrawerElement extends LitElement {
     return html`<div class="backdrop" @click=${this.#close}>
       <div class="drawer">
         <div class="header">
-          <div class="title">Sudoku</div>
+          <div class="title">Pages</div>
           <sudoku-button @click=${this.#close}>
             <sudoku-icon icon="chevron-left" style="--icon-size: 16px;"></sudoku-icon>
           </sudoku-button>
         </div>
 
         <div class="content">
-          <div class="sub-title">Navigation</div>
           <a class="option" href="#/sudoku">
             <sudoku-icon icon="dice"></sudoku-icon>
             Game
@@ -36,21 +35,10 @@ export class SudokuDrawerElement extends LitElement {
             <sudoku-icon icon="question"></sudoku-icon>
             Solver
           </a>
-          ${this.#isActivePath('#/sudoku')
-            ? html`
-                <div class="sub-title">Difficulty</div>
-                ${(['easy', 'moderate', 'hard', 'extreme'] as const).map(
-                  (difficulty) => html`
-                    <a class="option" href="#/new/${difficulty}">
-                      <sudoku-icon
-                        icon=${this._difficulty === difficulty ? 'radio-checked' : 'radio-empty'}
-                      ></sudoku-icon>
-                      <span class="difficulty">${difficulty}</span>
-                    </a>
-                  `
-                )}
-              `
-            : null}
+          <a class="option" href="#/settings">
+            <sudoku-icon icon="cog"></sudoku-icon>
+            Settings
+          </a>
         </div>
       </div>
     </div>`;
@@ -58,9 +46,5 @@ export class SudokuDrawerElement extends LitElement {
 
   #close() {
     this.dispatchEvent(new Event('close'));
-  }
-
-  #isActivePath(path: string) {
-    return window.location.hash?.startsWith(path);
   }
 }

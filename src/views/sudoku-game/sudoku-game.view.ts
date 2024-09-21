@@ -8,7 +8,7 @@ import '../../elements/sudoku-icon/sudoku-icon.element';
 
 import style from './sudoku-game.css' with { type: 'css' };
 
-import type { puzzleCell } from '../../storage/puzzle-service';
+import type { puzzleCell } from '../../app/types';
 
 import { html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
