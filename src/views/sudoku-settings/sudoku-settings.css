@@ -34,8 +34,6 @@
   }
 
   &:hover {
-    color: rgb(245, 124, 124);
-
     sudoku-icon {
       --icon-color: rgba(35, 35, 35, 0.8);
     }

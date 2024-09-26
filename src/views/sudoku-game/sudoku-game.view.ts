@@ -17,6 +17,11 @@ import { difficulty, loadCurrentPuzzle, saveCurrentPuzzle } from '../../storage/
 import { consume } from '@lit/context';
 import { Sudoku } from '../../sudoku/model/Sudoku';
 import { SudokuCell } from '../../sudoku/model/SudokuCell';
+import {
+  defaultSettings,
+  settings,
+  settingsContext,
+} from '../../elements/sudoku-context/settings-context';
 
 @customElement('sudoku-game-view')
 export class SudokuGameView extends LitElement {
@@ -24,6 +29,9 @@ export class SudokuGameView extends LitElement {
 
   @consume({ context: difficultyContext, subscribe: true })
   private _difficulty: difficulty = 'moderate';
+
+  @consume({ context: settingsContext, subscribe: true })
+  private _settings: settings = defaultSettings;
 
   @property({ attribute: 'sudoku', type: String })
   accessor sudoku = '' as string;
@@ -177,27 +185,30 @@ export class SudokuGameView extends LitElement {
   #handleCellClickStart(cell: puzzleCell, index: number) {
     this.#addHighlightTimeout = setTimeout(() => {
       if (cell.value && !this._highlights.includes(cell.value)) {
-        this._highlights = [...this._highlights, cell.value];
+        this._highlights = this._settings.highlights.multiple
+          ? [...this._highlights, cell.value]
+          : [cell.value];
       } else if (!cell.value) {
         this._highlights = [];
-        this._activeIndex = index;
       }
       this.#addHighlightTimeout = undefined;
-      this.#isolateHighlightTimeout = setTimeout(() => {
-        this._highlights = [cell.value];
-        this.#isolateHighlightTimeout = undefined;
-      }, 500);
+      if (this._settings.highlights.multiple) {
+        this.#isolateHighlightTimeout = setTimeout(() => {
+          this._highlights = [cell.value];
+          this.#isolateHighlightTimeout = undefined;
+        }, 500);
+      }
     }, 250);
   }
 
   #handleCellClickEnd(index: number) {
     if (this.#addHighlightTimeout) {
       clearTimeout(this.#addHighlightTimeout);
-      this._activeIndex = index;
     }
     if (this.#isolateHighlightTimeout) {
       clearTimeout(this.#isolateHighlightTimeout);
     }
+    this._activeIndex = index;
   }
 
   connectedCallback(): void {

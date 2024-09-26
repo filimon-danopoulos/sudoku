@@ -87,6 +87,19 @@ export class SudokuSettingsView extends LitElement {
             ></sudoku-icon>
             <span>Candidates</span>
           </div>
+          <div
+            class="option"
+            @click=${() => {
+              const settings = structuredClone(this._newSettings);
+              settings.highlights.multiple = !settings.highlights.multiple;
+              this._newSettings = settings;
+            }}
+          >
+            <sudoku-icon
+              icon=${this._newSettings.highlights.multiple ? 'checkbox-checked' : 'checkbox-empty'}
+            ></sudoku-icon>
+            <span>Multiple</span>
+          </div>
         </div>
 
         <sudoku-button
