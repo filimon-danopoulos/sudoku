@@ -142,7 +142,7 @@ export class SudokuGameView extends LitElement {
                   value=${cell.value ?? ''}
                   column=${i % 9}
                   row=${Math.floor(i / 9)}
-                  @pointerdown=${() => this.#handleCellClickStart(cell, i)}
+                  @pointerdown=${() => this.#handleCellClickStart(cell)}
                   @pointerup=${() => {
                     this.#handleCellClickEnd(i);
                   }}
@@ -182,7 +182,7 @@ export class SudokuGameView extends LitElement {
   #addHighlightTimeout?: ReturnType<typeof setTimeout>;
   #isolateHighlightTimeout?: ReturnType<typeof setTimeout>;
 
-  #handleCellClickStart(cell: puzzleCell, index: number) {
+  #handleCellClickStart(cell: puzzleCell) {
     this.#addHighlightTimeout = setTimeout(() => {
       if (cell.value && !this._highlights.includes(cell.value)) {
         this._highlights = this._settings.highlights.multiple
