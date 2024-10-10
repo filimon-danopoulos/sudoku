@@ -22,7 +22,6 @@ export class SudokuInputElement extends LitElement {
             <button
               ?completed=${this.completed.includes(number)}
               @pointerdown=${() => this.#handleInputDown(number)}
-              @pointerup=${() => this.#handleInputUp(number)}
             >
               ${number}
             </button>
@@ -37,10 +36,11 @@ export class SudokuInputElement extends LitElement {
 
   #candidateTimeout?: ReturnType<typeof setTimeout>;
   #handleInputDown = (value: string) => {
+    document.addEventListener('pointerup', () => this.#handleInputUp(value), { once: true });
     this.#candidateTimeout = setTimeout(() => {
       this.#candidateTimeout = undefined;
       this.#dispatchInputEvent(value);
-    }, 150);
+    }, 250);
   };
 
   #handleInputUp = (value: string) => {

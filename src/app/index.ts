@@ -122,3 +122,9 @@ function requestNewPuzzle(): void {
 }
 
 requestNewPuzzle();
+
+try {
+  navigator.wakeLock?.request('screen');
+} catch {
+  console.log('Wake Lock not granted.');
+}
